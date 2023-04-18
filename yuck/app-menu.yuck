@@ -1,0 +1,6 @@
+(defwidget app-menu []
+  (box :class "app-menu section"
+    (eventbox :onclick "sh scripts/rofi"
+              :cursor "pointer"
+              :class "app-menu"
+              "")))

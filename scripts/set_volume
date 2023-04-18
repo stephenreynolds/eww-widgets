@@ -1,0 +1,13 @@
+#!/bin/bash
+
+STEP=5
+
+if [ "$1" == "up" ]; then
+    pamixer --increase ${STEP}
+    canberra-gtk-play -f /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga
+elif [ "$1" == "down" ]; then
+    pamixer --decrease ${STEP}
+    canberra-gtk-play -f /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga
+else
+    echo "Invalid argument. Please use 'up' or 'down'."
+fi

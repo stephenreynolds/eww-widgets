@@ -1,0 +1,118 @@
+(defwidget widgets [monitor]
+  (revealer :transition "slideleft"
+            :duration "500ms"
+            :reveal {monitor == 0 ? widgets_reveal_0 : monitor == 1 ? widgets_reveal_1 : widgets_reveal_2 }
+            (overlay
+              (box :orientation "v"
+                   :spacing 10
+                   :space-evenly false
+                   :class "widgets"
+                   (box :orientation "v"
+                        :class "widget"
+                        "Notifications")
+                   (box :orientation "h"
+                        :spacing 10
+                        (box :orientation "v"
+                             :class "widget widget-calendar"
+                             "Sunday"
+                             "16"
+                             "Some event")
+                        (box :orientation "v"
+                             :class "widget"
+                             "Oxford"
+                             "70"
+                             "Sunny"
+                             "H: 74  L: 61"))
+                   (box :orientation "h"
+                        :halign "fill"
+                        :space-evenly true
+                        :spacing 5
+                        :class "widget widget-clock"
+                        (box :orientation "v"
+                             :spacing 3
+                             (label :text "PST"
+                                    :class "text-bold")
+                             (label :text timePST))
+                        (box :orientation "v"
+                             :spacing 3
+                             (label :text "EST"
+                                    :class "text-bold")
+                             (label :text timeEST))
+                        (box :orientation "v"
+                             :spacing 3
+                             (label :text "UTC"
+                                    :class "text-bold")
+                             (label :text timeUTC))
+                        (box :orientation "v"
+                             :spacing 3
+                             (label :text "JST"
+                                    :class "text-bold")
+                             (label :text timeJST)))
+                   (box :orientation "v"
+                        :spacing 14
+                        :class "widget widget-stocks"
+                        (box :orientation "h"
+                             (box :orientation "v"
+                                  :halign "start"
+                                  (label :text "SPY"
+                                         :justify "left"
+                                         :class "text-bold")
+                                  (label :text "S&P 500"))
+                             (graph :value 340.45
+                                    :time-range "86400s"
+                                    :thickness "1"
+                                    :min {340.45 * 0.8}
+                                    :max {340.45 * 1.2}
+                                    :dynamic true
+                                    :line-style "miter")
+                             (box :orientation "v"
+                                  :halign "end"
+                                  (label :text "340.45"
+                                         :class "text-bold")
+                                  (label :text "+1.36")))
+                        (box :orientation "h"
+                             (box :orientation "v"
+                                  :halign "start"
+                                  (label :text "SPY"
+                                         :justify "left"
+                                         :class "text-bold")
+                                  (label :text "S&P 500"))
+                             (graph :value 340.45
+                                    :time-range "86400s"
+                                    :thickness "1"
+                                    :min {340.45 * 0.8}
+                                    :max {340.45 * 1.2}
+                                    :dynamic true
+                                    :line-style "miter")
+                             (box :orientation "v"
+                                  :halign "end"
+                                  (label :text "340.45"
+                                         :class "text-bold")
+                                  (label :text "+1.36")))
+                        (box :orientation "h"
+                             (box :orientation "v"
+                                  :halign "start"
+                                  (label :text "SPY"
+                                         :justify "left"
+                                         :class "text-bold")
+                                  "S&P 500")
+                             (graph :value 340.45
+                                    :time-range "86400s"
+                                    :thickness "1"
+                                    :min {340.45 * 0.8}
+                                    :max {340.45 * 1.2}
+                                    :dynamic true
+                                    :line-style "miter")
+                             (box :orientation "v"
+                                  :halign "end"
+                                  (label :text "340.45"
+                                         :class "text-bold")
+                                  (label :text "+1.36"))))
+                   (box :orientation "v"
+                        :class "widget"
+                        (label :text "News")
+                        (box :orientation "h"
+                             (box :orientation "v"
+                                  (label :text "Subject")
+                                  (label :text "Summary of news story."))
+                             "image"))))))

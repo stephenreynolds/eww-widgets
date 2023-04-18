@@ -1,0 +1,21 @@
+#!/usr/bin/python
+
+import subprocess
+import json
+
+# Run nvidia-smi command and store the output in variables
+cmd = "nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits"
+output = subprocess.check_output(cmd, shell=True, text=True).strip()
+gpu_utilization, vram_used, vram_total = map(float, output.split(','))
+
+# Calculate VRAM usage percentage
+vram_usage_percentage = (vram_used / vram_total) * 100
+
+# Create a dictionary with the results
+gpu_info = {
+    "utilization": gpu_utilization,
+    "vram_usage": vram_usage_percentage
+}
+
+# Print the result in JSON format
+print(json.dumps(gpu_info, indent=2))

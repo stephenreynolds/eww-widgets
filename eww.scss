@@ -1,0 +1,153 @@
+* {
+    all: unset;
+}
+
+.section {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    padding: 0 10px;
+}
+
+.container {
+    font-family: SF Pro Rounded;
+    font-weight: 500;
+    font-size: 0.9em;
+    margin: 6px 10px 0 10px;
+
+    &.maximized {
+        background-color: rgba(0, 0, 0, 0.7);
+        margin: 0;
+        padding: 6px 10px 0 10px;
+
+        .section {
+            background-color: transparent;
+        }
+    }
+}
+
+.icon {
+    font-family: Segoe Fluent Icons;
+}
+
+.red {
+    color: #ff6961;
+}
+
+.app-menu {
+    font-size: 1.4em;
+    transition: color 500ms;
+    &:hover {
+        color: #1793D1;
+    }
+}
+
+.window-controls {
+    button {
+        font-size: 1.6em;
+        transition: color 500ms;
+
+        &.close-btn {
+            &:hover {
+                color: #ff0000;
+            }
+        }
+
+        &.maximize-btn {
+            &:hover {
+                color: #0099ff;
+            }
+        }
+
+        &.float-btn {
+            &:hover {
+                color: #ffff00;
+            }
+        }
+    }
+}
+
+.workspaces {
+    .workspace-btn {
+        transition: color 500ms;
+
+        label {
+            font-size: 1.2em;
+        }
+
+        margin: 0 4px;
+
+        &.empty {
+        }
+
+        &.occupied {
+
+        }
+
+        &.active {
+        }
+
+        &:hover {
+            color: #aaa;
+        }
+    }
+}
+
+.volume {
+    .volume-icon {
+        font-size: 1.2em;
+    }
+}
+
+.network {
+    .wifi-icon {
+       font-size: 1.3em;
+    }
+}
+
+.text-bold {
+    font-weight: 600;
+}
+
+.widgets {
+    margin-top: 10px;
+    margin-right: 14px;
+
+    .widget {
+        background-color: rgba(50, 50, 50, 0.6);
+        padding: 14px;
+        border-radius: 9px;
+
+        &.widget-clock, &.widget-stocks, &.widget-calendar {
+            background: rgb(24,24,24);
+            background: linear-gradient(0deg, rgba(24,24,24,1) 0%, rgba(20,20,20,1) 50%, rgba(14,14,14,1) 100%);
+            color: #aaa;
+
+            .text-bold {
+                color: #fff;
+            }
+        }
+    }
+}
+
+/* systray
+menubar {
+    margin: 0 -5px;
+    menuitem {
+        margin: 0 5px;
+
+        menu {
+            background-color: rgba(55, 55, 55, 0.8);
+            border-radius: 8px;
+
+            menuitem {
+                padding: 10px 20px;
+                border-radius: 8px;
+
+                &:hover {
+                    background-color: rgba(33, 33, 33, 0.8);
+                }
+            }
+        }
+    }
+}
+*/

@@ -1,0 +1,5 @@
+(defwidget clock [monitor]
+  (button :class "clock-button"
+          :onclick "scripts/reveal_widgets ${monitor}"
+          (label :class "clock section"
+                 :text datetime)))

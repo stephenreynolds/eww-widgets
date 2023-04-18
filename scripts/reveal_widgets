@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+EWW=eww
+
+revealed=$($EWW get widgets_reveal_$1)
+
+if [[ $revealed == "true" ]]; then
+    $EWW update widgets_reveal_$1=false
+else
+    $EWW update widgets_reveal_$1=true
+fi

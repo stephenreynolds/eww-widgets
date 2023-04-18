@@ -1,0 +1,17 @@
+(defwidget system-stats []
+  (box :class "system-stats section"
+       :spacing 10
+       :space-evenly false
+       (image :path "images/cpu.svg")
+       (label :text "${round(EWW_CPU.avg, 0)}%" :class {EWW_CPU.avg >= 90 ? "red" : "white"})
+       (image :path "images/memory.svg")
+       (label :text "${round(EWW_RAM.used_mem_perc, 0)}%" :class {EWW_RAM.used_mem_perc >= 90 ? "red" : "white"})
+       (image :path "images/gpu-card.svg")
+       (label :text "${round(gpu.utilization, 0)}%" :class {gpu.utilization >= 90 ? "red" : "white"})
+       (label :text "${round(gpu.vram_usage, 0)}%" :class {gpu.vram_usage >= 90 ? "red" : "white"})
+       (image :path "images/hdd-fill.svg")
+       (label :text "${round(EWW_DISK["/"].used_perc, 0)}%" :class {EWW_DISK["/"].used_perc >= 90 ? "red" : "white"})
+       (image :path "images/download.svg")
+       (label :text "${round(EWW_NET.wlan0.NET_DOWN / 250000, 1)} Mbps")
+       (image :path "images/upload.svg")
+       (label :text "${round(EWW_NET.wlan0.NET_UP / 250000, 1)} Mbps")))
