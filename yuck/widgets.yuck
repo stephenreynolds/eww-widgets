@@ -5,7 +5,7 @@
 (defwidget widgets [monitor]
   (revealer :transition "slideleft"
             :duration "500ms"
-            :reveal reveal_widgets[monitor]
+            :reveal {reveal_widgets[monitor]}
             (overlay
               (box :orientation "v"
                    :spacing 10
