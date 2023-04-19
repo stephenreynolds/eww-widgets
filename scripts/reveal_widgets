@@ -2,10 +2,16 @@
 
 EWW=eww
 
-revealed=$($EWW get widgets_reveal_$1)
+IFS=","
+read -a revealed <<< "$($EWW get reveal_widgets)"
+revealed[0]=${revealed[0]#[}
+revealed[-1]=${revealed[-1]%]}
+monitors=(false false false)
 
-if [[ $revealed == "true" ]]; then
-    $EWW update widgets_reveal_$1=false
+if [[ "${revealed[$1]}" == "true" ]]; then
+    monitors[$1]=false
+    $EWW update reveal_widgets="[${monitors[0]},${monitors[1]},${monitors[2]}]"
 else
-    $EWW update widgets_reveal_$1=true
+    monitors[$1]=true
+    $EWW update reveal_widgets="[${monitors[0]},${monitors[1]},${monitors[2]}]"
 fi

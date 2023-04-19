@@ -1,15 +1,8 @@
 (defvar primary_monitor 1)
-(defvar widgets_reveal_0 false)
-(defvar widgets_reveal_1 false)
-(defvar widgets_reveal_2 false)
 
 (deflisten hyprland :initial `{"monitors": []}` "scripts/hyprland")
 (deflisten volume :initial "NaN" "scripts/volume")
 
 (defpoll datetime :interval "1s" "date '+%a %b %-e  %l:%M %p'")
-(defpoll timePST :interval "1s" "TZ=':America/Los_Angeles' date '+%l:%M %p'")
-(defpoll timeEST :interval "1s" "TZ=':America/New_York' date '+%l:%M %p'")
-(defpoll timeUTC :interval "1s" "date -u '+%l:%M %p'")
-(defpoll timeJST :interval "1s" "TZ=':Asia/Tokyo' date '+%l:%M %p'")
 (defpoll wifi-strength :interval "5s" :initial "0" "grep wlan0 /proc/net/wireless | awk '{ print $3 }' | cut -d '.' -f 1")
 (defpoll gpu :interval "3s" :initial `{"utilization": 0, "vram_usage": 0}` "scripts/gpu")
