@@ -7,7 +7,7 @@
 
 (defwidget bar [monitor]
   (centerbox :orientation "h"
-             :class "container ${hyprland.monitors[monitor].single ? "maximized" : ""}"
+             :class "container ${(hyprland.monitors?.[monitor]?.single ?: false) ? "maximized" : ""}"
        (left :monitor monitor)
        (center :monitor monitor)
        (right :monitor monitor)))

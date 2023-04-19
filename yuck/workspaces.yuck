@@ -1,9 +1,8 @@
-
 (defwidget workspaces [monitor]
   (box :class "button-bin section"
       (eventbox :class "button workspaces"
                 (box :space-evenly false
-                     (for workspace in {hyprland.monitors[monitor].workspaces}
+                     (for workspace in {hyprland?.monitors?.[monitor]?.workspaces ?: []}
                           (button :class "workspace-btn ${workspace.active ? "active" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
                                   :onclick "hyprctl dispatch workspace ${workspace.id}"
                                   :valign "center"
