@@ -11,7 +11,7 @@
                       :anchor "top center")
   :stacking "fg"
   :exclusive true
-  :namespace "bar0"
+  :namespace "eww"
   :class "bar"
   (bar :monitor 0))
 
@@ -25,7 +25,7 @@
                       :anchor "top center")
   :stacking "fg"
   :exclusive true
-  :namespace "bar1"
+  :namespace "eww"
   :class "bar"
   (bar :monitor 1))
 
@@ -39,7 +39,7 @@
                       :anchor "top center")
   :stacking "fg"
   :exclusive true
-  :namespace "bar2"
+  :namespace "eww"
   :class "bar"
   (bar :monitor 2))
 
@@ -50,7 +50,7 @@
   :stacking "overlay"
   :exclusive false
   :focusable false
-  :namespace "eww-widgets"
+  :namespace "eww"
   (widgets :monitor 0))
 
 (defwindow widgets1
@@ -60,7 +60,7 @@
   :stacking "overlay"
   :exclusive false
   :focusable false
-  :namespace "eww-widgets"
+  :namespace "eww"
   (widgets :monitor 1))
 
 (defwindow widgets2
@@ -70,5 +70,5 @@
   :stacking "overlay"
   :exclusive false
   :focusable false
-  :namespace "eww-widgets"
+  :namespace "eww"
   (widgets :monitor 2))
