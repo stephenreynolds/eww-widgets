@@ -16,7 +16,7 @@
         :halign "fill"
         :space-evenly true
         :spacing 5
-        :class "widget widget-clock"
+        :class "widget widget-timezones"
         (box :orientation "v"
              :spacing 3
              (label :text "PST"
