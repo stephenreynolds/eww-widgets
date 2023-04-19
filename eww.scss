@@ -42,7 +42,7 @@
 }
 
 .window-controls {
-    button {
+    .close-btn, .maximize-btn, .float-btn {
         font-size: 1.6em;
         transition: color 500ms;
 
@@ -72,18 +72,7 @@
 
         label {
             font-size: 1.2em;
-        }
-
-        margin: 0 4px;
-
-        &.empty {
-        }
-
-        &.occupied {
-
-        }
-
-        &.active {
+            margin: 0 4px;
         }
 
         &:hover {

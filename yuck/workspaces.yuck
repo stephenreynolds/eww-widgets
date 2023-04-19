@@ -3,7 +3,8 @@
       (eventbox :class "button workspaces"
                 (box :space-evenly false
                      (for workspace in {hyprland?.monitors?.[monitor]?.workspaces ?: []}
-                          (button :class "workspace-btn ${workspace.active ? "active" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
-                                  :onclick "hyprctl dispatch workspace ${workspace.id}"
-                                  :valign "center"
-                                  (label :text {workspace.active ? "" : workspace.windows > 0 ? "" : ""})))))))
+                          (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+                                    :valign "center"
+                                    :cursor "pointer"
+                                    :class "workspace-btn"
+                                    (label :text {workspace.active ? "" : workspace.windows > 0 ? "" : ""})))))))
