@@ -1,3 +1,5 @@
+(deflisten volume :initial "NaN" "scripts/volume")
+
 (defwidget volume []
   (eventbox
     :onclick "pavucontrol &"

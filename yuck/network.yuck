@@ -1,3 +1,5 @@
+(defpoll wifi-strength :interval "5s" :initial "0" "grep wlan0 /proc/net/wireless | awk '{ print $3 }' | cut -d '.' -f 1")
+
 (defwidget network []
   (eventbox
     :onclick "kitty -e nmtui &"

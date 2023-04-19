@@ -1,3 +1,5 @@
+(defpoll gpu :interval "3s" :initial `{"utilization": 0, "vram_usage": 0}` "scripts/gpu")
+
 (defwidget system-stats []
   (box :class "system-stats section"
        :spacing 10
