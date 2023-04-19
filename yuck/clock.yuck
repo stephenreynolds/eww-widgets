@@ -1,7 +1,9 @@
 (defpoll datetime :interval "1s" "date '+%a %b %-e  %l:%M %p'")
 
 (defwidget clock [monitor]
-  (button :class "clock-button"
-          :onclick "scripts/reveal_widgets ${monitor}"
-          (label :class "clock section"
-                 :text datetime)))
+  (eventbox :class "clock-button section hover-button"
+            :onclick "scripts/reveal_widgets ${monitor}"
+            :cursor "pointer"
+            (label :class "clock hover-button-inner"
+                   :valign "center"
+                   :text datetime)))

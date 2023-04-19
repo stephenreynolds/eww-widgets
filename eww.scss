@@ -33,9 +33,21 @@
     color: #ff6961;
 }
 
+.hover-button {
+    .hover-button-inner {
+        padding: 0.5em;
+    }
+
+    &:hover .hover-button-inner {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+    }
+}
+
 .app-menu {
     font-size: 1.4em;
     transition: color 500ms;
+
     &:hover {
         color: #1793D1;
     }
