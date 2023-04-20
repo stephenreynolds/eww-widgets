@@ -16,7 +16,7 @@
   (box :halign "start"
        :spacing 10
        :space-evenly false
-       (app-menu)
+       (app-menu :monitor monitor)
        (window-controls)
        (box :visible {monitor == primary_monitor}
             (system-stats :visible {monitor == primary_monitor}))))

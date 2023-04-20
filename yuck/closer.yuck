@@ -1,0 +1,4 @@
+(defwidget closer [window]
+  (eventbox :onclick "eww close ${window} && eww close ${window}-closer-0 ${window}-closer-1 ${window}-closer-2"
+            :onrightclick "eww close ${window} && eww close ${window}-closer-0 ${window}-closer-1 ${window}-closer-2"
+            :onmiddleclick "eww close ${window} && eww close ${window}-closer-0 ${window}-closer-1 ${window}-closer-2"))

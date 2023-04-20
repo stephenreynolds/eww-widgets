@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+EWW=eww
+
+$EWW close system-menu-window && $EWW open --screen $1 system-menu-window

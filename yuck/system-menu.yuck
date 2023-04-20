@@ -1,0 +1,69 @@
+(include "yuck/closer.yuck")
+
+(defvar system-menu-monitor "null")
+
+(defwidget system-menu-section []
+  (box :class "system-menu-section"
+       :orientation "vertical"
+       (children)))
+
+(defwidget system-menu-button [text ?onclick]
+  (eventbox :class "system-menu-button"
+            :onclick onclick
+            (label :xalign 0 :text text)))
+
+(defwidget system-menu []
+  (box :class "system-menu"
+       :orientation "vertical"
+       :space-evenly false
+       (system-menu-section
+            (system-menu-button :text "About this system"
+                                :onclick "kitty zsh -c 'neofetch;zsh' &")
+            (system-menu-button :text "Software store"
+                                :onclick "/usr/bin/octopi &"))
+       (system-menu-section
+            (system-menu-button :text "Recent apps")
+            (system-menu-button :text "Processes"
+                                :onclick "kitty btop &"))
+       (system-menu-section
+            (system-menu-button :text "Sleep"
+                                :onclick "systemctl suspend")
+            (system-menu-button :text "Restart"
+                                :onclick "systemctl reboot")
+            (system-menu-button :text "Shut down"
+                                :onclick "systemctl poweroff"))
+       (system-menu-section
+            (system-menu-button :text "Lock screen"
+                                :onclick "$HOME/.config/swayidle/lock.sh")
+            (system-menu-button :text "Log out"
+                                :onclick "hyprctl dispatch exit"))))
+
+(defwindow system-menu-window
+  :windowtype "dock"
+  :geometry (geometry :anchor "top left")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :namespace "eww"
+  (system-menu))
+
+(defwindow system-menu-window-closer-0
+  :monitor 0
+  :geometry (geometry :width "100%" :height "100%")
+  :stacking "fg"
+  :focusable false
+  (closer :window "system-menu-window"))
+
+(defwindow system-menu-window-closer-1
+  :monitor 1
+  :geometry (geometry :width "100%" :height "100%")
+  :stacking "fg"
+  :focusable false
+  (closer :window "system-menu-window"))
+
+(defwindow system-menu-window-closer-2
+  :monitor 2
+  :geometry (geometry :width "100%" :height "100%")
+  :stacking "fg"
+  :focusable false
+  (closer :window "system-menu-window"))
