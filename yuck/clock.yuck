@@ -2,7 +2,8 @@
 
 (defwidget clock [monitor]
   (eventbox :class "clock-button section hover-button"
-            :onclick "scripts/reveal_widgets ${monitor}"
+            :onclick "${EWW_CMD} open-many --toggle widgets0-closer-0 widgets1-closer-1 widgets2-closer-2 &&
+                      scripts/reveal_widgets ${monitor}"
             :cursor "pointer"
             (label :class "clock hover-button-inner"
                    :valign "center"
