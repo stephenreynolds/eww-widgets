@@ -1,10 +1,11 @@
 (defpoll datetime :interval "1s" "date '+%a %b %-e  %l:%M %p'")
 
 (defwidget clock [monitor]
-  (eventbox :class "clock-button section hover-button"
+  (eventbox :class "clock-button hover-button"
             :onclick "${EWW_CMD} open-many --toggle widgets0-closer-0 widgets1-closer-1 widgets2-closer-2 &&
                       scripts/reveal_widgets ${monitor}"
             :cursor "pointer"
-            (label :class "clock hover-button-inner"
-                   :valign "center"
-                   :text datetime)))
+            (box :class "section"
+                 (label :class "clock"
+                        :valign "center"
+                        :text datetime))))

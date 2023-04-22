@@ -4,8 +4,8 @@
 (defwidget indicators []
   (eventbox :class "hover-button"
             :cursor "pointer"
-            (box :class "section hover-button-inner"
-                 :spacing 12
-                 :valign "center"
-                 (network)
-                 (volume))))
+            (box :class "section"
+                 (box :spacing 12
+                      :valign "center"
+                      (network)
+                      (volume)))))

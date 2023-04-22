@@ -5,9 +5,16 @@ $border-radius: 9px;
 }
 
 .section {
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: $border-radius;
-    padding: 0 10px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: $border-radius;
+  padding: 0 10px;
+}
+
+.hover-button {
+  border-radius: $border-radius;
+  &:hover {
+    background-color: rgba(100, 100, 100, 0.4);
+  }
 }
 
 .container {
