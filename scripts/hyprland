@@ -27,8 +27,7 @@ def generate_default_workspaces():
             "id": workspace_id,
             "windows": 0,
             "active": False,
-            "hasfullscreen": False,
-            "lastwindowtitle": None
+            "hasfullscreen": False
         }
         for workspace_id in range(1, 10)
     ]
@@ -59,7 +58,6 @@ def update_workspaces():
                     monitor_workspace["windows"] = workspace["windows"]
                     monitor_workspace["active"] = workspace["id"] == monitor["activeWorkspace"]["id"]
                     monitor_workspace["hasfullscreen"] = workspace["hasfullscreen"]
-                    monitor_workspace["lastwindowtitle"] = workspace["lastwindowtitle"]
                     if monitor_workspace["active"]:
                         monitor_info["single"] = workspace["windows"] == 1 or workspace["hasfullscreen"]
                     break
