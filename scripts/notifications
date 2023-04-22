@@ -58,7 +58,7 @@ def unwrap(value: dbus.Array
 
 def get_gtk_icon_path(icon_name: str, size: int = 128) -> str:
     if size < 32:
-        return os.path.expandvars("/usr/share/icons/Papirus-Dark/48x48/status/dialog-information.svg")
+        return None
     if info := Gtk.IconTheme.get_default().lookup_icon(icon_name, size, 0):
         return info.get_filename()
     return get_gtk_icon_path(icon_name, size - 1)
