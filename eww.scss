@@ -1,7 +1,7 @@
 $border-radius: 9px;
 
 * {
-    all: unset;
+  all: unset;
 }
 
 .section {
@@ -18,142 +18,152 @@ $border-radius: 9px;
 }
 
 .container {
-    font-family: SF Pro Rounded;
-    font-weight: 500;
-    font-size: 0.9em;
-    margin: 6px 10px 0 10px;
+  font-family: SF Pro Rounded;
+  font-weight: 500;
+  font-size: 0.9em;
+  margin: 6px 10px 0 10px;
 
-    &.maximized {
-        background-color: rgba(0, 0, 0, 0.7);
-        margin: 0;
-        padding: 6px 10px 5px 10px;
+  &.maximized {
+    background-color: rgba(0, 0, 0, 0.7);
+    margin: 0;
+    padding: 6px 10px 5px 10px;
 
-        .section {
-            background-color: transparent;
-        }
+    .section {
+      background-color: transparent;
     }
+  }
 }
 
 .icon {
-    font-family: Segoe Fluent Icons;
+  font-family: Segoe Fluent Icons;
 }
 
 .red {
-    color: #ff6961;
-}
-
-.hover-button {
-    .hover-button-inner {
-        padding: 0.5em;
-    }
-
-    &:hover .hover-button-inner {
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-    }
+  color: #ff6961;
 }
 
 .app-menu {
-    font-size: 1.4em;
-    transition: color 500ms;
+  font-size: 1.4em;
+  transition: color 500ms;
 
-    &:hover {
-        color: #1793D1;
-    }
+  &:hover {
+    color: #1793d1;
+  }
 }
 
 .window-controls {
-    .close-btn, .maximize-btn, .float-btn {
-        font-size: 1.6em;
-        transition: color 500ms;
+  .close-btn,
+  .maximize-btn,
+  .float-btn {
+    font-size: 1.6em;
+    transition: color 500ms;
 
-        &.close-btn {
-            &:hover {
-                color: #ff0000;
-            }
-        }
-
-        &.maximize-btn {
-            &:hover {
-                color: #0099ff;
-            }
-        }
-
-        &.float-btn {
-            &:hover {
-                color: #ffff00;
-            }
-        }
+    &.close-btn {
+      &:hover {
+        color: #ff0000;
+      }
     }
+
+    &.maximize-btn {
+      &:hover {
+        color: #0099ff;
+      }
+    }
+
+    &.float-btn {
+      &:hover {
+        color: #ffff00;
+      }
+    }
+  }
 }
 
 .workspaces {
-    .workspace-btn {
-        transition: color 500ms;
+  .workspace-btn {
+    transition: color 500ms;
 
-        label {
-            font-size: 1.2em;
-            margin: 0 4px;
-        }
-
-        &:hover {
-            color: #aaa;
-        }
+    label {
+      font-size: 1.2em;
+      margin: 0 4px;
     }
+
+    &:hover {
+      color: #aaa;
+    }
+  }
 }
 
 .volume {
-    .volume-icon {
-        font-size: 1.2em;
-    }
+  .volume-icon {
+    font-size: 1.2em;
+  }
 }
 
 .network {
-    .wifi-icon {
-       font-size: 1.3em;
-    }
+  .wifi-icon {
+    font-size: 1.3em;
+  }
 }
 
 .text-bold {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .widgets {
-    margin-top: 10px;
-    margin-right: 10px;
+  margin-top: 10px;
+  margin-right: 10px;
 
-    .widget {
-        background-color: rgba(50, 50, 50, 0.6);
-        padding: 14px;
-        border-radius: 9px;
+  .widget {
+    background-color: rgba(50, 50, 50, 0.6);
+    padding: 14px;
+    border-radius: 9px;
 
-        &.widget-timezones {
-            background: rgb(24,24,24);
-            background: linear-gradient(0deg, rgba(24,24,24,1) 0%, rgba(20,20,20,1) 50%, rgba(14,14,14,1) 100%);
-            color: #aaa;
+    &.widget-timezones {
+      background: rgb(24, 24, 24);
+      background: linear-gradient(
+        0deg,
+        rgba(24, 24, 24, 1) 0%,
+        rgba(20, 20, 20, 1) 50%,
+        rgba(14, 14, 14, 1) 100%
+      );
+      color: #aaa;
 
-            .text-bold {
-                color: #fff;
-            }
-        }
+      .text-bold {
+        color: #fff;
+      }
     }
+  }
 }
 
 .system-menu {
-    margin: 10px;
-    margin-top: 0;
-    background-color: rgba(50, 50, 50, 0.5);
-    border-radius: $border-radius;
+  margin: 10px;
+  margin-top: 0;
+  background-color: rgba(50, 50, 50, 0.5);
+  border-radius: $border-radius;
 
-    .system-menu-section {
-        border-bottom: 1px solid #777;
+  .system-menu-section {
+    border-bottom: 1px solid #777;
 
-        &:last-child {
-            border: none;
-        }
+    &:last-child {
+      border: none;
+    }
 
-        .system-menu-button {
-            padding: 0.2em 0.5em;
+    .system-menu-button {
+      padding: 0.2em 0.5em;
+
+      label {
+        margin: 0.2em 1em;
+        padding: 0.1em 0;
+      }
+
+      &:hover {
+        background-color: rgba(100, 100, 100, 0.5);
+        border-radius: $border-radius;
+      }
+    }
+  }
+}
+
 
             label {
                 margin: 0.2em 1em;
