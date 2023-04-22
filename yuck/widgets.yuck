@@ -1,21 +1,26 @@
+(include "yuck/widgets/notification-list.yuck")
 (include "yuck/widgets/timezones.yuck")
 
 (defvar reveal_widgets "[false, false, false]")
 
 (defwidget widgets [monitor]
   (revealer :transition "slideleft"
-            :duration "500ms"
+            :duration "300ms"
             :reveal {reveal_widgets[monitor]}
             (overlay
-              (box :orientation "v"
-                   :spacing 10
-                   :space-evenly false
-                   :class "widgets"
-                   (timezones)))))
+              (scroll :vscroll true
+                      :hscroll false
+                      (box :orientation "v"
+                           :spacing 10
+                           :space-evenly false
+                           :class "widgets"
+                           (notification-list)
+                           (timezones))))))
 
 (defwindow widgets0
   :monitor 0
   :geometry (geometry :x "-1px"
+                      :height "1032px"
                       :anchor "top right")
   :stacking "overlay"
   :exclusive false
@@ -26,6 +31,7 @@
 (defwindow widgets1
   :monitor 1
   :geometry (geometry :x "-1px"
+                      :height "1032px"
                       :anchor "top right")
   :stacking "overlay"
   :exclusive false
@@ -36,6 +42,7 @@
 (defwindow widgets2
   :monitor 2
   :geometry (geometry :x "-1px"
+                      :height "1032px"
                       :anchor "top right")
   :stacking "overlay"
   :exclusive false

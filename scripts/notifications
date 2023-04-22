@@ -1,0 +1,289 @@
+#!/usr/bin/env python3
+
+import gi
+gi.require_version("Gtk", "3.0")
+gi.require_version("GdkPixbuf", "2.0")
+
+import uuid
+import logging
+import os
+import datetime
+from dbus.mainloop.glib import DBusGMainLoop
+import dbus
+from gi.repository import GdkPixbuf, GLib, Gtk
+import pathlib
+import json
+
+cache_dir = "/tmp"
+history_path = os.path.expandvars("$XDG_CACHE_HOME/eww/notifications.json")
+history_limit = 20
+logging.basicConfig(filename="logs/notifications.log",
+                    encoding="utf-8", level=logging.INFO)
+
+
+def unwrap(value: dbus.Array
+           | dbus.Boolean
+           | dbus.Byte
+           | dbus.Dictionary
+           | dbus.Double
+           | dbus.Int16
+           | dbus.ByteArray
+           | dbus.Int32
+           | dbus.Int64
+           | dbus.Signature
+           | dbus.UInt16
+           | dbus.UInt32
+           | dbus.UInt64
+           | dbus.String) -> str | int | list | tuple | float | dict | bool | bytes:
+    if isinstance(value, dbus.ByteArray):
+        return "".join([str(byte) for byte in value])
+    if isinstance(value, (dbus.Array, list, tuple)):
+        return [unwrap(item) for item in value]
+    if isinstance(value, (dbus.Dictionary, dict)):
+        return dict([(unwrap(x), unwrap(y)) for x, y in value.items()])
+    if isinstance(value, (dbus.Signature, dbus.String)):
+        return str(value)
+    if isinstance(value, dbus.Boolean):
+        return bool(value)
+    if isinstance(
+        value,
+        (dbus.Int16, dbus.UInt16, dbus.Int32,
+         dbus.UInt32, dbus.Int64, dbus.UInt64),
+    ):
+        return int(value)
+    if isinstance(value, dbus.Byte):
+        return bytes([int(value)])
+    return value
+
+
+def get_gtk_icon_path(icon_name: str, size: int = 128) -> str:
+    if size < 32:
+        return os.path.expandvars("/usr/share/icons/Papirus-Dark/48x48/status/dialog-information.svg")
+    if info := Gtk.IconTheme.get_default().lookup_icon(icon_name, size, 0):
+        return info.get_filename()
+    return get_gtk_icon_path(icon_name, size - 1)
+
+
+def save_img_byte(pix, path):
+    GdkPixbuf.Pixbuf.new_from_bytes(width=pix[0],
+                                    height=pix[1],
+                                    has_alpha=pix[3],
+                                    data=GLib.Bytes(pix[6]),
+                                    colorspace=GdkPixbuf.Colorspace.RGB,
+                                    rowstride=pix[2],
+                                    bits_per_sample=pix[4]).savev(path, "png")
+
+
+def handle_special_rules(details):
+    if details["appname"] == "Music Player Daemon":
+        details["image-path"] = details["icon"]
+        del details["icon"]
+
+
+def parse_hints(hints_list, appname, id):
+    hints = {}
+
+    # action-icons: BOOLEAN
+    #  When set, a server that has the "action-icons" capability
+    #    will attempt to interpret any action identifier as a named icon.
+    #  The localized display name will be used to annotate the icon for
+    #    accessibility purposes.
+    #  The icon name should be compliant with the
+    #    Freedesktop.org Icon Naming Specification.
+    if "action-icons" in hints_list:
+        hints["action-icons"] = hints_list["action-icons"]
+
+    # category: STRING
+    #  The type of notification this is.
+    if "category" in hints_list:
+        hints["category"] = hints_list["category"]
+
+    # desktop-entry: STRING
+    #  This specifies the name of the desktop filename
+    #    representing the calling program.
+    #  This should be the same as the prefix used for the
+    #    application's .desktop file.
+    #  An example would be "rhythmbox" from "rhythmbox.desktop".
+    #  This can be used by the daemon to retrieve the correct icon
+    #    for the application, for logging purposes, etc.
+    if "desktop-entry" in hints_list:
+        hints["desktop-entry"] = hints_list["desktop-entry"]
+
+    # image-path: STRING
+    #  Alternative way to define the notification image.
+    if "image-path" in hints_list:
+        image_path = hints_list["image-path"]
+        image_path = image_path.replace("file://", "")
+        hints["image-path"] = image_path
+    elif "image_path" in hints_list:
+        image_path = hints_list["image_path"]
+        image_path = image_path.replace("file://", "")
+        hints["image-path"] = image_path
+
+    # image-data: iibiiay
+    #  This is a raw data image format which describes the width,
+    #    height, rowstride, has alpha, bits per sample, channels
+    #    and image data respectively.
+    if "image-data" in hints_list:
+        hints["image-path"] = f"{cache_dir}/{appname}-{id}.png"
+        save_img_byte(hints_list["image-data"], hints["image-path"])
+    elif "image_data" in hints_list:
+        hints["image-path"] = f"{cache_dir}/{appname}-{id}.png"
+        save_img_byte(hints_list["image_data"], hints["image-path"])
+
+    # sound-file: STRING
+    #  The path to a sound file to play when the notification pops up.
+    if "sound-file" in hints_list:
+        hints["sound-file"] = hints_list["sound-file"]
+
+    # sound-name: STRING
+    #  A themeable named sound from the freedesktop.org sound naming
+    #    specification to play when the notification pops up.
+    #  Similar to icon-name, only for sounds.
+    #  An example would be "message-new-instant".
+    if "sound-name" in hints_list:
+        hints["sound-name"] = hints_list["sound-name"]
+
+    # suppress-sound: BOOLEAN
+    #  Causes the server to suppress playing any sounds,
+    #    if it has that ability.
+    #  This is usually set when the client itself is going
+    #    to play its own sound.
+    if "suppress-sound" in hints_list:
+        hints["suppress-sound"] = hints_list["suppress-sound"]
+
+    # transient: BOOLEAN
+    #  When set the server will treat the notification as transient and
+    #    by-pass the server's persistence capability, if it should exist.
+    if "transient" in hints_list:
+        hints["transient"] = hints_list["transient"]
+
+    # x: INT32
+    #  Specifies the X location on the screen that the
+    #    notification should point to.
+    #  The "y" hint must also be specified.
+    if "x" in hints_list:
+        hints["x"] = hints_list["x"]
+
+    # y: INT32
+    #  Specifies the Y location on the screen that the
+    #    notification should point to.
+    #  The "x" hint must also be specified.
+    if "y" in hints_list:
+        hints["y"] = hints_list["y"]
+
+    # urgency: BYTE
+    #  The urgency level.
+    if "urgency" in hints_list:
+        match hints_list["urgency"]:
+            case b"\x00":
+                hints["urgency"] = "low"
+            case b"\x01":
+                hints["urgency"] = "normal"
+            case b"\x02":
+                hints["urgency"] = "critical"
+
+    # value
+    if "value" in hints_list:
+        hints["value"] = hints_list["value"]
+
+    # TODO: handle additional hints (sender-pid)
+    return hints
+
+
+def parse_notification(message):
+    args_list = message.get_args_list()
+    args_list = [unwrap(a) for a in args_list]
+
+    logging.info(args_list)
+
+    details = {
+        "id": str(uuid.uuid1()),
+        "timestamp": datetime.datetime.now().strftime("%l:%M %p"),
+        "appname": args_list[0],
+        "replaces-id": args_list[1],
+        "summary": args_list[3],
+        "body": args_list[4],
+        # TODO: parse actions (args_list[5])
+        "timeout": args_list[7]
+    }
+
+    # Notification Icon
+    if args_list[2].strip():
+        if "/" in args_list[2] or "." in args_list[2]:
+            icon_path = args_list[2]
+            icon_path = icon_path.replace("file://", "")
+            details["icon"] = icon_path
+        else:
+            details["icon"] = get_gtk_icon_path(args_list[2])
+
+    # Hints
+    details["hints"] = parse_hints(
+        args_list[6], details["appname"], details["id"])
+
+    # Special rules
+    handle_special_rules(details)
+
+    logging.info(details)
+
+    return details
+
+
+def create_history_file():
+    pathlib.PosixPath(os.path.dirname(history_path)).mkdir(
+        parents=True, exist_ok=True)
+    pathlib.PosixPath(history_path).touch(exist_ok=True)
+
+
+def read_notification_file():
+    with open(history_path, "r") as file:
+        try:
+            return json.load(file)
+        except ValueError:
+            return []
+
+
+def append_notification(data, notification):
+    with open(history_path, "w") as file:
+        if len(data) >= history_limit:
+            data.pop()
+        data.insert(0, notification)
+        json.dump(data, file)
+
+
+def print_notifications():
+    try:
+        with open(history_path, "r") as file:
+            output_str = file.read().replace('"', '\\"')
+            os.system(f"eww update notifications=\"{output_str}\"")
+    except FileNotFoundError:
+        os.system("eww update notifications=\"[]\"")
+
+
+def add_notificaton(notification):
+    try:
+        data = read_notification_file()
+        append_notification(data, notification)
+        print_notifications()
+    except FileNotFoundError:
+        create_history_file()
+        add_notificaton(notification)
+
+
+def notifications(bus, message):
+    notification = parse_notification(message)
+    add_notificaton(notification)
+
+
+if __name__ == "__main__":
+    print_notifications()
+
+    DBusGMainLoop(set_as_default=True)
+
+    bus = dbus.SessionBus()
+    bus.add_match_string_non_blocking(
+        "eavesdrop=true, interface='org.freedesktop.Notifications', member='Notify'")
+    bus.add_message_filter(notifications)
+
+    mainloop = GLib.MainLoop()
+    mainloop.run()

@@ -1,0 +1,70 @@
+(defwidget notification-list []
+  (box :class "notification-list"
+       :orientation "vertical"
+       :spacing 10
+       :space-evenly false
+       (for notification in notifications
+            (notification :notification {notification}))))
+
+(defwidget notification [notification]
+  (box :class "notification notification-${notification.hints.urgency ?: "normal"}"
+       :orientation "horizontal"
+       :space-evenly false
+       :spacing 10
+       :halign "end"
+       :width 380
+       :height 80
+       (box :class "notification-container"
+            :orientation "vertical"
+            :space-evenly false
+            :hexpand true
+            :vexpand true
+            :spacing 5
+            (box :class "notification-header"
+                 :space-evenly false
+                 (box :class "notification-appname"
+                      :halign "start"
+                      :hexpand true
+                      :space-evenly false
+                      :spacing 8
+                      (image :class "notification-icon"
+                             :visible {notification.icon != "null"}
+                             :valign "end"
+                             :image-width 16
+                             :image-height 16
+                             :path {notification.icon})
+                      (label :show-truncated true
+                             :xalign 0
+                             :yalign 0
+                             :wrap true
+                             :text {notification.appname}))
+                 (box :class "notification-time"
+                      :halign "end"
+                      :valign "start"
+                      :yalign 0
+                      (label :yalign 0
+                             :text {notification.timestamp})))
+            (box :class "notification-body-container"
+                 :orientation "horizontal"
+                 :vexpand true
+                 :space-evenly false
+                 :spacing 10
+                 (box :class "notification-text"
+                      :orientation "vertical"
+                      :space-evenly false
+                      :spacing 5
+                      :vexpand true
+                      :hexpand true
+                      (label :class "notification-summary"
+                             :wrap true
+                             :halign "start"
+                             :text {notification.summary})
+                      (label :class "notification-body"
+                             :visible {notification.body != ""}
+                             :text {notification.body}
+                             :halign "start"
+                             :wrap true))
+                 (image :class "notification-image"
+                        :visible {notification.image-path != "null"}
+                        :image-width 64
+                        :path {notification.image-path})))))
