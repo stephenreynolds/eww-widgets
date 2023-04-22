@@ -74,7 +74,7 @@ def save_img_byte(pix, path):
                                     bits_per_sample=pix[4]).savev(path, "png")
 
 
-def handle_special_rules(details):
+def handle_app_rules(details):
     if details["appname"] == "Music Player Daemon":
         details["image-path"] = details["icon"]
         del details["icon"]
@@ -222,7 +222,7 @@ def parse_notification(message):
         args_list[6], details["appname"], details["id"])
 
     # Special rules
-    handle_special_rules(details)
+    handle_app_rules(details)
 
     logging.info(details)
 
