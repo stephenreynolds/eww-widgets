@@ -8,6 +8,8 @@ revealed[0]=${revealed[0]#[}
 revealed[-1]=${revealed[-1]%]}
 monitors=(false false false)
 
+$EWW update reveal_notification_group="null"
+
 if [[ "${revealed[$1]}" == "true" ]]; then
     monitors[$1]=false
     $EWW update reveal_widgets="[${monitors[0]},${monitors[1]},${monitors[2]}]"

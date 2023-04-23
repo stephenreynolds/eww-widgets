@@ -13,8 +13,9 @@ import dbus
 from gi.repository import GdkPixbuf, GLib, Gtk
 import pathlib
 import json
+import shutil
 
-cache_dir = "/tmp"
+cache_dir = "/tmp/eww"
 history_path = os.path.expandvars("$XDG_CACHE_HOME/eww/notifications.json")
 history_limit = 20
 logging.basicConfig(filename="logs/notifications.log",
@@ -75,9 +76,14 @@ def save_img_byte(pix, path):
 
 
 def handle_app_rules(details):
-    if details["appname"] == "Music Player Daemon":
-        details["image-path"] = details["icon"]
-        del details["icon"]
+    appname = details["appname"]
+    match appname:
+        case "Music Player Daemon":
+            details["hints"]["image-path"] = details["icon"]
+            del details["icon"]
+        case "Mailspring":
+            details["icon"] = details["hints"]["image-path"]
+            del details["hints"]["image-path"]
 
 
 def parse_hints(hints_list, appname, id):
@@ -114,11 +120,17 @@ def parse_hints(hints_list, appname, id):
     if "image-path" in hints_list:
         image_path = hints_list["image-path"]
         image_path = image_path.replace("file://", "")
-        hints["image-path"] = image_path
+        filename = os.path.basename(image_path)
+        new_path = f"{cache_dir}/{filename}"
+        shutil.copy(image_path, new_path)
+        hints["image-path"] = new_path
     elif "image_path" in hints_list:
         image_path = hints_list["image_path"]
         image_path = image_path.replace("file://", "")
-        hints["image-path"] = image_path
+        filename = os.path.basename(image_path)
+        new_path = f"{cache_dir}/{filename}"
+        shutil.copy(image_path, new_path)
+        hints["image-path"] = new_path
 
     # image-data: iibiiay
     #  This is a raw data image format which describes the width,
@@ -195,8 +207,6 @@ def parse_notification(message):
     args_list = message.get_args_list()
     args_list = [unwrap(a) for a in args_list]
 
-    logging.info(args_list)
-
     details = {
         "id": str(uuid.uuid1()),
         "timestamp": datetime.datetime.now().strftime("%l:%M %p"),
@@ -213,7 +223,10 @@ def parse_notification(message):
         if "/" in args_list[2] or "." in args_list[2]:
             icon_path = args_list[2]
             icon_path = icon_path.replace("file://", "")
-            details["icon"] = icon_path
+            filename = os.path.basename(icon_path)
+            new_path = f"{cache_dir}/{filename}"
+            shutil.copy(icon_path, new_path)
+            details["icon"] = new_path
         else:
             details["icon"] = get_gtk_icon_path(args_list[2])
 
@@ -223,8 +236,6 @@ def parse_notification(message):
 
     # Special rules
     handle_app_rules(details)
-
-    logging.info(details)
 
     return details
 
@@ -245,9 +256,28 @@ def read_notification_file():
 
 def append_notification(data, notification):
     with open(history_path, "w") as file:
-        if len(data) >= history_limit:
+        appname = notification['appname']
+        found_group = None
+        for group in data:
+            if group['appname'] == appname:
+                found_group = group
+                break
+
+        if found_group:
+            found_group['notifications'].insert(0, notification)
+            data.remove(found_group)
+            data.insert(0, found_group)
+        else:
+            new_group = {'appname': appname, 'notifications': [notification]}
+            data.insert(0, new_group)
+
+        if len(data) > 20:
             data.pop()
-        data.insert(0, notification)
+
+        for group in data:
+            if len(group['notifications']) > 20:
+                group['notifications'].pop()
+
         json.dump(data, file)
 
 
@@ -277,6 +307,8 @@ def notifications(bus, message):
 
 if __name__ == "__main__":
     print_notifications()
+
+    pathlib.PosixPath(cache_dir).mkdir(parents=True, exist_ok=True)
 
     DBusGMainLoop(set_as_default=True)
 

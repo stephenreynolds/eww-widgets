@@ -112,6 +112,7 @@ $border-radius: 9px;
 .widgets {
   margin-top: 10px;
   margin-right: 10px;
+  margin-bottom: 48px;
 
   .widget {
     background-color: rgba(50, 50, 50, 0.6);
@@ -164,20 +165,62 @@ $border-radius: 9px;
   }
 }
 
+.notification-list {
+  .notification-list-inner {
+    margin-top: 10px;
+  }
+
+  .notification-list-header {
+    .notification-list-header-label {
+      font-weight: 600;
+    }
+
+    .notification-clear box {
+      padding: 0.4em 0.5em;
+      background-color: rgba(128, 128, 128, 0.4);
+      border-radius: $border-radius;
+    }
+  }
+
+  .notification-dismiss {
+    background-color: rgba(128, 128, 128, 0.6);
+    border-radius: 999px;
+  }
+
+  .notification-group-header {
+    .notification-group-name {
+      font-weight: 600;
+    }
+
+    .notification-group-less box {
+      padding: 0.4em 0.5em;
+      background-color: rgba(128, 128, 128, 0.4);
+      border-radius: $border-radius;
+    }
+  }
+
+  .notification-group-size {
+    margin-bottom: 0.5em;
+    padding: 0.4em 1em;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: $border-radius;
+  }
+}
+
 .notification {
   border-radius: 9px;
   padding: 0.75em;
 
   &.notification-low {
-    background-color: rgba(52, 64, 119, 0.5);
+    background-color: rgba(46, 52, 64, 0.4);
   }
 
   &.notification-normal {
-    background-color: rgba(21, 89, 66, 0.5);
+    background-color: rgba(21, 89, 66, 0.4);
   }
 
   &.notification-critical {
-    background-color: rgba(89, 21, 44, 0.5);
+    background-color: rgba(89, 21, 44, 0.4);
   }
 
   .notification-container {

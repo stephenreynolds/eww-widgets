@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import json
+
+history_path = os.path.expandvars("$XDG_CACHE_HOME/eww/notifications.json")
+
+
+def read_notification_file():
+    with open(history_path, "r") as file:
+        try:
+            return json.load(file)
+        except ValueError:
+            return []
+
+
+def print_notifications():
+    try:
+        with open(history_path, "r") as file:
+            output_str = file.read().replace('"', '\\"')
+            os.system(f"eww update notifications=\"{output_str}\"")
+    except FileNotFoundError:
+        os.system("eww update notifications=\"[]\"")
+
+
+def delete_by_id(id, data):
+    with open(history_path, "w") as file:
+        for group in data:
+            for i, notification in enumerate(group["notifications"]):
+                if notification["id"] == id:
+                    if len(group["notifications"]) == 1:
+                        data.remove(group)
+                    else:
+                        group["notifications"].pop(i)
+                    return json.dump(data, file)
+
+
+def delete_by_group(appname, data):
+    with open(history_path, "w") as file:
+        for group in data:
+            if group["appname"] == appname:
+                data.remove(group)
+                return json.dump(data, file)
+
+
+def delete_all(data):
+    with open(history_path, "w") as file:
+        data.clear()
+        return json.dump(data, file)
+
+
+if __name__ == "__main__":
+    data = read_notification_file()
+    match sys.argv[1]:
+        case "--id":
+            delete_by_id(sys.argv[2], data)
+            print_notifications()
+        case "--group":
+            delete_by_group(sys.argv[2], data)
+            print_notifications()
+        case "--all":
+            delete_all(data)
+            print_notifications()

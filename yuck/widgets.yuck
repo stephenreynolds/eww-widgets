@@ -14,13 +14,14 @@
                            :spacing 10
                            :space-evenly false
                            :class "widgets"
+                           :width 380
                            (notification-list)
                            (timezones))))))
 
 (defwindow widgets0
   :monitor 0
   :geometry (geometry :x "-1px"
-                      :height "1032px"
+                      :height "100%"
                       :anchor "top right")
   :stacking "overlay"
   :exclusive false
@@ -31,7 +32,7 @@
 (defwindow widgets1
   :monitor 1
   :geometry (geometry :x "-1px"
-                      :height "1032px"
+                      :height "100%"
                       :anchor "top right")
   :stacking "overlay"
   :exclusive false
@@ -42,7 +43,7 @@
 (defwindow widgets2
   :monitor 2
   :geometry (geometry :x "-1px"
-                      :height "1032px"
+                      :height "100%"
                       :anchor "top right")
   :stacking "overlay"
   :exclusive false
@@ -51,9 +52,15 @@
   (widgets :monitor 2))
 
 (defwidget widgets-closer [window]
-  (eventbox :onclick "${EWW_CMD} update reveal_widgets='[false,false,false]' && eww close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"
-            :onrightclick "${EWW_CMD} update reveal_widgets='[false,false,false]' && eww close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"
-            :onmiddleclick "${EWW_CMD} update reveal_widgets='[false,false,false]' && eww close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"))
+  (eventbox :onclick "${EWW_CMD} update reveal_widgets='[false,false,false]' &&
+                      ${EWW_CMD} update reveal_notification_group='null' &&
+                      ${EWW_CMD} close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"
+            :onrightclick "${EWW_CMD} update reveal_widgets='[false,false,false]' &&
+                           ${EWW_CMD} update reveal_notification_group='null' &&
+                           ${EWW_CMD} close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"
+            :onmiddleclick "${EWW_CMD} update reveal_widgets='[false,false,false]' &&
+                            ${EWW_CMD} update reveal_notification_group='null' &&
+                            ${EWW_CMD} close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"))
 
 (defwindow widgets0-closer-0
   :monitor 0
