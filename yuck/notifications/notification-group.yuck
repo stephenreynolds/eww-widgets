@@ -8,6 +8,7 @@
        :visible {reveal-notification-group == "null" || reveal-notification-group == appname}
        (box :orientation "vertical"
             :space-evenly false
+            :spacing 10
             (notification-group-header :appname appname)
             (notification-group-top :latest {group-notifications[0]}
                                     :count {arraylength(group-notifications)})
