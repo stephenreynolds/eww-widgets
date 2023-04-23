@@ -1,0 +1,107 @@
+(defvar hover-notification "null")
+
+; notification: The notification to display
+; group-count: The number of notifications in its group.
+(defwidget notification [notification ?group-count]
+  (notification-hover :id {notification.id}
+    (box :class "notification notification-${notification.hints.urgency ?: "normal"}"
+         :orientation "horizontal"
+         :space-evenly false
+         :spacing 10
+         :halign "end"
+         :width 380
+         :height 80
+         (box :class "notification-container"
+              :orientation "vertical"
+              :space-evenly false
+              :hexpand true
+              :vexpand true
+              :spacing 5
+              (notification-header :icon {notification.icon}
+                                   :appname {notification.appname}
+                                   :timestamp {notification.timestamp})
+              (notification-content :notification notification)
+              (notification-group-expand-button :appname {notification.appname}
+                                                :group-count {group-count ?: 1})))))
+
+(defwidget notification-hover [id]
+  (eventbox :onhover "${EWW_CMD} update hover-notification='${id}'"
+            :onhoverlost "${EWW_CMD} update hover-notification='null'"
+            (overlay
+              (box
+                (children))
+              (notification-dismiss-button :id {id}))))
+
+(defwidget notification-dismiss-button [id]
+  (eventbox :class "notification-dismiss"
+            :onclick "scripts/notification_dismiss --id ${id}"
+            :visible {hover-notification == id}
+            :cursor "pointer"
+            :width 24
+            :height 24
+            :halign "start"
+            :valign "start"
+            (label :text "")))
+
+(defwidget notification-header [icon appname timestamp]
+  (box :class "notification-header"
+       :space-evenly false
+       (box :class "notification-appname"
+            :halign "start"
+            :hexpand true
+            :space-evenly false
+            :spacing 8
+            (image :class "notification-icon"
+                   :visible {icon != "null"}
+                   :valign "start"
+                   :image-width 16
+                   :image-height 16
+                   :path {icon})
+            (label :show-truncated true
+                   :xalign 0
+                   :yalign 0
+                   :wrap true
+                   :text {appname}))
+       (box :class "notification-time"
+            :halign "end"
+            :valign "start"
+            (label :yalign 0
+                   :text {timestamp}))))
+
+(defwidget notification-content [notification]
+  (box :class "notification-content"
+       :orientation "horizontal"
+       :vexpand true
+       :space-evenly false
+       :spacing 10
+       (box :class "notification-text"
+            :orientation "vertical"
+            :space-evenly false
+            :spacing 5
+            :vexpand true
+            :hexpand true
+            (label :class "notification-summary"
+                   :wrap true
+                   :halign "start"
+                   :xalign 0
+                   :text {notification.summary})
+            (label :class "notification-body"
+                   :visible {notification.body != ""}
+                   :text {notification.body}
+                   :halign "start"
+                   :xalign 0
+                   :wrap true))
+       (image :class "notification-image"
+              :visible {notification.hints.image-path != "null"}
+              :image-width 64
+              :valign "start"
+              :path {notification.hints.image-path})))
+
+(defwidget notification-group-expand-button [appname group-count]
+  (eventbox :onclick `scripts/reveal_notification_group "${appname}"`
+            :class "notification-group-size"
+            :cursor "pointer"
+            :halign "start"
+            :visible {group-count > 1}
+            (label :text "+${group-count - 1} more"
+                   :justify "right")))

@@ -1,159 +1,37 @@
-(defvar reveal_notification_group "null")
-(defvar hover_notification "null")
+(include "yuck/notifications/notification-group.yuck")
 
 (defwidget notification-list []
   (box :class "notification-list"
        :orientation "vertical"
        :spacing 10
        :space-evenly false
-       (box :class "notification-list-header"
-            :space-evenly false
-            :visible {reveal_notification_group == "null"}
-            (label :text "Notifications"
-                   :class "notification-list-header-label"
-                   :halign "start"
-                   :hexpand true)
-            (eventbox :class "notification-clear"
-                      :onclick "scripts/notification_dismiss --all"
-                      :cursor "pointer"
-                      :visible {arraylength(notifications) > 0}
-                      (box (label :text "Clear all")))
-            (box :class "notification-list-empty"
-                 :visible {arraylength(notifications) == 0}
-                 (label :text "No notifications")))
+       (notification-list-header :is-empty {arraylength(notifications) == 0})
        (box :orientation "vertical"
             :spacing 10
             :space-evenly false
-         (for group in notifications
-              (notification-group :appname {group.appname}
-                                  :notifications {group.notifications})))
-         (eventbox :class "notification-list-more"
-                   :visible {jq(notifications, "[.[] | .notification][3:] | add | length") > 0}
-                   (box (label :text "${jq(notifications, "[.[] | .notification][3:] | add | length")} more notifications")))))
+            (for group in notifications
+                 (notification-group :appname {group.appname}
+                                     :group-notifications {group.notifications})))
+       (notification-list-expand-button)))
 
-(defwidget notification-dismiss-button [id]
-  (eventbox :class "notification-dismiss"
-            :onclick "scripts/notification_dismiss --id ${id}"
-            :visible {hover_notification == id}
-            :cursor "pointer"
-            :width 24
-            :height 24
-            :halign "start"
-            :valign "start"
-            (label :text "")))
+(defwidget notification-list-header [is-empty]
+   (box :class "notification-list-header"
+        :space-evenly false
+        :visible {reveal-notification-group == "null"}
+        (label :text "Notifications"
+               :class "notification-list-header-label"
+               :halign "start"
+               :hexpand true)
+        (literal :content {is-empty ?
+                 `(box :class "notification-list-empty"
+                       (label :text "No notifications"))` :
+                 `(eventbox :class "notification-clear"
+                            :onclick "scripts/notification_dismiss --all"
+                            :cursor "pointer"
+                            (box (label :text "Clear all")))`})))
 
-(defwidget notification-group [appname notifications]
-  (box :orientation "vertical"
-       :space-evenly false
-       :visible {reveal_notification_group == "null" || reveal_notification_group == appname}
-       (box :orientation "vertical"
-            :space-evenly false
-            (box :class "notification-group-header"
-                 :visible {reveal_notification_group == appname}
-                 :space-evenly false
-                 :spacing 10
-                 (label :text {appname}
-                        :class "notification-group-name"
-                        :halign "start"
-                        :hexpand true)
-                 (eventbox :class "notification-group-less"
-                           :onclick "${EWW_CMD} update reveal_notification_group='null'"
-                           :cursor "pointer"
-                           (box (label :text "Show less")))
-                 (eventbox :class "notification-dismiss"
-                           :onclick "scripts/notification_dismiss --group ${appname}"
-                           :cursor "pointer"
-                           :width 28
-                           (label :text "")))
-            (eventbox :onhover "${EWW_CMD} update hover_notification='${notifications[0].id}'"
-                      :onhoverlost "${EWW_CMD} update hover_notification='null'"
-                      :visible {reveal_notification_group == "null"}
-                      (overlay
-                          (eventbox :onclick {arraylength(notifications) == 1 || reveal_notification_group == appname ? "" :
-                                              `scripts/reveal_notification_group "${appname}"`}
-                                    (notification :notification {notifications[0]}))
-                          (box :class "notification-group-size"
-                               :halign "center"
-                               :valign "end"
-                               :visible {arraylength(notifications) > 1}
-                               (label :text "${arraylength(notifications) - 1} more"
-                                      :justify "right"))
-                          (notification-dismiss-button :id {notifications[0].id})))
-            (revealer :transition "slidedown"
-                      :duration "300ms"
-                      :reveal {reveal_notification_group == appname}
-                      (box :class "notification-list-inner"
-                           :orientation "vertical"
-                           :spacing 10
-                           :space-evenly false
-                           (for notification in {notifications}
-                                (eventbox :onhover "${EWW_CMD} update hover_notification='${notification.id}'"
-                                          :onhoverlost "${EWW_CMD} update hover_notification='null'"
-                                          (overlay
-                                              (notification :notification {notification})
-                                              (notification-dismiss-button :id {notification.id})))))))))
-
-(defwidget notification [notification]
-  (box :class "notification notification-${notification.hints.urgency ?: "normal"}"
-       :orientation "horizontal"
-       :space-evenly false
-       :spacing 10
-       :halign "end"
-       :width 380
-       :height 80
-       (box :class "notification-container"
-            :orientation "vertical"
-            :space-evenly false
-            :hexpand true
-            :vexpand true
-            :spacing 5
-            (box :class "notification-header"
-                 :space-evenly false
-                 (box :class "notification-appname"
-                      :halign "start"
-                      :hexpand true
-                      :space-evenly false
-                      :spacing 8
-                      (image :class "notification-icon"
-                             :visible {notification.icon != "null"}
-                             :valign "start"
-                             :image-width 16
-                             :image-height 16
-                             :path {notification.icon})
-                      (label :show-truncated true
-                             :xalign 0
-                             :yalign 0
-                             :wrap true
-                             :text {notification.appname}))
-                 (box :class "notification-time"
-                      :halign "end"
-                      :valign "start"
-                      :yalign 0
-                      (label :yalign 0
-                             :text {notification.timestamp})))
-            (box :class "notification-body-container"
-                 :orientation "horizontal"
-                 :vexpand true
-                 :space-evenly false
-                 :spacing 10
-                 (box :class "notification-text"
-                      :orientation "vertical"
-                      :space-evenly false
-                      :spacing 5
-                      :vexpand true
-                      :hexpand true
-                      (label :class "notification-summary"
-                             :wrap true
-                             :halign "start"
-                             :xalign 0
-                             :text {notification.summary})
-                      (label :class "notification-body"
-                             :visible {notification.body != ""}
-                             :text {notification.body}
-                             :halign "start"
-                             :xalign 0
-                             :wrap true))
-                 (image :class "notification-image"
-                        :visible {notification.hints.image-path != "null"}
-                        :image-width 64
-                        :path {notification.hints.image-path})))))
+(defwidget notification-list-expand-button []
+  (eventbox :class "notification-list-expand-button"
+            :visible {jq(notifications, ".[3:] | length") > 0}
+            (box
+              (label :text "${jq(notifications, "[.[] | .notification][3:] | add | length")} more notifications"))))

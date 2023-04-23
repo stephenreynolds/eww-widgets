@@ -1,0 +1,64 @@
+(include "yuck/notifications/notification.yuck")
+
+(defvar reveal-notification-group "null")
+
+(defwidget notification-group [appname group-notifications]
+  (box :orientation "vertical"
+       :space-evenly false
+       :visible {reveal-notification-group == "null" || reveal-notification-group == appname}
+       (box :orientation "vertical"
+            :space-evenly false
+            (notification-group-header :appname appname)
+            (notification-group-top :appname appname
+                                    :latest {group-notifications[0]}
+                                    :count {arraylength(group-notifications)})
+            (notification-group-expanded :reveal {reveal-notification-group == appname}
+                                         :group-notifications group-notifications))))
+
+(defwidget notification-group-header [appname]
+  (box :class "notification-group-header"
+       :visible {reveal-notification-group == appname}
+       :space-evenly false
+       :spacing 10
+       (notification-group-title :appname appname)
+       (notification-group-collapse)
+       (notification-group-dismiss :appname appname)))
+
+(defwidget notification-group-title [appname]
+   (label :text {appname}
+          :class "notification-group-name"
+          :halign "start"
+          :hexpand true))
+
+(defwidget notification-group-collapse []
+   (eventbox :class "notification-group-less"
+             :onclick "${EWW_CMD} update reveal-notification-group='null'"
+             :cursor "pointer"
+             (box (label :text "Show less"))))
+
+(defwidget notification-group-dismiss [appname]
+   (eventbox :class "notification-dismiss"
+             :onclick "scripts/notification_dismiss --group ${appname}"
+             :cursor "pointer"
+             :width 28
+             (label :text "")))
+
+(defwidget notification-group-top [appname latest count]
+    (eventbox :onhover "${EWW_CMD} update hover_notification='${latest.id}'"
+              :onhoverlost "${EWW_CMD} update hover_notification='null'"
+              :visible {reveal-notification-group == "null"}
+              (overlay
+                  (notification :notification {latest} :group-count count)
+                  (notification-dismiss-button :id {latest.id}))))
+
+(defwidget notification-group-expanded [reveal group-notifications]
+  (revealer :transition "slidedown"
+            :duration "300ms"
+            :reveal reveal
+            (box :class "notification-list-inner"
+                 :orientation "vertical"
+                 :spacing 10
+                 :space-evenly false
+                 (for notification in group-notifications
+
+                   (notification :notification notification)))))

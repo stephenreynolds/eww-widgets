@@ -53,13 +53,13 @@
 
 (defwidget widgets-closer [window]
   (eventbox :onclick "${EWW_CMD} update reveal_widgets='[false,false,false]' &&
-                      ${EWW_CMD} update reveal_notification_group='null' &&
+                      ${EWW_CMD} update reveal-notification-group='null' &&
                       ${EWW_CMD} close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"
             :onrightclick "${EWW_CMD} update reveal_widgets='[false,false,false]' &&
-                           ${EWW_CMD} update reveal_notification_group='null' &&
+                           ${EWW_CMD} update reveal-notification-group='null' &&
                            ${EWW_CMD} close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"
             :onmiddleclick "${EWW_CMD} update reveal_widgets='[false,false,false]' &&
-                            ${EWW_CMD} update reveal_notification_group='null' &&
+                            ${EWW_CMD} update reveal-notification-group='null' &&
                             ${EWW_CMD} close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"))
 
 (defwindow widgets0-closer-0
