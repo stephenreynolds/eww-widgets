@@ -21,6 +21,7 @@
         (label :text "Notifications"
                :class "notification-list-header-label"
                :halign "start"
+               :valign "end"
                :hexpand true)
         (literal :content {is-empty ?
                  `(box :class "notification-list-empty"
