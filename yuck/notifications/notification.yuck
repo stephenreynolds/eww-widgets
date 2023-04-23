@@ -88,7 +88,7 @@
                    :text {notification.summary})
             (label :class "notification-body"
                    :visible {notification.body != ""}
-                   :text {notification.body}
+                   :markup {notification.body}
                    :halign "start"
                    :xalign 0
                    :wrap true))

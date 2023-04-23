@@ -213,8 +213,8 @@ def parse_notification(message):
         "appname": args_list[0],
         "replaces-id": args_list[1],
         "summary": args_list[3],
-        "body": args_list[4],
-        # TODO: parse actions (args_list[5])
+        "body": GLib.markup_escape_text(args_list[4]),
+        "actions": args_list[5],
         "timeout": args_list[7]
     }
 
