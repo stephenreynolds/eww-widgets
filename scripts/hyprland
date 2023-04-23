@@ -69,7 +69,7 @@ def update_workspaces():
         "monitors": result
     }
 
-    output_str = json.dumps(output_obj).replace('"', '\\"')
+    output_str = json.dumps(output_obj).replace('"', '\\"').replace('\\\\"', '\\\\\\"')
 
     os.system(f"eww update hyprland=\"{output_str}\"")
 
