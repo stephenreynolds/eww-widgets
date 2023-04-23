@@ -9,11 +9,10 @@
        (box :orientation "vertical"
             :space-evenly false
             (notification-group-header :appname appname)
-            (notification-group-top :appname appname
-                                    :latest {group-notifications[0]}
+            (notification-group-top :latest {group-notifications[0]}
                                     :count {arraylength(group-notifications)})
             (notification-group-expanded :reveal {reveal-notification-group == appname}
-                                         :group-notifications group-notifications))))
+                                         :group-notifications {jq(group-notifications, ".[1:]")}))))
 
 (defwidget notification-group-header [appname]
   (box :class "notification-group-header"
@@ -43,13 +42,10 @@
              :width 28
              (label :text "")))
 
-(defwidget notification-group-top [appname latest count]
-    (eventbox :onhover "${EWW_CMD} update hover_notification='${latest.id}'"
-              :onhoverlost "${EWW_CMD} update hover_notification='null'"
-              :visible {reveal-notification-group == "null"}
-              (overlay
-                  (notification :notification {latest} :group-count count)
-                  (notification-dismiss-button :id {latest.id}))))
+(defwidget notification-group-top [latest count]
+  (notification :notification {latest}
+                :show-count {reveal-notification-group == "null"}
+                :group-count count))
 
 (defwidget notification-group-expanded [reveal group-notifications]
   (revealer :transition "slidedown"
@@ -60,5 +56,4 @@
                  :spacing 10
                  :space-evenly false
                  (for notification in group-notifications
-
                    (notification :notification notification)))))

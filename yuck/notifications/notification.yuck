@@ -2,7 +2,7 @@
 
 ; notification: The notification to display
 ; group-count: The number of notifications in its group.
-(defwidget notification [notification ?group-count]
+(defwidget notification [notification ?show-count ?group-count]
   (notification-hover :id {notification.id}
     (box :class "notification notification-${notification.hints.urgency ?: "normal"}"
          :orientation "horizontal"
@@ -21,7 +21,8 @@
                                    :appname {notification.appname}
                                    :timestamp {notification.timestamp})
               (notification-content :notification notification)
-              (notification-group-expand-button :appname {notification.appname}
+              (notification-group-expand-button :visible {show-count ?: false}
+                                                :appname {notification.appname}
                                                 :group-count {group-count ?: 1})))))
 
 (defwidget notification-hover [id]
@@ -97,11 +98,11 @@
               :valign "start"
               :path {notification.hints.image-path})))
 
-(defwidget notification-group-expand-button [appname group-count]
+(defwidget notification-group-expand-button [visible appname group-count]
   (eventbox :onclick `scripts/reveal_notification_group "${appname}"`
             :class "notification-group-size"
             :cursor "pointer"
             :halign "start"
-            :visible {group-count > 1}
+            :visible visible
             (label :text "+${group-count - 1} more"
                    :justify "right")))
