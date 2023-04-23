@@ -32,6 +32,6 @@
 
 (defwidget notification-list-expand-button []
   (eventbox :class "notification-list-expand-button"
-            :visible {jq(notifications, ".[3:] | length") > 0}
+            :visible {arraylength(notifications) > 3}
             (box
               (label :text "${jq(notifications, "[.[] | .notification][3:] | add | length")} more notifications"))))
