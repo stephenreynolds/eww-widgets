@@ -5,6 +5,7 @@
 (defwidget notification-group [appname group-notifications]
   (box :orientation "vertical"
        :space-evenly false
+       :visible {reveal-notification-group == "null" || reveal-notification-group == appname}
        (box :orientation "vertical"
             :space-evenly false
             :spacing 10
