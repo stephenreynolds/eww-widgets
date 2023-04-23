@@ -209,7 +209,7 @@ def parse_notification(message):
 
     details = {
         "id": str(uuid.uuid1()),
-        "timestamp": datetime.datetime.now().strftime("%l:%M %p"),
+        "timestamp": datetime.datetime.now().strftime("%-l:%M %p"),
         "appname": args_list[0],
         "replaces-id": args_list[1],
         "summary": args_list[3],
