@@ -45,7 +45,7 @@
 
 (defwidget notification-group-top [latest count]
   (notification :notification {latest}
-                :show-count {reveal-notification-group == "null"}
+                :show-count {count > 1 && reveal-notification-group == "null"}
                 :group-count count))
 
 (defwidget notification-group-expanded [reveal group-notifications]
