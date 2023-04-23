@@ -52,34 +52,34 @@
   :namespace "eww"
   (widgets :monitor 2))
 
-(defwidget widgets-closer [window]
+(defwidget widgets-closer []
   (eventbox :onclick "${EWW_CMD} update reveal_widgets='[false,false,false]' &&
                       ${EWW_CMD} update reveal-notification-group='null' &&
-                      ${EWW_CMD} close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"
+                      ${EWW_CMD} close widgets0-closer-0 widgets1-closer-1 widgets2-closer-2"
             :onrightclick "${EWW_CMD} update reveal_widgets='[false,false,false]' &&
                            ${EWW_CMD} update reveal-notification-group='null' &&
-                           ${EWW_CMD} close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"
+                           ${EWW_CMD} close widgets0-closer-0 widgets1-closer-1 widgets2-closer-2"
             :onmiddleclick "${EWW_CMD} update reveal_widgets='[false,false,false]' &&
                             ${EWW_CMD} update reveal-notification-group='null' &&
-                            ${EWW_CMD} close ${window}0-closer-0 ${window}1-closer-1 ${window}2-closer-2"))
+                            ${EWW_CMD} close widgets0-closer-0 widgets1-closer-1 widgets2-closer-2"))
 
 (defwindow widgets0-closer-0
   :monitor 0
   :geometry (geometry :width "100%" :height "100%")
   :stacking "fg"
   :focusable false
-  (widgets-closer :window "widgets"))
+  (widgets-closer))
 
 (defwindow widgets1-closer-1
   :monitor 1
   :geometry (geometry :width "100%" :height "100%")
   :stacking "fg"
   :focusable false
-  (widgets-closer :window "widgets"))
+  (widgets-closer))
 
 (defwindow widgets2-closer-2
   :monitor 2
   :geometry (geometry :width "100%" :height "100%")
   :stacking "fg"
   :focusable false
-  (widgets-closer :window "widgets"))
+  (widgets-closer))
