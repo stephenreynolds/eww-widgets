@@ -16,7 +16,8 @@
                            :class "widgets"
                            :width 380
                            (notification-list)
-                           (timezones))))))
+                           (box :visible {reveal-notification-group == "null"}
+                                (timezones)))))))
 
 (defwindow widgets0
   :monitor 0
