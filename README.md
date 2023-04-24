@@ -9,6 +9,7 @@ This repo contains my work-in-progess widget setup for my personal install.
 - Rofi
 - Pipewire (pipewire-audio and pipewire-pulse)
 - pamixer
+- Nerd Fonts patched font
 
 ## Running
 
