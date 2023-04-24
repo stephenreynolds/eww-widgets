@@ -1,25 +1,22 @@
 #!/usr/bin/env python3
 
+import json
+import os
+import sys
+from datetime import datetime
+import shutil
+import dbus
+import dbus.service
+from dbus.mainloop.glib import DBusGMainLoop
+
 import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version("GdkPixbuf", "2.0")
-
-import uuid
-import logging
-import os
-import datetime
-from dbus.mainloop.glib import DBusGMainLoop
-import dbus
 from gi.repository import GdkPixbuf, GLib, Gtk
-import pathlib
-import json
-import shutil
 
-cache_dir = "/tmp/eww"
-history_path = os.path.expandvars("$XDG_CACHE_HOME/eww/notifications.json")
-history_limit = 20
-logging.basicConfig(filename="logs/notifications.log",
-                    encoding="utf-8", level=logging.INFO)
+CACHE_DIR = "/tmp/eww"
+HISTORY_PATH = os.path.expandvars("$XDG_CACHE_HOME/eww/notifications.json")
+HISTORY_LIMIT = 20
 
 
 def unwrap(value: dbus.Array
@@ -75,117 +72,70 @@ def save_img_byte(pix, path):
                                     bits_per_sample=pix[4]).savev(path, "png")
 
 
-def handle_app_rules(details):
-    appname = details["appname"]
+def handle_app_rules(notification):
+    appname = notification["appname"]
     match appname:
         case "Music Player Daemon":
-            details["hints"]["image-path"] = details["icon"]
-            del details["icon"]
+            notification["hints"]["image-path"] = notification["icon"]
+            del notification["icon"]
         case "Mailspring":
-            details["icon"] = details["hints"]["image-path"]
-            del details["hints"]["image-path"]
+            notification["icon"] = notification["hints"]["image-path"]
+            del notification["hints"]["image-path"]
 
 
+# DOCS: https://specifications.freedesktop.org/notification-spec/latest/ar01s08.html
 def parse_hints(hints_list, appname, id):
     hints = {}
 
-    # action-icons: BOOLEAN
-    #  When set, a server that has the "action-icons" capability
-    #    will attempt to interpret any action identifier as a named icon.
-    #  The localized display name will be used to annotate the icon for
-    #    accessibility purposes.
-    #  The icon name should be compliant with the
-    #    Freedesktop.org Icon Naming Specification.
     if "action-icons" in hints_list:
         hints["action-icons"] = hints_list["action-icons"]
 
-    # category: STRING
-    #  The type of notification this is.
     if "category" in hints_list:
         hints["category"] = hints_list["category"]
 
-    # desktop-entry: STRING
-    #  This specifies the name of the desktop filename
-    #    representing the calling program.
-    #  This should be the same as the prefix used for the
-    #    application's .desktop file.
-    #  An example would be "rhythmbox" from "rhythmbox.desktop".
-    #  This can be used by the daemon to retrieve the correct icon
-    #    for the application, for logging purposes, etc.
     if "desktop-entry" in hints_list:
         hints["desktop-entry"] = hints_list["desktop-entry"]
 
-    # image-path: STRING
-    #  Alternative way to define the notification image.
     if "image-path" in hints_list:
         image_path = hints_list["image-path"]
         image_path = image_path.replace("file://", "")
         filename = os.path.basename(image_path)
-        new_path = f"{cache_dir}/{filename}"
+        new_path = f"{CACHE_DIR}/{filename}"
         shutil.copy(image_path, new_path)
         hints["image-path"] = new_path
     elif "image_path" in hints_list:
         image_path = hints_list["image_path"]
         image_path = image_path.replace("file://", "")
         filename = os.path.basename(image_path)
-        new_path = f"{cache_dir}/{filename}"
+        new_path = f"{CACHE_DIR}/{filename}"
         shutil.copy(image_path, new_path)
         hints["image-path"] = new_path
 
-    # image-data: iibiiay
-    #  This is a raw data image format which describes the width,
-    #    height, rowstride, has alpha, bits per sample, channels
-    #    and image data respectively.
     if "image-data" in hints_list:
-        hints["image-path"] = f"{cache_dir}/{appname}-{id}.png"
+        hints["image-path"] = f"{CACHE_DIR}/{appname}-{id}.png"
         save_img_byte(hints_list["image-data"], hints["image-path"])
     elif "image_data" in hints_list:
-        hints["image-path"] = f"{cache_dir}/{appname}-{id}.png"
+        hints["image-path"] = f"{CACHE_DIR}/{appname}-{id}.png"
         save_img_byte(hints_list["image_data"], hints["image-path"])
 
-    # sound-file: STRING
-    #  The path to a sound file to play when the notification pops up.
     if "sound-file" in hints_list:
         hints["sound-file"] = hints_list["sound-file"]
 
-    # sound-name: STRING
-    #  A themeable named sound from the freedesktop.org sound naming
-    #    specification to play when the notification pops up.
-    #  Similar to icon-name, only for sounds.
-    #  An example would be "message-new-instant".
     if "sound-name" in hints_list:
         hints["sound-name"] = hints_list["sound-name"]
 
-    # suppress-sound: BOOLEAN
-    #  Causes the server to suppress playing any sounds,
-    #    if it has that ability.
-    #  This is usually set when the client itself is going
-    #    to play its own sound.
     if "suppress-sound" in hints_list:
         hints["suppress-sound"] = hints_list["suppress-sound"]
 
-    # transient: BOOLEAN
-    #  When set the server will treat the notification as transient and
-    #    by-pass the server's persistence capability, if it should exist.
     if "transient" in hints_list:
         hints["transient"] = hints_list["transient"]
 
-    # x: INT32
-    #  Specifies the X location on the screen that the
-    #    notification should point to.
-    #  The "y" hint must also be specified.
     if "x" in hints_list:
         hints["x"] = hints_list["x"]
 
-    # y: INT32
-    #  Specifies the Y location on the screen that the
-    #    notification should point to.
-    #  The "x" hint must also be specified.
     if "y" in hints_list:
         hints["y"] = hints_list["y"]
 
-    # urgency: BYTE
-    #  The urgency level.
     if "urgency" in hints_list:
         match hints_list["urgency"]:
             case b"\x00":
@@ -195,127 +145,176 @@ def parse_hints(hints_list, appname, id):
             case b"\x02":
                 hints["urgency"] = "critical"
 
-    # value
+    # Non-standard hints
     if "value" in hints_list:
         hints["value"] = hints_list["value"]
+    if "sender-pid" in hints_list:
+        hints["sender-pid"] = hints_list["sender-pid"]
 
-    # TODO: handle additional hints (sender-pid)
     return hints
 
 
-def parse_notification(message):
-    args_list = message.get_args_list()
-    args_list = [unwrap(a) for a in args_list]
-
-    details = {
-        "id": str(uuid.uuid1()),
-        "timestamp": datetime.datetime.now().strftime("%-l:%M %p"),
-        "appname": args_list[0],
-        "replaces-id": args_list[1],
-        "summary": args_list[3],
-        "body": GLib.markup_escape_text(args_list[4]),
-        "actions": args_list[5],
-        "timeout": args_list[7]
-    }
-
-    # Notification Icon
-    if args_list[2].strip():
-        if "/" in args_list[2] or "." in args_list[2]:
-            icon_path = args_list[2]
+def get_notification_icon(app_icon):
+    if app_icon.strip():
+        if "/" in app_icon or "." in app_icon:
+            icon_path = app_icon
             icon_path = icon_path.replace("file://", "")
             filename = os.path.basename(icon_path)
-            new_path = f"{cache_dir}/{filename}"
+            new_path = f"{CACHE_DIR}/{filename}"
             shutil.copy(icon_path, new_path)
-            details["icon"] = new_path
-        else:
-            details["icon"] = get_gtk_icon_path(args_list[2])
+            return new_path
+        return get_gtk_icon_path(app_icon)
 
-    # Hints
-    details["hints"] = parse_hints(
-        args_list[6], details["appname"], details["id"])
+
+def parse_notification(id, app_name, replaces_id, app_icon, summary,
+                       body, actions, hints, expire_timeout):
+    notification = {
+        "id": id,
+        "timestamp": datetime.now().strftime("%-l:%M %p"),
+        "appname": app_name,
+        "replaces-id": replaces_id,
+        "icon": get_notification_icon(app_icon),
+        "summary": summary,
+        "body": GLib.markup_escape_text(body),
+        "actions": actions,
+        "hints": parse_hints(hints, app_name, id),
+        "timeout": expire_timeout
+    }
 
     # Special rules
-    handle_app_rules(details)
+    handle_app_rules(notification)
 
-    return details
-
-
-def create_history_file():
-    pathlib.PosixPath(os.path.dirname(history_path)).mkdir(
-        parents=True, exist_ok=True)
-    pathlib.PosixPath(history_path).touch(exist_ok=True)
-
-
-def read_notification_file():
-    with open(history_path, "r") as file:
-        try:
-            return json.load(file)
-        except ValueError:
-            return []
-
-
-def append_notification(data, notification):
-    with open(history_path, "w") as file:
-        appname = notification['appname']
-        found_group = None
-        for group in data:
-            if group['appname'] == appname:
-                found_group = group
-                break
-
-        if found_group:
-            found_group['notifications'].insert(0, notification)
-            data.remove(found_group)
-            data.insert(0, found_group)
-        else:
-            new_group = {'appname': appname, 'notifications': [notification]}
-            data.insert(0, new_group)
-
-        if len(data) > 20:
-            data.pop()
-
-        for group in data:
-            if len(group['notifications']) > 20:
-                group['notifications'].pop()
-
-        json.dump(data, file)
+    return notification
 
 
 def print_notifications():
     try:
-        with open(history_path, "r") as file:
+        with open(HISTORY_PATH, "r") as file:
             output_str = file.read().replace('"', '\\"').replace('\\\\"', '\\\\\\"')
             os.system(f"eww update notifications=\"{output_str}\"")
     except FileNotFoundError:
         os.system("eww update notifications=\"[]\"")
 
 
-def add_notificaton(notification):
-    try:
-        data = read_notification_file()
-        append_notification(data, notification)
+class NotificationServer(dbus.service.Object):
+    def __init__(self):
+        bus_name = dbus.service.BusName(
+            "org.freedesktop.Notifications", bus=dbus.SessionBus())
+        dbus.service.Object.__init__(
+            self, bus_name, "/org/freedesktop/Notifications")
+
+        self.notifications = []
+        self.next_id = 1
+
+        self.load_notifications_from_json()
+
+    def load_notifications_from_json(self):
+        if not os.path.exists(HISTORY_PATH):
+            with open(HISTORY_PATH, "w") as f:
+                json.dump([], f)
+
+        with open(HISTORY_PATH, "r") as f:
+            try:
+                self.notifications = json.load(f)
+                if self.notifications:
+                    max_id = max(notification["id"]
+                                 for group in self.notifications
+                                 for notification in group["notifications"])
+                    self.next_id = max(max_id + 1, self.next_id)
+                else:
+                    self.next_id = 1
+            except json.JSONDecodeError:
+                pass
+
+    def save_notifications_to_json(self):
+        with open(HISTORY_PATH, "w") as f:
+            json.dump(self.notifications, f)
+
+    def append_notification(self, notification):
+        appname = notification['appname']
+        found_group = None
+        for group in self.notifications:
+            if group['appname'] == appname:
+                found_group = group
+                break
+
+        if found_group:
+            found_group['notifications'].insert(0, notification)
+            self.notifications.remove(found_group)
+            self.notifications.insert(0, found_group)
+        else:
+            new_group = {'appname': appname, 'notifications': [notification]}
+            self.notifications.insert(0, new_group)
+
+        if len(self.notifications) > 20:
+            self.notifications.pop()
+
+        for group in self.notifications:
+            if len(group['notifications']) > 20:
+                group['notifications'].pop()
+
+    @dbus.service.method("org.freedesktop.Notifications",
+                         in_signature='', out_signature='as')
+    def GetCapabilities(self):
+        return ['body', 'body-hyperlinks', 'body-markup', 'actions',
+                'action-icons', 'icon-static', 'persistence', 'sound']
+
+    @dbus.service.method("org.freedesktop.Notifications",
+                         in_signature='', out_signature='ssss')
+    def GetServerInformation(self):
+        name = "JSON Notification Server"
+        vendor = "github.com/stephenreynolds"
+        version = "git"
+        spec_version = "1.2"
+        return [name, vendor, version, spec_version]
+
+    @dbus.service.method("org.freedesktop.Notifications",
+                         in_signature='susssasa{sv}i', out_signature='u')
+    def Notify(self, app_name, replaces_id, app_icon, summary, body, actions, hints, expire_timeout):
+        id = replaces_id
+
+        if replaces_id == 0:
+            while self.next_id in (notification["id"]
+                                   for group in self.notifications
+                                   for notification in group["notifications"]):
+                self.next_id += 1
+            if self.next_id >= sys.maxsize:
+                self.next_id = replaces_id
+            id = self.next_id
+
+        assert id > 0, "Notification ID must be greater than zero."
+
+        args = [unwrap(a) for a in [app_name, replaces_id, app_icon, summary, body, actions, hints, expire_timeout]]
+
+        notification = parse_notification(id, *args)
+
+        self.append_notification(notification)
+        self.save_notifications_to_json()
         print_notifications()
-    except FileNotFoundError:
-        create_history_file()
-        add_notificaton(notification)
 
+        return id
 
-def notifications(bus, message):
-    notification = parse_notification(message)
-    add_notificaton(notification)
+    @dbus.service.method("org.freedesktop.Notifications",
+                         in_signature='u', out_signature='')
+    def CloseNotification(self, id):
+        try:
+            notification = next(
+                notification for notification in self.notifications if notification["id"] == id)
+        except StopIteration:
+            return
+
+        self.notifications.remove(notification)
+        self.save_notifications_to_json()
+
+    @dbus.service.signal("org.freedesktop.Notifications", signature='uu')
+    def NotificationClosed(self, id, reason):
+        pass
 
 
 if __name__ == "__main__":
-    print_notifications()
-
-    pathlib.PosixPath(cache_dir).mkdir(parents=True, exist_ok=True)
-
     DBusGMainLoop(set_as_default=True)
 
-    bus = dbus.SessionBus()
-    bus.add_match_string_non_blocking(
-        "eavesdrop=true, interface='org.freedesktop.Notifications', member='Notify'")
-    bus.add_message_filter(notifications)
+    server = NotificationServer()
 
-    mainloop = GLib.MainLoop()
-    mainloop.run()
+    loop = GLib.MainLoop()
+    loop.run()
