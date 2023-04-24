@@ -207,6 +207,7 @@ class NotificationServer(dbus.service.Object):
         self.next_id = 1
 
         self.load_notifications_from_json()
+        print_notifications()
 
     def load_notifications_from_json(self):
         if not os.path.exists(HISTORY_PATH):
@@ -297,14 +298,32 @@ class NotificationServer(dbus.service.Object):
     @dbus.service.method("org.freedesktop.Notifications",
                          in_signature='u', out_signature='')
     def CloseNotification(self, id):
-        try:
-            notification = next(
-                notification for notification in self.notifications if notification["id"] == id)
-        except StopIteration:
-            return
-
-        self.notifications.remove(notification)
+        for group in self.notifications:
+            for i, notification in enumerate(group["notifications"]):
+                if notification["id"] == id:
+                    if len(group["notifications"]) == 1:
+                        self.notifications.remove(group)
+                    else:
+                        group["notifications"].pop(i)
         self.save_notifications_to_json()
+        print_notifications()
+
+    @dbus.service.method("org.freedesktop.Notifications",
+                         in_signature='s', out_signature='')
+    def CloseNotificationGroup(self, appname):
+        for group in self.notifications:
+            if group["appname"] == appname:
+                self.notifications.remove(group)
+
+        self.save_notifications_to_json()
+        print_notifications()
+
+    @dbus.service.method("org.freedesktop.Notifications",
+                         in_signature='', out_signature='')
+    def CloseAllNotifications(self):
+        self.notifications.clear()
+        self.save_notifications_to_json()
+        print_notifications()
 
     @dbus.service.signal("org.freedesktop.Notifications", signature='uu')
     def NotificationClosed(self, id, reason):

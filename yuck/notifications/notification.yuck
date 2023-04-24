@@ -37,8 +37,8 @@
 (defwidget notification-dismiss-button [id appname]
   (eventbox :class "notification-dismiss"
             :onclick {reveal-notification-group == appname ?
-                      "scripts/notification_dismiss --id ${id}" :
-                      "scripts/notification_dismiss --group ${appname}"}
+                      "${dismiss_by_id}:${id}" :
+                      "${dismiss_by_group}:'${appname}'"}
             :visible {hover-notification == id}
             :cursor "pointer"
             :width 24

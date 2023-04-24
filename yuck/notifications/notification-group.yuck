@@ -38,7 +38,7 @@
 
 (defwidget notification-group-dismiss [appname]
    (eventbox :class "notification-dismiss"
-             :onclick "scripts/notification_dismiss --group ${appname}"
+             :onclick "${dismiss_by_group}:'${appname}'"
              :cursor "pointer"
              :width 28
              (label :text "")))
