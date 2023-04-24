@@ -5,6 +5,11 @@
             :onclick "scripts/reveal_widgets ${monitor}"
             :cursor "pointer"
             (box :class "section"
+                 :space-evenly false
+                 :spacing 5
                  (label :class "clock"
                         :valign "center"
-                        :text datetime))))
+                        :text datetime)
+                 (label :class "notifications-indicator"
+                        :visible {arraylength(notifications) > 0}
+                        :text "󰅸"))))
