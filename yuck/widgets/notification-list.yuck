@@ -39,7 +39,7 @@
                             (box (label :text "Clear all")))`})))
 
 (defwidget notification-list-expand-button []
-  (eventbox :visible {reveal-notification-group == "null" && jq(notifications, ".[] | length") > 3}
+  (eventbox :visible {reveal-notification-group == "null" && arraylength(notifications) > 3}
             :onclick "scripts/toggle-expand-groups"
             :cursor "pointer"
             :halign "center"
