@@ -257,8 +257,8 @@ class NotificationServer(dbus.service.Object):
     @dbus.service.method("org.freedesktop.Notifications",
                          in_signature='', out_signature='as')
     def GetCapabilities(self):
-        return ['body', 'body-hyperlinks', 'body-markup', 'actions',
-                'action-icons', 'icon-static', 'persistence', 'sound']
+        return ['body', 'body-markup', 'actions', 'action-icons',
+                'icon-static', 'persistence', 'sound']
 
     @dbus.service.method("org.freedesktop.Notifications",
                          in_signature='', out_signature='ssss')
