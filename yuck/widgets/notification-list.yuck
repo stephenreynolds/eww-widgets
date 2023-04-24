@@ -1,17 +1,25 @@
 (include "yuck/notifications/notification-group.yuck")
 
+(defvar expand-notification-groups false)
+
 (defwidget notification-list []
   (box :class "notification-list"
        :orientation "vertical"
-       :spacing 10
        :space-evenly false
        (notification-list-header :is-empty {arraylength(notifications) == 0})
        (box :orientation "vertical"
-            :spacing 10
             :space-evenly false
-            (for group in notifications
+            (for group in {jq(notifications, ".[:3]")}
                  (notification-group :appname {group.appname}
                                      :group-notifications {group.notifications})))
+       (box :orientation "vertical"
+            :space-evenly false
+            (revealer :transition "slidedown"
+                      :duration "300ms"
+                      :reveal {expand-notification-groups}
+                      (for group in {jq(notifications, ".[3:]")}
+                           (notification-group :appname {group.appname}
+                                               :group-notifications {group.notifications}))))
        (notification-list-expand-button)))
 
 (defwidget notification-list-header [is-empty]
@@ -21,7 +29,6 @@
         (label :text "Notifications"
                :class "notification-list-header-label"
                :halign "start"
-               :valign "end"
                :hexpand true)
         (literal :content {is-empty ?
                  `(box :class "notification-list-empty"
@@ -32,7 +39,10 @@
                             (box (label :text "Clear all")))`})))
 
 (defwidget notification-list-expand-button []
-  (eventbox :class "notification-list-expand-button"
-            :visible {arraylength(notifications) > 3}
-            (box
-              (label :text "${jq(notifications, "[.[] | .notification][3:] | add | length")} more notifications"))))
+  (eventbox :visible {reveal-notification-group == "null" && jq(notifications, ".[] | length") > 3}
+            :onclick "scripts/toggle-expand-groups"
+            :cursor "pointer"
+            :halign "center"
+            (box :class "notification-list-expand-button"
+              (label :text {expand-notification-groups ? "Show less" :
+                     "${jq(notifications, ".[3:] | .[].notifications | length")} more notifications"}))))

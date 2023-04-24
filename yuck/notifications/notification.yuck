@@ -4,6 +4,7 @@
 ; group-count: The number of notifications in its group.
 (defwidget notification [notification ?show-count ?group-count]
   (notification-hover :id {notification.id}
+                      :appname {notification.appname}
     (box :class "notification notification-${notification.hints.urgency ?: "normal"}"
          :orientation "horizontal"
          :space-evenly false
@@ -25,17 +26,19 @@
                                                 :appname {notification.appname}
                                                 :group-count {group-count ?: 1})))))
 
-(defwidget notification-hover [id]
+(defwidget notification-hover [id appname]
   (eventbox :onhover "${EWW_CMD} update hover-notification='${id}'"
             :onhoverlost "${EWW_CMD} update hover-notification='null'"
             (overlay
               (box
                 (children))
-              (notification-dismiss-button :id {id}))))
+              (notification-dismiss-button :id {id} :appname appname))))
 
-(defwidget notification-dismiss-button [id]
+(defwidget notification-dismiss-button [id appname]
   (eventbox :class "notification-dismiss"
-            :onclick "scripts/notification_dismiss --id ${id}"
+            :onclick {reveal-notification-group == appname ?
+                      "scripts/notification_dismiss --id ${id}" :
+                      "scripts/notification_dismiss --group ${appname}"}
             :visible {hover-notification == id}
             :cursor "pointer"
             :width 24

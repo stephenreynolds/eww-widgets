@@ -1,19 +1,23 @@
 #!/usr/bin/env bash
 
-EWW=eww
+EWW_CMD=eww
+
+$EWW_CMD open-many --toggle widgets0-closer-0 widgets1-closer-1 widgets2-closer-2
 
 IFS=","
-read -a revealed <<< "$($EWW get reveal_widgets)"
+read -a revealed <<< "$($EWW_CMD get reveal_widgets)"
 revealed[0]=${revealed[0]#[}
 revealed[-1]=${revealed[-1]%]}
 monitors=(false false false)
 
-$EWW update reveal-notification-group="null"
+$EWW_CMD update reveal-notification-group="null"
+$EWW_CMD update expand-notification-groups="false"
+
 
 if [[ "${revealed[$1]}" == "true" ]]; then
     monitors[$1]=false
-    $EWW update reveal_widgets="[${monitors[0]},${monitors[1]},${monitors[2]}]"
+    $EWW_CMD update reveal_widgets="[${monitors[0]},${monitors[1]},${monitors[2]}]"
 else
     monitors[$1]=true
-    $EWW update reveal_widgets="[${monitors[0]},${monitors[1]},${monitors[2]}]"
+    $EWW_CMD update reveal_widgets="[${monitors[0]},${monitors[1]},${monitors[2]}]"
 fi

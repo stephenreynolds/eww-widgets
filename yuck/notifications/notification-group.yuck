@@ -28,7 +28,6 @@
    (label :text {appname}
           :class "notification-group-name"
           :halign "start"
-          :valign "end"
           :hexpand true))
 
 (defwidget notification-group-collapse []

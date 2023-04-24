@@ -167,6 +167,8 @@ $border-radius: 9px;
 
 .notification-list {
   .notification-list-header {
+    margin-bottom: 10px;
+
     .notification-list-header-label {
       font-weight: 600;
     }
@@ -199,6 +201,16 @@ $border-radius: 9px;
     padding: 0.4em 1em;
     background-color: rgba(128, 128, 128, 0.4);
     border-radius: $border-radius;
+  }
+
+  .notification-list-expand-button {
+    padding: 0.4em 0.5em;
+    background-color: rgba(128, 128, 128, 0.4);
+    border-radius: $border-radius;
+  }
+
+  .notification-list-inner {
+    margin-bottom: 10px;
   }
 }
 
