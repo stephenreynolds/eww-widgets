@@ -11,9 +11,15 @@ This repo contains my work-in-progess widget setup for my personal install.
 - pamixer
 - Nerd Fonts patched font
 
+These widgets also assume you are running three 1920x1080 monitors and may need
+modification if your setup differs.
+
+You will also need to disable any notification daemon, such as dunst, as it will
+conflict with the included one (WIP).
+
 ## Running
 
-Run with `./scripts/launch`
+Run with `./scripts/launch`.
 
 ## To Do
 
