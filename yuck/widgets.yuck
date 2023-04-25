@@ -7,17 +7,16 @@
   (revealer :transition "slideleft"
             :duration "300ms"
             :reveal {reveal_widgets[monitor]}
-            (overlay
-              (scroll :vscroll true
-                      :hscroll false
-                      (box :orientation "v"
-                           :spacing 10
-                           :space-evenly false
-                           :class "widgets"
-                           :width 380
-                           (notification-list)
-                           (box :visible {reveal-notification-group == "null" && !expand-notification-groups}
-                                (timezones)))))))
+            (scroll :vscroll true
+                    :hscroll false
+                    (box :orientation "v"
+                         :spacing 10
+                         :space-evenly false
+                         :class "widgets"
+                         :width 380
+                         (notification-list)
+                         (box :visible {reveal-notification-group == "null" && !expand-notification-groups}
+                              (timezones))))))
 
 (defwindow widgets0
   :monitor 0
