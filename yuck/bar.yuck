@@ -38,7 +38,6 @@
 
 (defwindow bar0
   :monitor 0
-  :windowtype "dock"
   :geometry (geometry :x "0%"
                       :y "0%"
                       :width "100%"
@@ -52,7 +51,6 @@
 
 (defwindow bar1
   :monitor 1
-  :windowtype "dock"
   :geometry (geometry :x "0%"
                       :y "0%"
                       :width "100%"
@@ -66,7 +64,6 @@
 
 (defwindow bar2
   :monitor 2
-  :windowtype "dock"
   :geometry (geometry :x "0%"
                       :y "0%"
                       :width "100%"
