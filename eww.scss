@@ -1,4 +1,6 @@
 $border-radius: 9px;
+$button-bg: rgba(128, 128, 128, 0.4);
+$button-bg-hover: rgba(115, 115, 115, 0.4);
 
 * {
   all: unset;
@@ -179,6 +181,10 @@ $border-radius: 9px;
 .notification-dismiss {
   background-color: rgba(128, 128, 128, 0.6);
   border-radius: 999px;
+
+  &:hover {
+    background-color: rgba(115, 115, 115, 0.6);
+  }
 }
 
 .notification-list {
@@ -190,10 +196,17 @@ $border-radius: 9px;
       font-weight: 600;
     }
 
-    .notification-clear box {
-      padding: 0.4em 1em;
-      background-color: rgba(128, 128, 128, 0.4);
+    .notification-clear {
+      background-color: $button-bg;
       border-radius: $border-radius;
+
+      box {
+        padding: 0.4em 1em;
+      }
+
+      &:hover {
+        background-color: $button-bg-hover;
+      }
     }
   }
 
@@ -205,21 +218,33 @@ $border-radius: 9px;
 
     .notification-group-less box {
       padding: 0.4em 0.5em;
-      background-color: rgba(128, 128, 128, 0.4);
+      background-color: $button-bg;
       border-radius: $border-radius;
     }
   }
 
-  .notification-group-size label {
-    padding: 0.4em 1em;
-    background-color: rgba(128, 128, 128, 0.4);
-    border-radius: $border-radius;
+  .notification-group-expand-button {
+    label {
+      padding: 0.4em 1em;
+      background-color: $button-bg;
+      border-radius: $border-radius;
+    }
+
+    &:hover label {
+      background-color: $button-bg-hover;
+    }
   }
 
   .notification-list-expand-button {
-    padding: 0.4em 0.5em;
-    background-color: rgba(128, 128, 128, 0.4);
-    border-radius: $border-radius;
+    label {
+      padding: 0.4em 0.5em;
+      background-color: $button-bg;
+      border-radius: $border-radius;
+    }
+
+    &:hover label {
+      background-color: $button-bg-hover;
+    }
   }
 
   .notification-list-inner {
