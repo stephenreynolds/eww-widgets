@@ -26,9 +26,17 @@ Run with `./scripts/launch`.
 - Notifications
   - Fix notification group header not showing the first time one is expanded
   - Truncate notification content if height is exceeded
-  - Implement actions
   - Implement do not disturb
   - Implement priority mode
   - Implement expiration timeout
   - Implement resident hint
   - Implement sound hints
+- Control center
+  - Wifi toggle and network menu
+  - Bluetooth toggle and device menu
+  - Screenshot button
+  - Volume slider and mute button (input and output)
+  - Sound device selector (input and output)
+  - Media controls
+- Keyboard layout indicator/toggle (with ibus and mozc)
+- System tray (waiting for support by Eww, or use stalonetray)
