@@ -16,7 +16,6 @@
               :space-evenly false
               :hexpand true
               :vexpand true
-              :spacing 10
               (eventbox :onclick {arraylength(notification.actions) == 0 ?
                                         "scripts/dbus-send --id ${notification.id}" :
                                         jq(notification.actions, `any(.[]; . == "default")`) ?
@@ -35,8 +34,8 @@
                           (notification-content :notification notification)))
               (notification-actions :id {notification.id} :actions {notification.actions})
               (notification-group-expand-button :visible {show-count ?: false}
-                                              :appname {notification.appname}
-                                              :group-count {group-count ?: 1})))))
+                                                :appname {notification.appname}
+                                                :group-count {group-count ?: 1})))))
 
 (defwidget notification-hover [id appname is-group]
   (eventbox :onhover "${EWW_CMD} update hover-notification='${id}'"
@@ -116,23 +115,24 @@
               :path {notification.hints.image-path})))
 
 (defwidget notification-actions [id actions]
-  (box
-       :orientation "horizontal"
+  (box :orientation "horizontal"
        :space-evenly true
        :spacing 5
        ; Display butons for each action, except for the "default" action.
        ; Even index values represent the keys, and odd index values represent labels.
        (for action in {jq(actions, `[range(0; ${arraylength(actions) / 2}) as $i | ({"key": .[2*$i], "text": .[2*$i+1]}) | select(.key != "default" and .key != "settings")]`)}
-            (eventbox :onclick "scripts/dbus-send --action ${id} ${action.key}"
-                      :cursor "pointer"
-                      :class "action-button"
-                      (label :text {action.text})))))
+            (box :class "notification-action-button-box"
+              (eventbox :onclick "scripts/dbus-send --action ${id} ${action.key}"
+                        :cursor "pointer"
+                        :class "notification-action-button"
+                        (label :text {action.text}))))))
 
 (defwidget notification-group-expand-button [visible appname group-count]
-  (eventbox :onclick `scripts/reveal_notification_group "${appname}"`
-            :class "notification-group-expand-button"
-            :cursor "pointer"
-            :halign "start"
-            :visible visible
-            (label :text "+${group-count - 1} more"
-                   :justify "right")))
+  (box :class "notification-group-expand-button-box"
+    (eventbox :onclick `scripts/reveal_notification_group "${appname}"`
+              :cursor "pointer"
+              :halign "start"
+              :visible visible
+              :class "notification-group-expand-button"
+              (label :text "+${group-count - 1} more"
+                     :justify "right"))))

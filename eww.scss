@@ -223,15 +223,19 @@ $button-bg-hover: rgba(115, 115, 115, 0.4);
     }
   }
 
-  .notification-group-expand-button {
-    label {
-      padding: 0.4em 1em;
-      background-color: $button-bg;
-      border-radius: $border-radius;
-    }
+  .notification-group-expand-button-box {
+    margin-top: 10px;
 
-    &:hover label {
-      background-color: $button-bg-hover;
+    .notification-group-expand-button {
+      label {
+        padding: 0.4em 1em;
+        background-color: $button-bg;
+        border-radius: $border-radius;
+      }
+
+      &:hover label {
+        background-color: $button-bg-hover;
+      }
     }
   }
 
@@ -274,17 +278,21 @@ $button-bg-hover: rgba(115, 115, 115, 0.4);
     }
   }
 
-  .action-button {
-    background-color: $button-bg;
-    border-radius: $border-radius;
-    font-weight: 500;
+  .notification-action-button-box {
+    margin-top: 10px;
 
-    &:hover {
-      background-color: $button-bg-hover;
-    }
+    .notification-action-button {
+      background-color: $button-bg;
+      border-radius: $border-radius;
+      font-weight: 500;
 
-    label {
-      padding: 0.25em;
+      &:hover {
+        background-color: $button-bg-hover;
+      }
+
+      label {
+        padding: 0.25em;
+      }
     }
   }
 }
