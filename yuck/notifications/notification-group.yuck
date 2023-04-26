@@ -38,13 +38,14 @@
 
 (defwidget notification-group-dismiss [appname]
    (eventbox :class "notification-dismiss"
-             :onclick "${dismiss_by_group}:'${appname}'"
+             :onclick "scripts/dbus-send --group '${appname}'"
              :cursor "pointer"
              :width 28
              (label :text "")))
 
 (defwidget notification-group-top [latest count]
   (notification :notification {latest}
+                :is-group true
                 :show-count {count > 1 && reveal-notification-group == "null"}
                 :group-count count))
 

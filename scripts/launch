@@ -13,3 +13,5 @@ for monitor in ${MONITORS}; do
     ${EWW_CMD} open bar${monitor}
     ${EWW_CMD} open widgets${monitor}
 done
+
+${EWW_CMD} open notification-popup-window

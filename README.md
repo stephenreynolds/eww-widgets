@@ -24,14 +24,11 @@ Run with `./scripts/launch`.
 ## To Do
 
 - Notifications
-  - [ ] Fix notification group header not showing the first time one is expanded
-  - [ ] Truncate notification content if height is exceeded
-  - [ ] Implement actions
-  - [ ] Implement popup notifications
-  - [ ] Implement do not disturb
-  - [ ] Implement priority mode
-  - [ ] Implement transient hint
-  - [ ] Implement replaces id
-  - [ ] Implement expiration timeout
-  - [ ] Implement resident hint
-  - [ ] Implement sound hints
+  - Fix notification group header not showing the first time one is expanded
+  - Truncate notification content if height is exceeded
+  - Implement actions
+  - Implement do not disturb
+  - Implement priority mode
+  - Implement expiration timeout
+  - Implement resident hint
+  - Implement sound hints

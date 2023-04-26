@@ -1,12 +1,5 @@
 (include "yuck/notifications/notification-group.yuck")
 
-; Usage: ${dismiss_by_id}:${id}
-(defvar dismiss_by_id "dbus-send --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.CloseNotification uint32")
-; Usage: ${dismiss_by_group}:'${appname}'
-(defvar dismiss_by_group "dbus-send --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.CloseNotificationGroup string")
-; Usage: ${dismiss_all}
-(defvar dismiss_all "dbus-send --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.CloseAllNotifications")
-
 (defvar expand-notification-groups false)
 
 (defwidget notification-list []
@@ -41,7 +34,7 @@
                  `(box :class "notification-list-empty"
                        (label :text "No notifications"))` :
                  `(eventbox :class "notification-clear"
-                            :onclick "${dismiss_all}"
+                            :onclick "scripts/dbus-send --all"
                             :cursor "pointer"
                             (box (label :text "Clear all")))`})))
 

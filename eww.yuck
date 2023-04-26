@@ -1,3 +1,6 @@
+(defvar hover-notification "null")
+
 (include "./yuck/vars.yuck")
 (include "./yuck/bar.yuck")
 (include "./yuck/widgets.yuck")
+(include "./yuck/notifications/notification-popup.yuck")

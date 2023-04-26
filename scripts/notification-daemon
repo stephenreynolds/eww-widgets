@@ -5,6 +5,7 @@ import os
 import sys
 from datetime import datetime
 import shutil
+import pathlib
 import dbus
 import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
@@ -17,6 +18,7 @@ from gi.repository import GdkPixbuf, GLib, Gtk
 CACHE_DIR = "/tmp/eww"
 HISTORY_PATH = os.path.expandvars("$XDG_CACHE_HOME/eww/notifications.json")
 HISTORY_LIMIT = 20
+POPUP_LIMIT = 5
 
 
 def unwrap(value: dbus.Array
@@ -154,13 +156,13 @@ def parse_hints(hints_list, appname, id):
     return hints
 
 
-def get_notification_icon(app_icon):
+def get_notification_icon(appname, app_icon, id):
     if app_icon.strip():
         if "/" in app_icon or "." in app_icon:
             icon_path = app_icon
             icon_path = icon_path.replace("file://", "")
-            filename = os.path.basename(icon_path)
-            new_path = f"{CACHE_DIR}/{filename}"
+            extension = pathlib.Path(icon_path).suffix
+            new_path = f"{CACHE_DIR}/{appname}-{id}{extension}"
             shutil.copy(icon_path, new_path)
             return new_path
         return get_gtk_icon_path(app_icon)
@@ -173,7 +175,7 @@ def parse_notification(id, app_name, replaces_id, app_icon, summary,
         "timestamp": datetime.now().strftime("%-l:%M %p"),
         "appname": app_name,
         "replaces-id": replaces_id,
-        "icon": get_notification_icon(app_icon),
+        "icon": get_notification_icon(app_name, app_icon, id),
         "summary": summary,
         "body": GLib.markup_escape_text(body),
         "actions": actions,
@@ -187,13 +189,8 @@ def parse_notification(id, app_name, replaces_id, app_icon, summary,
     return notification
 
 
-def print_notifications():
-    try:
-        with open(HISTORY_PATH, "r") as file:
-            output_str = file.read().replace('"', '\\"').replace('\\\\"', '\\\\\\"')
-            os.system(f"eww update notifications=\"{output_str}\"")
-    except FileNotFoundError:
-        os.system("eww update notifications=\"[]\"")
+def escape_quotes(s):
+    return s.replace('"', '\\"').replace('\\\\"', '\\\\\\"')
 
 
 class NotificationServer(dbus.service.Object):
@@ -203,11 +200,17 @@ class NotificationServer(dbus.service.Object):
         dbus.service.Object.__init__(
             self, bus_name, "/org/freedesktop/Notifications")
 
+        pathlib.PosixPath(os.path.dirname(HISTORY_PATH)).mkdir(
+            parents=True, exist_ok=True)
+        pathlib.PosixPath(HISTORY_PATH).touch(exist_ok=True)
+        pathlib.PosixPath(CACHE_DIR).mkdir(parents=True, exist_ok=True)
+
         self.notifications = []
+        self.popups = []
         self.next_id = 1
 
         self.load_notifications_from_json()
-        print_notifications()
+        self.update_notifications()
 
     def load_notifications_from_json(self):
         if not os.path.exists(HISTORY_PATH):
@@ -254,6 +257,57 @@ class NotificationServer(dbus.service.Object):
             if len(group['notifications']) > 20:
                 group['notifications'].pop()
 
+    def update_notifications(self):
+        # Update the popup notifications
+        output_str = json.dumps(self.popups)
+        output_str = escape_quotes(output_str)
+        os.system(f"eww update notification-popup-list=\"{output_str}\"")
+
+        # Update the persistant notifications
+        output_str = json.dumps(self.notifications)
+        output_str = escape_quotes(output_str)
+        os.system(f"eww update notifications=\"{output_str}\"")
+
+    def add_popup_notification(self, notification):
+        self.popups.insert(0, notification)
+        if len(self.popups) > POPUP_LIMIT:
+            self.popups.pop()
+
+    def remove_popup(self, id):
+        for notification in self.popups:
+            if notification["id"] == id:
+                self.popups.remove(notification)
+                break
+
+    def remove_by_id(self, id):
+        self.remove_popup(id)
+        for group in self.notifications:
+            for i, notification in enumerate(group["notifications"]):
+                if notification["id"] == id:
+                    if len(group["notifications"]) == 1:
+                        self.notifications.remove(group)
+                    else:
+                        group["notifications"].pop(i)
+                    return
+
+    def get_new_id(self, replaces_id):
+        if replaces_id != 0:
+            return replaces_id
+        while self.next_id in (notification["id"]
+                               for group in self.notifications
+                               for notification in group["notifications"]):
+            self.next_id += 1
+        if self.next_id >= sys.maxsize:
+            self.next_id = replaces_id
+        return self.next_id
+
+    def find_by_id(self, id):
+        for group in self.notifications:
+            for notification in group["notifications"]:
+                if notification["id"] == id:
+                    return notification
+        return None
+
     @dbus.service.method("org.freedesktop.Notifications",
                          in_signature='', out_signature='as')
     def GetCapabilities(self):
@@ -272,16 +326,7 @@ class NotificationServer(dbus.service.Object):
     @dbus.service.method("org.freedesktop.Notifications",
                          in_signature='susssasa{sv}i', out_signature='u')
     def Notify(self, app_name, replaces_id, app_icon, summary, body, actions, hints, expire_timeout):
-        id = replaces_id
-
-        if replaces_id == 0:
-            while self.next_id in (notification["id"]
-                                   for group in self.notifications
-                                   for notification in group["notifications"]):
-                self.next_id += 1
-            if self.next_id >= sys.maxsize:
-                self.next_id = replaces_id
-            id = self.next_id
+        id = self.get_new_id(replaces_id)
 
         assert id > 0, "Notification ID must be greater than zero."
 
@@ -289,24 +334,24 @@ class NotificationServer(dbus.service.Object):
 
         notification = parse_notification(id, *args)
 
-        self.append_notification(notification)
-        self.save_notifications_to_json()
-        print_notifications()
+        if replaces_id != 0:
+            self.remove_by_id(replaces_id)
+
+        if not ("transient" in notification["hints"] and notification["hints"]["transient"]):
+            self.append_notification(notification)
+            self.save_notifications_to_json()
+
+        self.add_popup_notification(notification)
+        self.update_notifications()
 
         return id
 
     @dbus.service.method("org.freedesktop.Notifications",
                          in_signature='u', out_signature='')
     def CloseNotification(self, id):
-        for group in self.notifications:
-            for i, notification in enumerate(group["notifications"]):
-                if notification["id"] == id:
-                    if len(group["notifications"]) == 1:
-                        self.notifications.remove(group)
-                    else:
-                        group["notifications"].pop(i)
+        self.remove_by_id(id)
         self.save_notifications_to_json()
-        print_notifications()
+        self.update_notifications()
 
     @dbus.service.method("org.freedesktop.Notifications",
                          in_signature='s', out_signature='')
@@ -314,19 +359,40 @@ class NotificationServer(dbus.service.Object):
         for group in self.notifications:
             if group["appname"] == appname:
                 self.notifications.remove(group)
-
-        self.save_notifications_to_json()
-        print_notifications()
+                for popup in self.popups:
+                    if popup["appname"] == appname:
+                        self.popups.remove(popup)
+                self.save_notifications_to_json()
+                self.update_notifications()
+                return
 
     @dbus.service.method("org.freedesktop.Notifications",
                          in_signature='', out_signature='')
-    def CloseAllNotifications(self):
+    def ClearNotifications(self):
         self.notifications.clear()
+        self.popups.clear()
         self.save_notifications_to_json()
-        print_notifications()
+        self.update_notifications()
 
     @dbus.service.signal("org.freedesktop.Notifications", signature='uu')
     def NotificationClosed(self, id, reason):
+        pass
+
+    @dbus.service.method("org.freedesktop.Notifications", signature='us')
+    def InvokeAction(self, id, action_key):
+        if self.find_by_id(id) is None:
+            return
+        self.remove_by_id(id)
+        self.save_notifications_to_json()
+        self.update_notifications()
+        self.ActionInvoked(id, action_key)
+
+    @dbus.service.signal("org.freedesktop.Notifications", signature='us')
+    def ActionInvoked(self, id, action_key):
+        pass
+
+    @dbus.service.signal("org.freedesktop.Notifications", signature='us')
+    def ActivationToken(self, id, activation_token):
         pass
 
 
