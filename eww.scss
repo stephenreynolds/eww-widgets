@@ -273,6 +273,20 @@ $button-bg-hover: rgba(115, 115, 115, 0.4);
       font-weight: 600;
     }
   }
+
+  .action-button {
+    background-color: $button-bg;
+    border-radius: $border-radius;
+    font-weight: 500;
+
+    &:hover {
+      background-color: $button-bg-hover;
+    }
+
+    label {
+      padding: 0.25em;
+    }
+  }
 }
 
 /* systray
