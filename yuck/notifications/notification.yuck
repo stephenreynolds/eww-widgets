@@ -3,7 +3,6 @@
 (defwidget notification [notification ?is-group ?group-count ?show-count]
   (notification-hover :id {notification.id}
                       :appname {notification.appname}
-                      :actions {notification.actions}
                       :is-group {is-group ?: false}
     (box :class "notification notification-${notification.hints.urgency ?: "normal"}"
          :orientation "horizontal"
@@ -18,28 +17,30 @@
               :hexpand true
               :vexpand true
               :spacing 10
-              (notification-header :icon {notification.icon}
-                                   :appname {notification.appname}
-                                   :timestamp {notification.timestamp})
-              (notification-content :notification notification)
+              (eventbox :onclick {arraylength(notification.actions) == 0 ?
+                                        "scripts/dbus-send --id ${notification.id}" :
+                                        jq(notification.actions, `any(.[]; . == "default")`) ?
+                                        "scripts/dbus-send --action ${notification.id} default" :
+                                        "scripts/dbus-send --action ${notification.id} ${notification.actions[0]}"}
+                        :onrightclick {jq(notification.actions, `any(.[]; . == "settings")`) ?
+                                      "scripts/dbus-send --action ${notification.id} settings" : ""}
+                        (box :orientation "vertical"
+                             :space-evenly false
+                             :hexpand true
+                             :vexpand true
+                             :spacing 10
+                          (notification-header :icon {notification.icon}
+                                               :appname {notification.appname}
+                                               :timestamp {notification.timestamp})
+                          (notification-content :notification notification)))
               (notification-actions :id {notification.id} :actions {notification.actions})
               (notification-group-expand-button :visible {show-count ?: false}
-                                                :appname {notification.appname}
-                                                :group-count {group-count ?: 1})))))
+                                              :appname {notification.appname}
+                                              :group-count {group-count ?: 1})))))
 
-; Hovering over a notification will reveal the dismiss button.
-; Clicking on a notification will dismiss if it doesn't have any actions
-;   or invoke the default action, or the first action if no default.
-(defwidget notification-hover [id appname actions is-group]
+(defwidget notification-hover [id appname is-group]
   (eventbox :onhover "${EWW_CMD} update hover-notification='${id}'"
             :onhoverlost "${EWW_CMD} update hover-notification='null'"
-            :onclick {arraylength(actions) == 0 ?
-                            "scripts/dbus-send --id ${id}" :
-                            jq(actions, `any(.[]; . == "default")`) ?
-                            "scripts/dbus-send --action ${id} default" :
-                            "scripts/dbus-send --action ${id} ${actions[0]}"}
-            :onrightclick {jq(actions, `any(.[]; . == "settings")`) ?
-                          "scripts/dbus-send --action ${id} settings" : ""}
             (overlay
               (box
                 (children))
