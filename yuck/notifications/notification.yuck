@@ -129,6 +129,7 @@
 
 (defwidget notification-group-expand-button [visible appname group-count]
   (box :class "notification-group-expand-button-box"
+       :visible visible
     (eventbox :onclick `scripts/reveal_notification_group "${appname}"`
               :cursor "pointer"
               :halign "start"
