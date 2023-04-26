@@ -38,6 +38,8 @@
                             jq(actions, `any(.[]; . == "default")`) ?
                             "scripts/dbus-send --action ${id} default" :
                             "scripts/dbus-send --action ${id} ${actions[0]}"}
+            :onrightclick {jq(actions, `any(.[]; . == "settings")`) ?
+                          "scripts/dbus-send --action ${id} settings" : ""}
             (overlay
               (box
                 (children))
@@ -119,7 +121,7 @@
        :spacing 5
        ; Display butons for each action, except for the "default" action.
        ; Even index values represent the keys, and odd index values represent labels.
-       (for action in {jq(actions, `[range(0; ${arraylength(actions) / 2}) as $i | ({"key": .[2*$i], "text": .[2*$i+1]}) | select(.key != "default")]`)}
+       (for action in {jq(actions, `[range(0; ${arraylength(actions) / 2}) as $i | ({"key": .[2*$i], "text": .[2*$i+1]}) | select(.key != "default" and .key != "settings")]`)}
             (eventbox :onclick "scripts/dbus-send --action ${id} ${action.key}"
                       :cursor "pointer"
                       :class "action-button"
