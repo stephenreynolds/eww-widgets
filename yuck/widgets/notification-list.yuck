@@ -43,6 +43,6 @@
             :onclick "scripts/toggle-expand-groups"
             :cursor "pointer"
             :halign "center"
-            (box :class "notification-list-expand-button"
-              (label :text {expand-notification-groups ? "Show less" :
-                     "${jq(notifications, ".[3:] | .[].notifications | length")} more notifications"}))))
+            :class "notification-list-expand-button"
+            (label :text {expand-notification-groups ? "Show less" :
+                   "${jq(notifications, ".[3:] | .[].notifications | length")} more notifications"})))
