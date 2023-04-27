@@ -308,6 +308,10 @@ class NotificationServer(dbus.service.Object):
                     return notification
         return None
 
+    def on_expired(self, id):
+        self.remove_popup(id)
+        self.update_notifications()
+
     @dbus.service.method("org.freedesktop.Notifications",
                          in_signature='', out_signature='as')
     def GetCapabilities(self):
@@ -343,6 +347,18 @@ class NotificationServer(dbus.service.Object):
 
         self.add_popup_notification(notification)
         self.update_notifications()
+
+        if expire_timeout > 0:
+            GLib.timeout_add_seconds(expire_timeout / 1000, self.on_expired, id)
+        elif expire_timeout < 0:
+            if "urgency" in notification["hints"]:
+                match notification["hints"]["urgency"]:
+                    case "low":
+                        GLib.timeout_add_seconds(5, self.on_expired, id)
+                    case "normal":
+                        GLib.timeout_add_seconds(10, self.on_expired, id)
+            else:
+                GLib.timeout_add_seconds(10, self.on_expired, id)
 
         return id
 
