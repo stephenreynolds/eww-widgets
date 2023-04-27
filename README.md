@@ -29,7 +29,6 @@ Run with `./scripts/launch`.
   - Implement do not disturb
   - Implement priority mode
   - Implement resident hint
-  - Implement sound hints
 - Control center
   - Wifi toggle and network menu
   - Bluetooth toggle and device menu
