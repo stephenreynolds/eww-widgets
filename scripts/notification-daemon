@@ -124,17 +124,8 @@ def parse_hints(hints_list, appname, id):
     if sound_name := hints_list.get("sound-name"):
         hints["sound-name"] = sound_name
 
-    if suppress_sound := hints_list.get("suppress-sound"):
-        hints["suppress-sound"] = suppress_sound
-
     if transient := hints_list.get("transient"):
         hints["transient"] = transient
-
-    if x := hints_list.get("x"):
-        hints["x"] = x
-
-    if y := hints_list.get("y"):
-        hints["y"] = y
 
     if urgency := hints_list.get("urgency"):
         match hints_list["urgency"]:
@@ -147,12 +138,6 @@ def parse_hints(hints_list, appname, id):
             case _:
                 urgency = "normal"
         hints["urgency"] = urgency
-
-    # Non-standard hints
-    if value := hints_list.get("value"):
-        hints["value"] = value
-    if sender_pid := hints_list.get("sender-pid"):
-        hints["sender-pid"] = sender_pid
 
     return hints
 
