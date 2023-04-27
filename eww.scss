@@ -299,20 +299,22 @@ $button-bg-hover: rgba(115, 115, 115, 0.4);
 
 .control-center {
   margin-top: 5px;
-  padding: 15px;
-  border-radius: $border-radius;
-  background-color: rgba(64, 64, 64, 0.6);
 
-  .volume-slider {
-    trough {
-      background-color: #4c566a;
-      border-radius: 50px;
-      min-height: 8px;
+  .sound-box {
+    padding: 15px;
+    border-radius: $border-radius;
+    background-color: rgba(64, 64, 64, 0.6);
+    .volume-slider {
+      trough {
+        background-color: #4c566a;
+        border-radius: 50px;
+        min-height: 8px;
 
-      highlight {
-        background-color: #88c0d0;
-        color: #2e3440;
-        border-radius: $border-radius;
+        highlight {
+          background-color: #88c0d0;
+          color: #2e3440;
+          border-radius: $border-radius;
+        }
       }
     }
   }

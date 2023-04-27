@@ -1,4 +1,5 @@
 (deflisten volume :initial "NaN" "scripts/volume")
+(deflisten mic_volume :initial "NaN" "scripts/mic_volume")
 
 (defwidget volume []
   (eventbox
