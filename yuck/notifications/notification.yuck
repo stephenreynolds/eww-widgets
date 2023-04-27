@@ -17,12 +17,12 @@
               :hexpand true
               :vexpand true
               (eventbox :onclick {arraylength(notification.actions) == 0 ?
-                                        "scripts/dbus-send --id ${notification.id}" :
+                                        "scripts/dbus-send --id ${notification.id} && scripts/hide-widgets" :
                                         jq(notification.actions, `any(.[]; . == "default")`) ?
-                                        "scripts/dbus-send --action ${notification.id} default" :
+                                        "scripts/dbus-send --action ${notification.id} default && scripts/hide-widgets" :
                                         "scripts/dbus-send --action ${notification.id} ${notification.actions[0]}"}
                         :onrightclick {jq(notification.actions, `any(.[]; . == "settings")`) ?
-                                      "scripts/dbus-send --action ${notification.id} settings" : ""}
+                                      "scripts/dbus-send --action ${notification.id} settings && scripts/hide-widgets" : ""}
                         (box :orientation "vertical"
                              :space-evenly false
                              :hexpand true
@@ -122,7 +122,7 @@
        ; Even index values represent the keys, and odd index values represent labels.
        (for action in {jq(actions, `[range(0; ${arraylength(actions) / 2}) as $i | ({"key": .[2*$i], "text": .[2*$i+1]}) | select(.key != "default" and .key != "settings")]`)}
             (box :class "notification-action-button-box"
-              (eventbox :onclick "scripts/dbus-send --action ${id} ${action.key}"
+              (eventbox :onclick "scripts/dbus-send --action ${id} ${action.key} && scripts/hide-widgets"
                         :cursor "pointer"
                         :class "notification-action-button"
                         (label :text {action.text}))))))
