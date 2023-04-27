@@ -33,7 +33,6 @@ Run with `./scripts/launch`.
   - Wifi toggle and network menu
   - Bluetooth toggle and device menu
   - Screenshot button
-  - Volume slider and mute button (input and output)
   - Sound device selector (input and output)
   - Media controls
 - Keyboard layout indicator/toggle (with ibus and mozc)
