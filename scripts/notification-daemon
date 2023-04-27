@@ -83,6 +83,11 @@ def handle_app_rules(notification):
         case "Mailspring":
             notification["icon"] = notification["hints"]["image-path"]
             del notification["hints"]["image-path"]
+        case "udiskie":
+            if notification["summary"] == "Device mounted":
+                notification["hints"]["sound-name"] = "device-added"
+            elif notification["summary"] == "Device removed":
+                notification["hints"]["sound-name"] = "device-removed"
 
 
 # DOCS: https://specifications.freedesktop.org/notification-spec/latest/ar01s08.html
