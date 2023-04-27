@@ -5,5 +5,4 @@
     :onclick "kitty -e nmtui &"
     :class "network"
     (label :class "wifi-icon icon"
-           :tooltip {wifi-strength}
            :text {wifi-strength > 66 ? "" : wifi-strength > 40 ? "" : wifi-strength > 20 ? "" : ""})))
