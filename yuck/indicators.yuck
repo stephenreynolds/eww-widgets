@@ -4,6 +4,8 @@
 (defwidget indicators []
   (eventbox :class "hover-button"
             :cursor "pointer"
+            :onclick "${EWW_CMD} open-many --toggle control-center-window-closer-0 control-center-window-closer-1 control-center-window-closer-2 &&
+                      ${EWW_CMD} open --toggle control-center-window"
             (box :class "section"
                  (box :spacing 12
                       :valign "center"

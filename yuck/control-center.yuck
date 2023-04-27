@@ -1,0 +1,53 @@
+(defwidget control-center []
+  (box :orientation "vertical"
+       :spacing 10
+       :space-evenly false
+       :class "control-center"
+       (box :orientation "vertical"
+            :class "volume-slider-box"
+            :spacing 5
+            (label :text "Sound"
+                   :halign "start"
+                   :class "sound-label")
+            (box :orientation "horizontal"
+                 :spacing 5
+                 :space-evenly false
+                 (eventbox :onclick "pamixer --toggle-mute"
+                           (label :class "volume-icon icon"
+                                  :text {volume == "muted" ? "" : volume > 66 ? "" : volume > 33 ? "" : volume > 0 ? "" : ""}))
+                 (scale :class "volume-slider"
+                        :value volume
+                        :onchange "scripts/set_volume {}"
+                        :min 0
+                        :max 101
+                        :hexpand true)))))
+
+(defwindow control-center-window
+  :monitor 1
+  :geometry (geometry :width 380
+                      :x 120
+                      :anchor "top right")
+  :stacking "fg"
+  :focusable false
+  (control-center))
+
+(defwindow control-center-window-closer-0
+  :monitor 0
+  :geometry (geometry :width "100%" :height "100%")
+  :stacking "fg"
+  :focusable false
+  (closer :window "control-center-window"))
+
+(defwindow control-center-window-closer-1
+  :monitor 1
+  :geometry (geometry :width "100%" :height "100%")
+  :stacking "fg"
+  :focusable false
+  (closer :window "control-center-window"))
+
+(defwindow control-center-window-closer-2
+  :monitor 2
+  :geometry (geometry :width "100%" :height "100%")
+  :stacking "fg"
+  :focusable false
+  (closer :window "control-center-window"))

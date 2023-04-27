@@ -3,4 +3,5 @@
 (include "./yuck/vars.yuck")
 (include "./yuck/bar.yuck")
 (include "./yuck/widgets.yuck")
+(include "./yuck/control-center.yuck")
 (include "./yuck/notifications/notification-popup.yuck")
