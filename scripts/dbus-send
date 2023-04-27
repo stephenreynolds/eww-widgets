@@ -19,7 +19,7 @@ def dismiss_all():
         f"dbus-send --session --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.ClearNotifications")
 
 
-def invoke_actoin(id, action_key):
+def invoke_action(id, action_key):
     os.system(
         f"dbus-send --session --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.InvokeAction uint32:{id} string:'{action_key}'")
 
@@ -44,7 +44,7 @@ def main():
     elif args.all:
         dismiss_all()
     elif args.action:
-        invoke_actoin(args.action[0], args.action[1])
+        invoke_action(args.action[0], args.action[1])
 
 
 if __name__ == "__main__":
