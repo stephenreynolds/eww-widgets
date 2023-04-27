@@ -89,69 +89,65 @@ def handle_app_rules(notification):
 def parse_hints(hints_list, appname, id):
     hints = {}
 
-    if "action-icons" in hints_list:
-        hints["action-icons"] = hints_list["action-icons"]
+    if action_icons := hints_list.get("action-icons"):
+        hints["action-icons"] = action_icons
 
-    if "category" in hints_list:
-        hints["category"] = hints_list["category"]
+    if category := hints_list.get("category"):
+        hints["category"] = category
 
-    if "desktop-entry" in hints_list:
-        hints["desktop-entry"] = hints_list["desktop-entry"]
+    if desktop_entry := hints_list.get("desktop-entry"):
+        hints["desktop-entry"] = desktop_entry
 
-    if "image-path" in hints_list:
-        image_path = hints_list["image-path"]
+    if image_data := hints_list.get("icon_data"):
+        hints["image-path"] = f"{CACHE_DIR}/{appname}-{id}.png"
+        save_img_byte(image_data, hints["image-path"])
+
+    if image_path := hints_list.get("image-path"):
         image_path = image_path.replace("file://", "")
         filename = os.path.basename(image_path)
         new_path = f"{CACHE_DIR}/{filename}"
         shutil.copy(image_path, new_path)
         hints["image-path"] = new_path
-    elif "image_path" in hints_list:
-        image_path = hints_list["image_path"]
-        image_path = image_path.replace("file://", "")
-        filename = os.path.basename(image_path)
-        new_path = f"{CACHE_DIR}/{filename}"
-        shutil.copy(image_path, new_path)
-        hints["image-path"] = new_path
 
-    if "image-data" in hints_list:
+    if image_data := hints_list.get("image-data"):
         hints["image-path"] = f"{CACHE_DIR}/{appname}-{id}.png"
-        save_img_byte(hints_list["image-data"], hints["image-path"])
-    elif "image_data" in hints_list:
-        hints["image-path"] = f"{CACHE_DIR}/{appname}-{id}.png"
-        save_img_byte(hints_list["image_data"], hints["image-path"])
+        save_img_byte(image_data, hints["image-path"])
 
-    if "sound-file" in hints_list:
-        hints["sound-file"] = hints_list["sound-file"]
+    if sound_file := hints_list.get("sound-file"):
+        hints["sound-file"] = sound_file
 
-    if "sound-name" in hints_list:
-        hints["sound-name"] = hints_list["sound-name"]
+    if sound_name := hints_list.get("sound-name"):
+        hints["sound-name"] = sound_name
 
-    if "suppress-sound" in hints_list:
-        hints["suppress-sound"] = hints_list["suppress-sound"]
+    if suppress_sound := hints_list.get("suppress-sound"):
+        hints["suppress-sound"] = suppress_sound
 
-    if "transient" in hints_list:
-        hints["transient"] = hints_list["transient"]
+    if transient := hints_list.get("transient"):
+        hints["transient"] = transient
 
-    if "x" in hints_list:
-        hints["x"] = hints_list["x"]
+    if x := hints_list.get("x"):
+        hints["x"] = x
 
-    if "y" in hints_list:
-        hints["y"] = hints_list["y"]
+    if y := hints_list.get("y"):
+        hints["y"] = y
 
-    if "urgency" in hints_list:
+    if urgency := hints_list.get("urgency"):
         match hints_list["urgency"]:
             case b"\x00":
-                hints["urgency"] = "low"
+                urgency = "low"
             case b"\x01":
-                hints["urgency"] = "normal"
+                urgency = "normal"
             case b"\x02":
-                hints["urgency"] = "critical"
+                urgency = "critical"
+            case _:
+                urgency = "normal"
+        hints["urgency"] = urgency
 
     # Non-standard hints
-    if "value" in hints_list:
-        hints["value"] = hints_list["value"]
-    if "sender-pid" in hints_list:
-        hints["sender-pid"] = hints_list["sender-pid"]
+    if value := hints_list.get("value"):
+        hints["value"] = value
+    if sender_pid := hints_list.get("sender-pid"):
+        hints["sender-pid"] = sender_pid
 
     return hints
 
@@ -191,6 +187,10 @@ def parse_notification(id, app_name, replaces_id, app_icon, summary,
 
 def escape_quotes(s):
     return s.replace('"', '\\"').replace('\\\\"', '\\\\\\"')
+
+
+def get_hint(notification, hint, default=None):
+    return notification["hints"].get(hint, default)
 
 
 class NotificationServer(dbus.service.Object):
@@ -341,7 +341,7 @@ class NotificationServer(dbus.service.Object):
         if replaces_id != 0:
             self.remove_by_id(replaces_id)
 
-        if not ("transient" in notification["hints"] and notification["hints"]["transient"]):
+        if not get_hint(notification, "transient"):
             self.append_notification(notification)
             self.save_notifications_to_json()
 
@@ -349,24 +349,17 @@ class NotificationServer(dbus.service.Object):
         self.update_notifications()
 
         if expire_timeout > 0:
-            GLib.timeout_add_seconds(expire_timeout / 1000, self.on_expired, id)
+            GLib.timeout_add_seconds(expire_timeout // 1000, self.on_expired, id)
         elif expire_timeout < 0:
-            if "urgency" in notification["hints"]:
-                match notification["hints"]["urgency"]:
-                    case "low":
-                        GLib.timeout_add_seconds(5, self.on_expired, id)
-                    case "normal":
-                        GLib.timeout_add_seconds(10, self.on_expired, id)
-            else:
-                GLib.timeout_add_seconds(10, self.on_expired, id)
+            urgency = get_hint(notification, "urgency", "normal")
+            timeout = {"low": 5, "normal": 10}.get(urgency, 10)
+            GLib.timeout_add_seconds(timeout, self.on_expired, id)
 
-        if "sound-name" in notification["hints"]:
-            sound = notification["hints"]["sound-name"]
-            os.system(f"canberra-gtk-play -f /usr/share/sounds/freedesktop/stereo/{sound}.oga")
+        if sound_name := get_hint(notification, "sound-name"):
+            os.system(f"canberra-gtk-play -f /usr/share/sounds/freedesktop/stereo/{sound_name}.oga")
 
-        if "sound-file" in notification["hints"]:
-            sound = notification["hints"]["sound-file"]
-            os.system(f"canberra-gtk-play -f {sound}")
+        if sound_file := get_hint(notification, "sound-file"):
+            os.system(f"canberra-gtk-play -f {sound_file}")
 
         return id
 
