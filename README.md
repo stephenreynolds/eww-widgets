@@ -28,7 +28,6 @@ Run with `./scripts/launch`.
   - Truncate notification content if height is exceeded
   - Implement do not disturb
   - Implement priority mode
-  - Implement expiration timeout
   - Implement resident hint
   - Implement sound hints
 - Control center
