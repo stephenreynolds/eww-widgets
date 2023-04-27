@@ -360,6 +360,14 @@ class NotificationServer(dbus.service.Object):
             else:
                 GLib.timeout_add_seconds(10, self.on_expired, id)
 
+        if "sound-name" in notification["hints"]:
+            sound = notification["hints"]["sound-name"]
+            os.system(f"canberra-gtk-play -f /usr/share/sounds/freedesktop/stereo/{sound}.oga")
+
+        if "sound-file" in notification["hints"]:
+            sound = notification["hints"]["sound-file"]
+            os.system(f"canberra-gtk-play -f {sound}")
+
         return id
 
     @dbus.service.method("org.freedesktop.Notifications",
