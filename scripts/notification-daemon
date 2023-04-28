@@ -24,7 +24,7 @@ POPUP_LIMIT = 5
 
 
 class Mode(Enum):
-    DISABLED = 0
+    ON = 0
     PRIORITY = 1
     DO_NOT_DISTURB = 2
 
@@ -206,7 +206,7 @@ class NotificationServer(dbus.service.Object):
         self.notifications = []
         self.popups = []
         self.next_id = 1
-        self.mode = Mode.DISABLED
+        self.mode = Mode.ON
 
         self.load_notifications_from_json()
         self.update_notifications()
@@ -313,6 +313,7 @@ class NotificationServer(dbus.service.Object):
 
     def do_popup(self, notification):
         self.add_popup_notification(notification)
+        expire_timeout = notification["timeout"]
 
         if expire_timeout > 0:
             GLib.timeout_add_seconds(expire_timeout // 1000, self.on_expired, id)
@@ -423,7 +424,7 @@ class NotificationServer(dbus.service.Object):
     Args:
         value (int): The mode to set. Valid values are:
             * 0: on
-            * 1: priority
+            * 1: priority only
             * 2: do not disturbed
 
     Raises:
