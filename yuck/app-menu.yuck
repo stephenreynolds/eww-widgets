@@ -7,4 +7,4 @@
                              ${EWW_CMD} open --toggle --screen ${monitor} system-menu-window"
               :cursor "pointer"
               :class "app-menu"
-              "")))
+              (label :text ""))))

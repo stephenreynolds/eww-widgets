@@ -10,7 +10,6 @@
             (scroll :vscroll true
                     :hscroll false
                     (box :orientation "v"
-                         :spacing 10
                          :space-evenly false
                          :class "widgets"
                          :width 380

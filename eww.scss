@@ -1,83 +1,99 @@
-$border-radius: 9px;
 $button-bg: rgba(128, 128, 128, 0.4);
 $button-bg-hover: rgba(115, 115, 115, 0.4);
 
+$theme: "tokyo-night";
+
+$themes: (
+  "tokyo-night": (
+    "border-radius": 9px,
+    "background": #1a1b26,
+    "background-opacity": 1,
+    "background-light": #24283b,
+    "text": #c0caf5,
+    "btn": #24283b,
+    "btn-opacity": 1,
+    "btn-hover": #414868,
+    "btn-hover-opacity": 1,
+    "app-menu-icon": #2ac3de,
+    "text-hover": #f7768e,
+    "workspace-hover": #9aa5ce,
+    "notification-bg": #24283b,
+    "notification-opacity": 1,
+    "notification-low": #9aa5ce,
+    "notification-normal": #73daca,
+    "notification-critical": #f7768e,
+    "notification-border-size": 0,
+    "notification-btn": #414868,
+    "notification-btn-hover": #565f89,
+    "notification-dismiss": #f7768e,
+    "slider-trough": #414868,
+    "slider-highlight": #7dcfff,
+  ),
+);
+
+@function get-value($value) {
+  @return map-get(map-get($themes, $theme), $value);
+}
+
+@mixin background-opacity($color, $opacity) {
+  background-color: rgba($color, $opacity);
+}
+
 * {
   all: unset;
+  color: get-value("text");
 }
 
 .section {
-  background-color: rgba(0, 0, 0, 0.4);
-  border-radius: $border-radius;
+  @include background-opacity(
+    get-value("background"),
+    get-value("background-opacity")
+  );
+  border-radius: get-value("border-radius");
   padding: 0 10px;
 }
 
-.hover-button {
-  border-radius: $border-radius;
+.btn {
+  border-radius: get-value("border-radius");
+
   &:hover {
-    background-color: rgba(100, 100, 100, 0.4);
+    @include background-opacity(
+      get-value("btn-hover"),
+      get-value("btn-hover-opacity")
+    );
   }
 }
 
-.container {
+.bar {
   font-family: SF Pro Rounded;
   font-weight: 500;
   font-size: 0.9em;
-  margin-bottom: -10px;
-  padding: 10px;
-
-  &.maximized {
-    background-color: rgba(0, 0, 0, 0.7);
-    margin: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-
-    .section {
-      background-color: transparent;
-    }
-  }
+  margin: 10px;
+  margin-bottom: 0;
 }
 
 .icon {
   font-family: Segoe Fluent Icons;
 }
 
-.red {
-  color: #ff6961;
-}
-
 .app-menu {
   font-size: 1.4em;
-  transition: color 500ms;
+
+  label {
+    transition: color 500ms;
+  }
 
   &:hover {
-    color: #1793d1;
+    label {
+      color: get-value("app-menu-icon");
+    }
   }
 }
 
-.window-controls {
-  .close-btn,
-  .maximize-btn,
-  .float-btn {
-    font-size: 1.6em;
-    transition: color 500ms;
-
-    &.close-btn {
-      &:hover {
-        color: #ff0000;
-      }
-    }
-
-    &.maximize-btn {
-      &:hover {
-        color: #0099ff;
-      }
-    }
-
-    &.float-btn {
-      &:hover {
-        color: #ffff00;
-      }
+.text-btn {
+  &:hover {
+    label {
+      color: get-value("text-hover");
     }
   }
 }
@@ -92,7 +108,9 @@ $button-bg-hover: rgba(115, 115, 115, 0.4);
     }
 
     &:hover {
-      color: #aaa;
+      label {
+        color: get-value("workspace-hover");
+      }
     }
   }
 }
@@ -119,32 +137,24 @@ $button-bg-hover: rgba(115, 115, 115, 0.4);
   margin-bottom: 48px;
 
   .widget {
-    background-color: rgba(50, 50, 50, 0.6);
+    @include background-opacity(
+      get-value("background-light"),
+      get-value("background-opacity")
+    );
+
     padding: 14px;
-    border-radius: 9px;
-
-    &.widget-timezones {
-      background: rgb(24, 24, 24);
-      background: linear-gradient(
-        0deg,
-        rgba(24, 24, 24, 1) 0%,
-        rgba(20, 20, 20, 1) 50%,
-        rgba(14, 14, 14, 1) 100%
-      );
-      color: #aaa;
-
-      .text-bold {
-        color: #fff;
-      }
-    }
+    border-radius: get-value("border-radius");
   }
 }
 
 .system-menu {
   margin: 10px;
   margin-top: 0;
-  background-color: rgba(50, 50, 50, 0.5);
-  border-radius: $border-radius;
+  @include background-opacity(
+    get-value("background-light"),
+    get-value("background-opacity")
+  );
+  border-radius: get-value("border-radius");
 
   .system-menu-section {
     border-bottom: 1px solid #777;
@@ -162,29 +172,18 @@ $button-bg-hover: rgba(115, 115, 115, 0.4);
       }
 
       &:hover {
-        background-color: rgba(100, 100, 100, 0.5);
-        border-radius: $border-radius;
+        @include background-opacity(
+          get-value("btn-hover"),
+          get-value("btn-hover-opacity")
+        );
+        border-radius: get-value("border-radius");
       }
     }
   }
 }
 
-.notification-popups {
-  margin-top: 10px;
-  margin-right: 10px;
-}
-
 .notifications-indicator {
   font-size: 2em;
-}
-
-.notification-dismiss {
-  background-color: rgba(128, 128, 128, 0.6);
-  border-radius: 999px;
-
-  &:hover {
-    background-color: rgba(115, 115, 115, 0.6);
-  }
 }
 
 .notification-list {
@@ -197,44 +196,18 @@ $button-bg-hover: rgba(115, 115, 115, 0.4);
     }
 
     .notification-clear {
-      background-color: $button-bg;
-      border-radius: $border-radius;
+      @include background-opacity(get-value("btn"), get-value("btn-opacity"));
+      border-radius: get-value("border-radius");
 
       box {
         padding: 0.4em 1em;
       }
 
       &:hover {
-        background-color: $button-bg-hover;
-      }
-    }
-  }
-
-  .notification-group-header {
-    .notification-group-name {
-      font-size: 1.2em;
-      font-weight: 600;
-    }
-
-    .notification-group-less box {
-      padding: 0.4em 0.5em;
-      background-color: $button-bg;
-      border-radius: $border-radius;
-    }
-  }
-
-  .notification-group-expand-button-box {
-    margin-top: 10px;
-
-    .notification-group-expand-button {
-      label {
-        padding: 0.4em 1em;
-        background-color: $button-bg;
-        border-radius: $border-radius;
-      }
-
-      &:hover label {
-        background-color: $button-bg-hover;
+        @include background-opacity(
+          get-value("btn-hover"),
+          get-value("btn-hover-opacity")
+        );
       }
     }
   }
@@ -242,34 +215,115 @@ $button-bg-hover: rgba(115, 115, 115, 0.4);
   .notification-list-expand-button {
     label {
       padding: 0.4em 0.5em;
-      background-color: $button-bg;
-      border-radius: $border-radius;
+      @include background-opacity(get-value("btn"), get-value("btn-opacity"));
+      border-radius: get-value("border-radius");
     }
 
     &:hover label {
-      background-color: $button-bg-hover;
+      @include background-opacity(
+        get-value("btn-hover"),
+        get-value("btn-hover-opacity")
+      );
     }
   }
 
-  .notification-list-inner {
-    margin-bottom: 10px;
+  .notification-group {
+    .notification-group-header {
+      .notification-group-name {
+        font-size: 1.2em;
+        font-weight: 600;
+      }
+
+      .notification-group-collapse-btn {
+        box {
+          padding: 0.4em 0.5em;
+          @include background-opacity(
+            get-value("btn"),
+            get-value("btn-opacity")
+          );
+          border-radius: get-value("border-radius");
+        }
+
+        &:hover box {
+          @include background-opacity(
+            get-value("btn-hover"),
+            get-value("btn-hover-opacity")
+          );
+        }
+      }
+    }
+
+    .notification-group-expand-button-box {
+      margin-top: 10px;
+
+      .notification-group-expand-button {
+        label {
+          padding: 0.4em 1em;
+          @include background-opacity(
+            get-value("notification-btn"),
+            get-value("btn-opacity")
+          );
+          border-radius: get-value("border-radius");
+        }
+
+        &:hover label {
+          @include background-opacity(
+            get-value("notification-btn-hover"),
+            get-value("btn-hover-opacity")
+          );
+        }
+      }
+    }
+
+    .notification-group-expanded {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.notification-popups {
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.notification-dismiss {
+  @include background-opacity(get-value("btn"), get-value("btn-opacity"));
+  border-radius: 999px;
+
+  &:hover label {
+      color: get-value("notification-dismiss");
   }
 }
 
 .notification {
-  border-radius: 9px;
+  border-radius: get-value("border-radius");
   padding: 0.75em;
 
   &.notification-low {
-    background-color: rgba(46, 52, 64, 0.4);
+    @include background-opacity(
+      get-value("notification-bg"),
+      get-value("notification-opacity")
+    );
+    border: get-value("notification-border-size") solid
+      get-value("notification-low");
   }
 
   &.notification-normal {
-    background-color: rgba(21, 89, 66, 0.4);
+    @include background-opacity(
+      get-value("notification-bg"),
+      get-value("notification-opacity")
+    );
+    border: get-value("notification-border-size") solid
+      get-value("notification-normal");
   }
 
   &.notification-critical {
-    background-color: rgba(89, 21, 44, 0.4);
+    @include background-opacity(
+      get-value("notification-bg"),
+      get-value("notification-opacity")
+    );
+    border: get-value("notification-border-size") solid
+      get-value("notification-critical");
   }
 
   .notification-container {
@@ -282,12 +336,18 @@ $button-bg-hover: rgba(115, 115, 115, 0.4);
     margin-top: 10px;
 
     .notification-action-button {
-      background-color: $button-bg;
-      border-radius: $border-radius;
+      @include background-opacity(
+        get-value("notification-btn"),
+        get-value("btn-opacity")
+      );
+      border-radius: get-value("border-radius");
       font-weight: 500;
 
       &:hover {
-        background-color: $button-bg-hover;
+        @include background-opacity(
+          get-value("notification-btn-hover"),
+          get-value("btn-hover-opacity")
+        );
       }
 
       label {
@@ -302,43 +362,23 @@ $button-bg-hover: rgba(115, 115, 115, 0.4);
 
   .sound-box {
     padding: 15px;
-    border-radius: $border-radius;
-    background-color: rgba(64, 64, 64, 0.6);
+    @include background-opacity(
+      get-value("background-light"),
+      get-value("background-opacity")
+    );
+    border-radius: get-value("border-radius");
+
     .volume-slider {
       trough {
-        background-color: #4c566a;
+        background-color: get-value("slider-trough");
         border-radius: 50px;
         min-height: 8px;
 
         highlight {
-          background-color: #88c0d0;
-          color: #2e3440;
-          border-radius: $border-radius;
+          background-color: get-value("slider-highlight");
+          border-radius: get-value("border-radius");
         }
       }
     }
   }
 }
-
-/* systray
-menubar {
-    margin: 0 -5px;
-    menuitem {
-        margin: 0 5px;
-
-        menu {
-            background-color: rgba(55, 55, 55, 0.8);
-            border-radius: 8px;
-
-            menuitem {
-                padding: 10px 20px;
-                border-radius: 8px;
-
-                &:hover {
-                    background-color: rgba(33, 33, 33, 0.8);
-                }
-            }
-        }
-    }
-}
-*/

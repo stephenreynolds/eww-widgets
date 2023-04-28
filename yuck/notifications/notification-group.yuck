@@ -6,6 +6,7 @@
   (box :orientation "vertical"
        :space-evenly false
        :visible {reveal-notification-group == "null" || reveal-notification-group == appname}
+       :class "notification-group"
        (box :orientation "vertical"
             :space-evenly false
             :spacing 10
@@ -31,7 +32,7 @@
           :hexpand true))
 
 (defwidget notification-group-collapse []
-   (eventbox :class "notification-group-less"
+   (eventbox :class "notification-group-collapse-btn"
              :onclick "${EWW_CMD} update reveal-notification-group='null'"
              :cursor "pointer"
              (box (label :text "Show less"))))
@@ -53,7 +54,7 @@
   (revealer :transition "slidedown"
             :duration "300ms"
             :reveal reveal
-            (box :class "notification-list-inner"
+            (box :class "notification-group-expanded"
                  :orientation "vertical"
                  :spacing 10
                  :space-evenly false

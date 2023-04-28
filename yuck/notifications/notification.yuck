@@ -1,9 +1,6 @@
 ; notification: The notification to display
 ; group-count: The number of notifications in its group.
 (defwidget notification [notification ?is-group ?group-count ?show-count]
-  (notification-hover :id {notification.id}
-                      :appname {notification.appname}
-                      :is-group {is-group ?: false}
     (box :class "notification notification-${notification.hints.urgency ?: "normal"}"
          :orientation "horizontal"
          :space-evenly false
@@ -27,42 +24,35 @@
                              :space-evenly false
                              :hexpand true
                              :vexpand true
-                             :spacing 10
+                             :spacing 5
                           (notification-header :icon {notification.icon}
                                                :appname {notification.appname}
-                                               :timestamp {notification.timestamp})
+                                               :timestamp {notification.timestamp}
+                                               :id {notification.id}
+                                               :is-group {is-group ?: false})
                           (notification-content :notification notification)))
               (notification-actions :id {notification.id} :actions {notification.actions})
               (notification-group-expand-button :visible {show-count ?: false}
                                                 :appname {notification.appname}
-                                                :group-count {group-count ?: 1})))))
-
-(defwidget notification-hover [id appname is-group]
-  (eventbox :onhover "${EWW_CMD} update hover-notification='${id}'"
-            :onhoverlost "${EWW_CMD} update hover-notification='null'"
-            (overlay
-              (box
-                (children))
-              (notification-dismiss-button :id {id}
-                                           :appname appname
-                                           :is-group is-group))))
+                                                :group-count {group-count ?: 1}))))
 
 (defwidget notification-dismiss-button [id appname ?is-group]
   (eventbox :class "notification-dismiss"
             :onclick {is-group ?
                       "scripts/dbus-send --group ${appname}" :
                       "scripts/dbus-send --id ${id}"}
-            :visible {hover-notification == id}
             :cursor "pointer"
             :width 24
             :height 24
-            :halign "start"
+            :space-evenly false
             :valign "start"
-            (label :text "")))
+            (label :text ""
+                   :yalign 0)))
 
-(defwidget notification-header [icon appname timestamp]
+(defwidget notification-header [icon appname timestamp id ?is-group]
   (box :class "notification-header"
        :space-evenly false
+       :spacing 5
        (box :class "notification-appname"
             :halign "start"
             :hexpand true
@@ -70,20 +60,18 @@
             :spacing 8
             (image :class "notification-icon"
                    :visible {icon != "null"}
-                   :valign "start"
                    :image-width 16
                    :image-height 16
                    :path {icon})
             (label :show-truncated true
                    :xalign 0
-                   :yalign 0
                    :wrap true
                    :text {appname}))
        (box :class "notification-time"
             :halign "end"
             :valign "start"
-            (label :yalign 0
-                   :text {timestamp}))))
+            (label :text {timestamp}))
+       (notification-dismiss-button :id id :appname appname :is-group is-group)))
 
 (defwidget notification-content [notification]
   (box :class "notification-content"

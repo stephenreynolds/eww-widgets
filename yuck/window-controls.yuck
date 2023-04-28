@@ -1,15 +1,16 @@
 (defwidget window-controls []
-  (box :class "window-controls section"
+  (box :class "section"
        :spacing 15
+       :space-evenly false
     (eventbox :onclick "hyprctl dispatch killactive"
-            :cursor "pointer"
-            :class "close-btn"
-            (label :text ""))
+              :cursor "pointer"
+              :class "text-btn"
+              (label :text "Close"))
     (eventbox :onclick "hyprctl dispatch fullscreen 1"
-            :cursor "pointer"
-            :class "maximize-btn"
-            (label :text ""))
+              :cursor "pointer"
+              :class "text-btn"
+              (label :text "Maximize"))
     (eventbox :onclick "hyprctl dispatch togglefloating active"
-            :cursor "pointer"
-            :class "float-btn"
-            (label :text ""))))
+              :cursor "pointer"
+              :class "text-btn"
+              (label :text "Float"))))
