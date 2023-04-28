@@ -6,18 +6,18 @@
 (include "yuck/clock.yuck")
 
 (defwidget bar [monitor]
-  (centerbox :orientation "h"
-             :class "bar ${(hyprland.monitors?.[monitor]?.single ?: false) ? "maximized" : ""}"
-       (left :monitor monitor)
-       (center :monitor monitor)
-       (right :monitor monitor)))
+  (centerbox :orientation "horizontal"
+             :class "bar"
+             (left :monitor monitor)
+             (center :monitor monitor)
+             (right :monitor monitor)))
 
 (defwidget left [monitor]
   (box :halign "start"
        :spacing 10
        :space-evenly false
        (app-menu :monitor monitor)
-       (window-controls)))
+       (window-controls :monitor monitor)))
 
 (defwidget center [monitor]
   (box :halign "center"

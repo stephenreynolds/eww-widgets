@@ -1,7 +1,8 @@
-(defwidget window-controls []
+(defwidget window-controls [monitor]
   (box :class "section"
        :spacing 15
        :space-evenly false
+       :visible {hyprland?.monitors?.[monitor]?.activehaswindow}
     (eventbox :onclick "hyprctl dispatch killactive"
               :cursor "pointer"
               :class "text-btn"
@@ -9,8 +10,13 @@
     (eventbox :onclick "hyprctl dispatch fullscreen 1"
               :cursor "pointer"
               :class "text-btn"
-              (label :text "Maximize"))
+              (label :text {hyprland?.monitors?.[monitor]?.lastwindow?.fullscreen ?: false ? "Restore" : "Maximize"}))
     (eventbox :onclick "hyprctl dispatch togglefloating active"
               :cursor "pointer"
               :class "text-btn"
-              (label :text "Float"))))
+              (label :text {hyprland?.monitors?.[monitor]?.lastwindow?.floating ?: false ? "Tile" : "Float"}))
+    (eventbox :onclick "hyprctl dispatch pin active"
+              :cursor "pointer"
+              :class "text-btn"
+              :visible {hyprland?.monitors?.[monitor]?.lastwindow?.floating ?: false}
+              (label :text {hyprland?.monitors?.[monitor]?.lastwindow?.pinned ?: false ? "Unpin" : "Pin"}))))

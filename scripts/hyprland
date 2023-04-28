@@ -36,6 +36,7 @@ def generate_default_workspaces():
 def update_workspaces():
     workspaces_data = parse_shell_json("hyprctl workspaces -j")
     monitors_data = parse_shell_json("hyprctl monitors -j")
+    client_data = parse_shell_json("hyprctl clients -j")
     result = []
 
     default_workspaces = generate_default_workspaces()
@@ -44,7 +45,8 @@ def update_workspaces():
         monitor_info = {
             "id": monitor["id"],
             "single": False,
-            "workspaces": []
+            "workspaces": [],
+            "lastwindow": {}
         }
 
         # Assign workspaces to monitors
@@ -59,7 +61,13 @@ def update_workspaces():
                     monitor_workspace["active"] = workspace["id"] == monitor["activeWorkspace"]["id"]
                     monitor_workspace["hasfullscreen"] = workspace["hasfullscreen"]
                     if monitor_workspace["active"]:
-                        monitor_info["single"] = workspace["windows"] == 1 or workspace["hasfullscreen"]
+                        monitor_info["activehaswindow"] = workspace["windows"] > 0
+                        for client in client_data:
+                            if client["address"] == workspace["lastwindow"]:
+                                monitor_info["lastwindow"]["fullscreen"] = client["fullscreen"]
+                                monitor_info["lastwindow"]["floating"] = client["floating"]
+                                monitor_info["lastwindow"]["pinned"] = client["pinned"]
+                                break
                     break
 
         monitor_info["workspaces"] = monitor_workspaces
