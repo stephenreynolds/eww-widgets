@@ -10,6 +10,7 @@ This repo contains my work-in-progess widget setup for my personal install.
 - Pipewire (pipewire-audio and pipewire-pulse)
 - pamixer
 - Nerd Fonts patched font
+- Python >= 3.10
 
 These widgets also assume you are running three 1920x1080 monitors and may need
 modification if your setup differs.
