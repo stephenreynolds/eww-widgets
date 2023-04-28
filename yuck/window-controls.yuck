@@ -3,7 +3,7 @@
        :spacing 15
        :space-evenly false
        :visible {hyprland?.monitors?.[monitor]?.activehaswindow}
-    (eventbox :onclick "hyprctl dispatch killactive"
+    (eventbox :onclick "hyprctl dispatch closewindow address:${hyprland?.monitors?.[monitor]?.lastwindow?.address ?: 0}"
               :cursor "pointer"
               :class "text-btn"
               (label :text "Close"))
@@ -11,12 +11,7 @@
               :cursor "pointer"
               :class "text-btn"
               (label :text {hyprland?.monitors?.[monitor]?.lastwindow?.fullscreen ?: false ? "Restore" : "Maximize"}))
-    (eventbox :onclick "hyprctl dispatch togglefloating active"
+    (eventbox :onclick "hyprctl dispatch togglefloating address:${hyprland?.monitors?.[monitor]?.lastwindow?.address ?: 0}"
               :cursor "pointer"
               :class "text-btn"
-              (label :text {hyprland?.monitors?.[monitor]?.lastwindow?.floating ?: false ? "Tile" : "Float"}))
-    (eventbox :onclick "hyprctl dispatch pin active"
-              :cursor "pointer"
-              :class "text-btn"
-              :visible {hyprland?.monitors?.[monitor]?.lastwindow?.floating ?: false}
-              (label :text {hyprland?.monitors?.[monitor]?.lastwindow?.pinned ?: false ? "Unpin" : "Pin"}))))
+              (label :text {hyprland?.monitors?.[monitor]?.lastwindow?.floating ?: false ? "Tile" : "Float"}))))

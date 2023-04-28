@@ -64,6 +64,7 @@ def update_workspaces():
                         monitor_info["activehaswindow"] = workspace["windows"] > 0
                         for client in client_data:
                             if client["address"] == workspace["lastwindow"]:
+                                monitor_info["lastwindow"]["address"] = client["address"]
                                 monitor_info["lastwindow"]["fullscreen"] = client["fullscreen"]
                                 monitor_info["lastwindow"]["floating"] = client["floating"]
                                 monitor_info["lastwindow"]["pinned"] = client["pinned"]
