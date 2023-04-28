@@ -313,6 +313,7 @@ class NotificationServer(dbus.service.Object):
 
     def do_popup(self, notification):
         self.add_popup_notification(notification)
+        id = notification["id"]
         expire_timeout = notification["timeout"]
 
         if expire_timeout > 0:
