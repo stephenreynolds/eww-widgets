@@ -7,6 +7,7 @@
          :spacing 10
          :halign "end"
          :width 380
+         :height 80
          (box :class "notification-container"
               :orientation "vertical"
               :space-evenly false
@@ -43,7 +44,6 @@
             :cursor "pointer"
             :width 24
             :height 24
-            :space-evenly false
             :valign "start"
             (label :text ""
                    :yalign 0)))
