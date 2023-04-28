@@ -1,7 +1,7 @@
 $button-bg: rgba(128, 128, 128, 0.4);
 $button-bg-hover: rgba(115, 115, 115, 0.4);
 
-$theme: "tokyo-night";
+$theme: "rose-pine";
 
 $themes: (
   "tokyo-night": (
@@ -28,6 +28,31 @@ $themes: (
     "notification-dismiss": #f7768e,
     "slider-trough": #414868,
     "slider-highlight": #7dcfff,
+  ),
+  "rose-pine": (
+    "border-radius": 9px,
+    "background": #191724,
+    "background-opacity": 1,
+    "background-light": #1f1d2e,
+    "text": #e0def4,
+    "btn": #26233a,
+    "btn-opacity": 1,
+    "btn-hover": #403d52,
+    "btn-hover-opacity": 1,
+    "app-menu-icon": #9ccfd8,
+    "text-hover": #eb6f92,
+    "workspace-hover": #f6c177,
+    "notification-bg": #26233a,
+    "notification-opacity": 1,
+    "notification-low": #26233a,
+    "notification-normal": #9ccfd8,
+    "notification-critical": #eb6f92,
+    "notification-border-size": 0,
+    "notification-btn": #403d52,
+    "notification-btn-hover": #524f67,
+    "notification-dismiss": #eb6f92,
+    "slider-trough": #6e6a86,
+    "slider-highlight": #9ccfd8,
   ),
 );
 
@@ -287,7 +312,6 @@ $themes: (
 }
 
 .notification-dismiss {
-  @include background-opacity(get-value("btn"), get-value("btn-opacity"));
   border-radius: 999px;
 
   &:hover label {
