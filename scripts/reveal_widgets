@@ -5,7 +5,7 @@ EWW_CMD=eww
 ./scripts/hide-control-center
 ./scripts/hide-system-menu
 
-$EWW_CMD open-many toggle widgets0-closer-0 widgets1-closer-1 widgets2-closer-2
+$EWW_CMD open-many --toggle widgets0-closer-0 widgets1-closer-1 widgets2-closer-2
 
 IFS=","
 read -a revealed <<< "$($EWW_CMD get reveal_widgets)"
