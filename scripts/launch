@@ -12,6 +12,7 @@ MONITORS=$(hyprctl monitors -j | jq '.[] | .id')
 for monitor in ${MONITORS}; do
     ${EWW_CMD} open bar${monitor}
     ${EWW_CMD} open widgets${monitor}
+    ${EWW_CMD} open system-menu-window-${monitor}
 done
 
 ${EWW_CMD} open control-center-window

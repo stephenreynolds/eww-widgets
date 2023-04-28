@@ -162,32 +162,46 @@ $themes: (
 }
 
 .system-menu {
-  margin: 10px;
-  margin-top: 0;
-  @include background-opacity(get-value("bg-layer-2"), get-value("bg-opacity"));
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-bottom: 50px;
+  padding: 10px;
   border-radius: get-value("border-radius");
+  @include background-opacity(get-value("bg-layer-2"), get-value("bg-opacity"));
 
-  .system-menu-section {
-    border-bottom: 1px solid get-value("bg-layer-3");
-
-    &:last-child {
-      border: none;
-    }
-
-    .system-menu-button {
-      padding: 0.2em 0.5em;
-
-      label {
-        margin: 0.2em 1em;
-        padding: 0.1em 0;
+  .session-buttons {
+    .session-btn {
+      box {
+        @include background-opacity(
+          get-value("bg-layer-3"),
+          get-value("bg-opacity")
+        );
+        padding: 5px 14px;
+        border-radius: get-value("border-radius");
+        font-size: 1.5em;
       }
 
-      &:hover {
+      &:hover box {
         @include background-opacity(
           get-value("bg-layer-4"),
-          get-value("btn-hover-opacity")
+          get-value("bg-opacity")
         );
-        border-radius: get-value("border-radius");
+
+        label {
+          color: get-value("accent-6");
+        }
+      }
+
+      &.session-btn-lock {
+        font-size: 1.2em;
+      }
+
+      &.session-btn-sleep {
+        font-size: 2em;
+      }
+
+      &.session-btn-restart {
+        font-size: 2em;
       }
     }
   }
@@ -229,7 +243,10 @@ $themes: (
   .notification-list-expand-button {
     label {
       padding: 0.4em 0.5em;
-      @include background-opacity(get-value("bg-layer-3"), get-value("btn-opacity"));
+      @include background-opacity(
+        get-value("bg-layer-3"),
+        get-value("btn-opacity")
+      );
       border-radius: get-value("border-radius");
     }
 

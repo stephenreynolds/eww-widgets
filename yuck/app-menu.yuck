@@ -2,8 +2,7 @@
 
 (defwidget app-menu [monitor]
   (box :class "app-menu section"
-    (eventbox :onclick "sh scripts/rofi"
-              :onrightclick "scripts/reveal_system_menu ${monitor}"
+    (eventbox :onclick "scripts/reveal_system_menu ${monitor}"
               :cursor "pointer"
               :class "app-menu"
               (label :text ""))))
