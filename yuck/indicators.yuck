@@ -3,8 +3,7 @@
 
 (defwidget indicators []
   (eventbox :cursor "pointer"
-            :onclick "${EWW_CMD} open-many --toggle control-center-window-closer-0 control-center-window-closer-1 control-center-window-closer-2 &&
-                      ${EWW_CMD} open --toggle control-center-window"
+            :onclick "scripts/reveal_control_center"
             (box :class "section"
                  (box :spacing 12
                       :valign "center"

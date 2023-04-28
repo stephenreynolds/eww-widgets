@@ -1,53 +1,33 @@
+(include "yuck/control-center/volume.yuck")
+
+(defvar reveal_control_center false)
+
 (defwidget control-center []
-  (box :orientation "vertical"
-       :spacing 10
-       :space-evenly false
-       :class "control-center"
-       (box :orientation "vertical"
-            :class "sound-box"
-            :spacing 5
-            (box :orientation "vertical"
-                 :spacing 5
-                 (label :text "Sound"
-                        :halign "start"
-                        :class "sound-label")
-                 (box :orientation "horizontal"
-                      :spacing 5
-                      :space-evenly false
-                      (eventbox :onclick "pamixer --toggle-mute"
-                                (label :class "volume-icon icon"
-                                       :text {volume == "muted" ? "" : volume > 66 ? "" : volume > 33 ? "" : volume > 0 ? "" : ""}))
-                      (scale :class "volume-slider"
-                             :value volume
-                             :onchange "scripts/set_volume {}"
-                             :min 0
-                             :max 101
-                             :hexpand true)))
-            (box :orientation "vertical"
-                 :spacing 5
-                 (label :text "Microphone"
-                        :halign "start"
-                        :class "sound-label")
-                 (box :orientation "horizontal"
-                      :spacing 5
-                      :space-evenly false
-                      (eventbox :onclick "pamixer --toggle-mute --source 0"
-                                (label :class "volume-icon icon"
-                                       :text {mic_volume == "muted" ? "" : ""}))
-                      (scale :class "volume-slider"
-                             :value mic_volume
-                             :onchange "scripts/set_microphone {}"
-                             :min 0
-                             :max 101
-                             :hexpand true))))))
+  (revealer :transition "slideleft"
+            :duration "300ms"
+            :reveal reveal_control_center
+            (box :class "control-center"
+                 (scroll :vscroll true
+                         :hscroll false
+                         (box :orientation "vertical"
+                              :space-evenly false
+                              :width 380
+                              (volume-widget))))))
+
+(defwidget control-center-closer []
+  (eventbox :onclick "scripts/hide-control-center"
+            :onrightclick "scripts/hide-control-center"
+            :onmiddleclick "scripts/hide-control-center"))
 
 (defwindow control-center-window
   :monitor 1
-  :geometry (geometry :width 380
-                      :x 120
+  :geometry (geometry :x "-1px"
+                      :height "100%"
                       :anchor "top right")
-  :stacking "fg"
+  :stacking "overlay"
+  :exclusive false
   :focusable false
+  :namespace "eww"
   (control-center))
 
 (defwindow control-center-window-closer-0
@@ -55,18 +35,18 @@
   :geometry (geometry :width "100%" :height "100%")
   :stacking "fg"
   :focusable false
-  (closer :window "control-center-window"))
+  (control-center-closer))
 
 (defwindow control-center-window-closer-1
   :monitor 1
   :geometry (geometry :width "100%" :height "100%")
   :stacking "fg"
   :focusable false
-  (closer :window "control-center-window"))
+  (control-center-closer))
 
 (defwindow control-center-window-closer-2
   :monitor 2
   :geometry (geometry :width "100%" :height "100%")
   :stacking "fg"
   :focusable false
-  (closer :window "control-center-window"))
+  (control-center-closer))

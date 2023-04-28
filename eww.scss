@@ -17,6 +17,7 @@ $themes: (
     "app-menu-icon": #2ac3de,
     "text-hover": #f7768e,
     "workspace-hover": #9aa5ce,
+    "widget-bg": #24283b,
     "notification-bg": #24283b,
     "notification-opacity": 1,
     "notification-low": #9aa5ce,
@@ -42,6 +43,7 @@ $themes: (
     "app-menu-icon": #9ccfd8,
     "text-hover": #eb6f92,
     "workspace-hover": #f6c177,
+    "widget-bg": #26233a,
     "notification-bg": #26233a,
     "notification-opacity": 1,
     "notification-low": #26233a,
@@ -159,11 +161,18 @@ $themes: (
 .widgets {
   margin-top: 10px;
   margin-right: 10px;
-  margin-bottom: 48px;
+  margin-bottom: 50px;
+  padding: 10px;
+  border-radius: get-value("border-radius");
+
+  @include background-opacity(
+    get-value("background-light"),
+    get-value("background-opacity")
+  );
 
   .widget {
     @include background-opacity(
-      get-value("background-light"),
+      get-value("widget-bg"),
       get-value("background-opacity")
     );
 
@@ -315,7 +324,7 @@ $themes: (
   border-radius: 999px;
 
   &:hover label {
-      color: get-value("notification-dismiss");
+    color: get-value("notification-dismiss");
   }
 }
 
@@ -382,12 +391,20 @@ $themes: (
 }
 
 .control-center {
-  margin-top: 5px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 50px;
+  padding: 10px;
+  border-radius: get-value("border-radius");
+  @include background-opacity(
+    get-value("background-light"),
+    get-value("background-opacity")
+  );
 
   .sound-box {
     padding: 15px;
     @include background-opacity(
-      get-value("background-light"),
+      get-value("widget-bg"),
       get-value("background-opacity")
     );
     border-radius: get-value("border-radius");

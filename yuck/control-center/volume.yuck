@@ -1,0 +1,38 @@
+(defwidget volume-widget []
+  (box :orientation "vertical"
+       :class "sound-box"
+       :spacing 5
+       (box :orientation "vertical"
+            :spacing 5
+            (label :text "Sound"
+                   :halign "start"
+                   :class "sound-label")
+            (box :orientation "horizontal"
+                 :spacing 5
+                 :space-evenly false
+                 (eventbox :onclick "pamixer --toggle-mute"
+                           (label :class "volume-icon icon"
+                                  :text {volume == "muted" ? "" : volume > 66 ? "" : volume > 33 ? "" : volume > 0 ? "" : ""}))
+                 (scale :class "volume-slider"
+                        :value volume
+                        :onchange "scripts/set_volume {}"
+                        :min 0
+                        :max 101
+                        :hexpand true)))
+       (box :orientation "vertical"
+            :spacing 5
+            (label :text "Microphone"
+                   :halign "start"
+                   :class "sound-label")
+            (box :orientation "horizontal"
+                 :spacing 5
+                 :space-evenly false
+                 (eventbox :onclick "pamixer --toggle-mute --source 0"
+                           (label :class "volume-icon icon"
+                                  :text {mic_volume == "muted" ? "" : ""}))
+                 (scale :class "volume-slider"
+                        :value mic_volume
+                        :onchange "scripts/set_microphone {}"
+                        :min 0
+                        :max 101
+                        :hexpand true)))))
