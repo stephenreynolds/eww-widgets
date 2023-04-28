@@ -7,30 +7,29 @@
          :spacing 10
          :halign "end"
          :width 380
-         :height 80
          (box :class "notification-container"
               :orientation "vertical"
               :space-evenly false
               :hexpand true
               :vexpand true
-              (eventbox :onclick {arraylength(notification.actions) == 0 ?
-                                        "scripts/dbus-send --id ${notification.id} && scripts/hide-widgets" :
-                                        jq(notification.actions, `any(.[]; . == "default")`) ?
-                                        "scripts/dbus-send --action ${notification.id} default && scripts/hide-widgets" :
-                                        "scripts/dbus-send --action ${notification.id} ${notification.actions[0]}"}
-                        :onrightclick {jq(notification.actions, `any(.[]; . == "settings")`) ?
-                                      "scripts/dbus-send --action ${notification.id} settings && scripts/hide-widgets" : ""}
-                        (box :orientation "vertical"
-                             :space-evenly false
-                             :hexpand true
-                             :vexpand true
-                             :spacing 5
-                          (notification-header :icon {notification.icon}
-                                               :appname {notification.appname}
-                                               :timestamp {notification.timestamp}
-                                               :id {notification.id}
-                                               :is-group {is-group ?: false})
-                          (notification-content :notification notification)))
+              (box :orientation "vertical"
+                   :space-evenly false
+                   :hexpand true
+                   :vexpand true
+                   :spacing 5
+                   (notification-header :icon {notification.icon}
+                                        :appname {notification.appname}
+                                        :timestamp {notification.timestamp}
+                                        :id {notification.id}
+                                        :is-group {is-group ?: false})
+                   (eventbox :onclick {arraylength(notification.actions) == 0 ?
+                                             "scripts/dbus-send --id ${notification.id} && scripts/hide-widgets" :
+                                             jq(notification.actions, `any(.[]; . == "default")`) ?
+                                             "scripts/dbus-send --action ${notification.id} default && scripts/hide-widgets" :
+                                             "scripts/dbus-send --action ${notification.id} ${notification.actions[0]}"}
+                             :onrightclick {jq(notification.actions, `any(.[]; . == "settings")`) ?
+                                           "scripts/dbus-send --action ${notification.id} settings && scripts/hide-widgets" : ""}
+                             (notification-content :notification notification)))
               (notification-actions :id {notification.id} :actions {notification.actions})
               (notification-group-expand-button :visible {show-count ?: false}
                                                 :appname {notification.appname}
