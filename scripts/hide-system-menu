@@ -2,5 +2,5 @@
 
 EWW_CMD=eww
 
-$EWW_CMD update reveal_system_menu='[false,false,false]'
-$EWW_CMD close system-menu-window-closer-0 system-menu-window-closer-1 system-menu-window-closer-2
+$EWW_CMD update reveal_system_menu='[false,false,false]' &
+$EWW_CMD close system-menu-window-closer-0 system-menu-window-closer-1 system-menu-window-closer-2 &

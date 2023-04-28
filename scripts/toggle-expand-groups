@@ -5,7 +5,7 @@ EWW=eww
 result=$($EWW get expand-notification-groups)
 
 if [[ $result == "true" ]]; then
-    $EWW update expand-notification-groups="false"
+    $EWW update expand-notification-groups="false" &
 else
-    $EWW update expand-notification-groups="true"
+    $EWW update expand-notification-groups="true" &
 fi

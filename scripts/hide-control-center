@@ -2,5 +2,5 @@
 
 EWW_CMD=eww
 
-$EWW_CMD update reveal_control_center='false'
-$EWW_CMD close control-center-window-closer-0 control-center-window-closer-1 control-center-window-closer-2
+$EWW_CMD update reveal_control_center='false' &
+$EWW_CMD close control-center-window-closer-0 control-center-window-closer-1 control-center-window-closer-2 &
