@@ -24,6 +24,11 @@ def invoke_action(id, action_key):
         f"dbus-send --session --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.InvokeAction uint32:{id} string:'{action_key}'")
 
 
+def set_mode(value):
+    os.system(
+            f"dbus-send --session --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.SetMode uint32:{value}")
+
+
 def main():
     parser = argparse.ArgumentParser()
 
@@ -31,9 +36,8 @@ def main():
     group.add_argument("--id", type=int)
     group.add_argument("--group", type=str)
     group.add_argument("--all", action="store_true")
-
-    group2 = parser.add_mutually_exclusive_group()
-    group2.add_argument("--action", nargs=2)
+    group.add_argument("--action", nargs=2)
+    group.add_argument("--mode", type=int)
 
     args = parser.parse_args()
 
@@ -45,6 +49,8 @@ def main():
         dismiss_all()
     elif args.action:
         invoke_action(args.action[0], args.action[1])
+    elif args.mode:
+        set_mode(args.mode)
 
 
 if __name__ == "__main__":

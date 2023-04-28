@@ -220,6 +220,26 @@ $themes: (
       font-weight: 600;
     }
 
+    .dnd-button {
+      @include background-opacity(
+        get-value("bg-layer-3"),
+        get-value("btn-opacity")
+      );
+      border-radius: get-value("border-radius");
+      font-size: 1.6em;
+
+      label {
+        padding: 0 0.4em;
+      }
+
+      &:hover {
+        @include background-opacity(
+          get-value("bg-layer-4"),
+          get-value("btn-hover-opacity")
+        );
+      }
+    }
+
     .notification-clear {
       @include background-opacity(
         get-value("bg-layer-3"),

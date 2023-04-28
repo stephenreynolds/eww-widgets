@@ -4,7 +4,9 @@ import json
 import os
 import sys
 from datetime import datetime
+from enum import Enum
 import shutil
+import subprocess
 import pathlib
 import dbus
 import dbus.service
@@ -19,6 +21,12 @@ CACHE_DIR = "/tmp/eww"
 HISTORY_PATH = os.path.expandvars("$XDG_CACHE_HOME/eww/notifications.json")
 HISTORY_LIMIT = 20
 POPUP_LIMIT = 5
+
+
+class Mode(Enum):
+    DISABLED = 0
+    PRIORITY = 1
+    DO_NOT_DISTURB = 2
 
 
 def unwrap(value: dbus.Array
@@ -198,6 +206,7 @@ class NotificationServer(dbus.service.Object):
         self.notifications = []
         self.popups = []
         self.next_id = 1
+        self.mode = Mode.DISABLED
 
         self.load_notifications_from_json()
         self.update_notifications()
@@ -302,6 +311,22 @@ class NotificationServer(dbus.service.Object):
         self.remove_popup(id)
         self.update_notifications()
 
+    def do_popup(self, notification):
+        self.add_popup_notification(notification)
+
+        if expire_timeout > 0:
+            GLib.timeout_add_seconds(expire_timeout // 1000, self.on_expired, id)
+        elif expire_timeout < 0:
+            urgency = get_hint(notification, "urgency", "normal")
+            timeout = {"low": 5, "normal": 10}.get(urgency, 10)
+            GLib.timeout_add_seconds(timeout, self.on_expired, id)
+
+        if sound_name := get_hint(notification, "sound-name"):
+            os.system(f"canberra-gtk-play -f /usr/share/sounds/freedesktop/stereo/{sound_name}.oga")
+
+        if sound_file := get_hint(notification, "sound-file"):
+            os.system(f"canberra-gtk-play -f {sound_file}")
+
     @dbus.service.method("org.freedesktop.Notifications",
                          in_signature='', out_signature='as')
     def GetCapabilities(self):
@@ -335,21 +360,11 @@ class NotificationServer(dbus.service.Object):
             self.append_notification(notification)
             self.save_notifications_to_json()
 
-        self.add_popup_notification(notification)
+        urgency = get_hint(notification, "urgency", "normal")
+        if self.mode == Mode.ON or (self.mode == Mode.PRIORITY and urgency == "critical"):
+            self.do_popup(notification)
+
         self.update_notifications()
-
-        if expire_timeout > 0:
-            GLib.timeout_add_seconds(expire_timeout // 1000, self.on_expired, id)
-        elif expire_timeout < 0:
-            urgency = get_hint(notification, "urgency", "normal")
-            timeout = {"low": 5, "normal": 10}.get(urgency, 10)
-            GLib.timeout_add_seconds(timeout, self.on_expired, id)
-
-        if sound_name := get_hint(notification, "sound-name"):
-            os.system(f"canberra-gtk-play -f /usr/share/sounds/freedesktop/stereo/{sound_name}.oga")
-
-        if sound_file := get_hint(notification, "sound-file"):
-            os.system(f"canberra-gtk-play -f {sound_file}")
 
         return id
 
@@ -401,6 +416,30 @@ class NotificationServer(dbus.service.Object):
     @dbus.service.signal("org.freedesktop.Notifications", signature='us')
     def ActivationToken(self, id, activation_token):
         pass
+
+    """
+    Sets the mode of the notification system.
+
+    Args:
+        value (int): The mode to set. Valid values are:
+            * 0: on
+            * 1: priority
+            * 2: do not disturbed
+
+    Raises:
+        TypeError: If the value is not an integer.
+        ValueError: If the value is not one of the valid modes.
+
+    Returns:
+        None
+    """
+    @dbus.service.method("org.freedesktop.Notifications", signature='u')
+    def SetMode(self, value):
+        if not isinstance(value, int):
+            raise TypeError("Value must be an integer.")
+        if value not in [mode.value for mode in Mode]:
+            raise ValueError("Invalid mode value.")
+        self.mode = Mode(value)
 
 
 if __name__ == "__main__":
