@@ -1,60 +1,47 @@
-$button-bg: rgba(128, 128, 128, 0.4);
-$button-bg-hover: rgba(115, 115, 115, 0.4);
-
 $theme: "rose-pine";
 
 $themes: (
-  "tokyo-night": (
-    "border-radius": 9px,
-    "background": #1a1b26,
-    "background-opacity": 1,
-    "background-light": #24283b,
+  "tokyonight": (
+    "bg-layer-1": #1a1b26,
+    "bg-layer-2": #24283b,
+    "bg-layer-3": #414868,
+    "bg-layer-4": #565f89,
+    "bg-layer-5": #9aa5ce,
     "text": #c0caf5,
-    "btn": #24283b,
+    "muted": #a9b1d6,
+    "accent-1": #f7768e,
+    "accent-2": #e0af68,
+    "accent-3": #7dcfff,
+    "accent-4": #73daca,
+    "accent-5": #7aa2f7,
+    "accent-6": #bb9af7,
+    "border-radius": 9px,
+    "bg-opacity": 1,
     "btn-opacity": 1,
-    "btn-hover": #414868,
     "btn-hover-opacity": 1,
-    "app-menu-icon": #2ac3de,
-    "text-hover": #f7768e,
-    "workspace-hover": #9aa5ce,
-    "widget-bg": #24283b,
-    "notification-bg": #24283b,
     "notification-opacity": 1,
-    "notification-low": #9aa5ce,
-    "notification-normal": #73daca,
-    "notification-critical": #f7768e,
     "notification-border-size": 0,
-    "notification-btn": #414868,
-    "notification-btn-hover": #565f89,
-    "notification-dismiss": #f7768e,
-    "slider-trough": #414868,
-    "slider-highlight": #7dcfff,
   ),
   "rose-pine": (
-    "border-radius": 9px,
-    "background": #191724,
-    "background-opacity": 1,
-    "background-light": #1f1d2e,
+    "bg-layer-1": #191724,
+    "bg-layer-2": #1f1d2e,
+    "bg-layer-3": #26233a,
+    "bg-layer-4": #403d52,
+    "bg-layer-5": #524f67,
     "text": #e0def4,
-    "btn": #26233a,
+    "muted": #6e6a86,
+    "accent-1": #eb6f92,
+    "accent-2": #f6c177,
+    "accent-3": #ebbcba,
+    "accent-4": #31748f,
+    "accent-5": #9ccfd8,
+    "accent-6": #c4a7e7,
+    "border-radius": 9px,
+    "bg-opacity": 1,
     "btn-opacity": 1,
-    "btn-hover": #403d52,
     "btn-hover-opacity": 1,
-    "app-menu-icon": #9ccfd8,
-    "text-hover": #eb6f92,
-    "workspace-hover": #f6c177,
-    "widget-bg": #26233a,
-    "notification-bg": #26233a,
     "notification-opacity": 1,
-    "notification-low": #26233a,
-    "notification-normal": #9ccfd8,
-    "notification-critical": #eb6f92,
     "notification-border-size": 0,
-    "notification-btn": #403d52,
-    "notification-btn-hover": #524f67,
-    "notification-dismiss": #eb6f92,
-    "slider-trough": #6e6a86,
-    "slider-highlight": #9ccfd8,
   ),
 );
 
@@ -72,10 +59,7 @@ $themes: (
 }
 
 .section {
-  @include background-opacity(
-    get-value("background"),
-    get-value("background-opacity")
-  );
+  @include background-opacity(get-value("bg-layer-1"), get-value("bg-opacity"));
   border-radius: get-value("border-radius");
   padding: 0 10px;
 }
@@ -85,7 +69,7 @@ $themes: (
 
   &:hover {
     @include background-opacity(
-      get-value("btn-hover"),
+      get-value("bg-layer-4"),
       get-value("btn-hover-opacity")
     );
   }
@@ -112,7 +96,7 @@ $themes: (
 
   &:hover {
     label {
-      color: get-value("app-menu-icon");
+      color: get-value("accent-5");
     }
   }
 }
@@ -120,7 +104,7 @@ $themes: (
 .text-btn {
   &:hover {
     label {
-      color: get-value("text-hover");
+      color: get-value("accent-1");
     }
   }
 }
@@ -136,7 +120,7 @@ $themes: (
 
     &:hover {
       label {
-        color: get-value("workspace-hover");
+        color: get-value("accent-2");
       }
     }
   }
@@ -164,16 +148,12 @@ $themes: (
   margin-bottom: 50px;
   padding: 10px;
   border-radius: get-value("border-radius");
-
-  @include background-opacity(
-    get-value("background-light"),
-    get-value("background-opacity")
-  );
+  @include background-opacity(get-value("bg-layer-2"), get-value("bg-opacity"));
 
   .widget {
     @include background-opacity(
-      get-value("widget-bg"),
-      get-value("background-opacity")
+      get-value("bg-layer-3"),
+      get-value("bg-opacity")
     );
 
     padding: 14px;
@@ -184,14 +164,11 @@ $themes: (
 .system-menu {
   margin: 10px;
   margin-top: 0;
-  @include background-opacity(
-    get-value("background-light"),
-    get-value("background-opacity")
-  );
+  @include background-opacity(get-value("bg-layer-2"), get-value("bg-opacity"));
   border-radius: get-value("border-radius");
 
   .system-menu-section {
-    border-bottom: 1px solid #777;
+    border-bottom: 1px solid get-value("bg-layer-3");
 
     &:last-child {
       border: none;
@@ -207,7 +184,7 @@ $themes: (
 
       &:hover {
         @include background-opacity(
-          get-value("btn-hover"),
+          get-value("bg-layer-4"),
           get-value("btn-hover-opacity")
         );
         border-radius: get-value("border-radius");
@@ -230,7 +207,10 @@ $themes: (
     }
 
     .notification-clear {
-      @include background-opacity(get-value("btn"), get-value("btn-opacity"));
+      @include background-opacity(
+        get-value("bg-layer-3"),
+        get-value("btn-opacity")
+      );
       border-radius: get-value("border-radius");
 
       box {
@@ -239,7 +219,7 @@ $themes: (
 
       &:hover {
         @include background-opacity(
-          get-value("btn-hover"),
+          get-value("bg-layer-4"),
           get-value("btn-hover-opacity")
         );
       }
@@ -249,13 +229,13 @@ $themes: (
   .notification-list-expand-button {
     label {
       padding: 0.4em 0.5em;
-      @include background-opacity(get-value("btn"), get-value("btn-opacity"));
+      @include background-opacity(get-value("bg-layer-3"), get-value("btn-opacity"));
       border-radius: get-value("border-radius");
     }
 
     &:hover label {
       @include background-opacity(
-        get-value("btn-hover"),
+        get-value("bg-layer-4"),
         get-value("btn-hover-opacity")
       );
     }
@@ -272,7 +252,7 @@ $themes: (
         box {
           padding: 0.4em 0.5em;
           @include background-opacity(
-            get-value("btn"),
+            get-value("bg-layer-3"),
             get-value("btn-opacity")
           );
           border-radius: get-value("border-radius");
@@ -280,7 +260,7 @@ $themes: (
 
         &:hover box {
           @include background-opacity(
-            get-value("btn-hover"),
+            get-value("bg-layer-4"),
             get-value("btn-hover-opacity")
           );
         }
@@ -294,7 +274,7 @@ $themes: (
         label {
           padding: 0.4em 1em;
           @include background-opacity(
-            get-value("notification-btn"),
+            get-value("bg-layer-4"),
             get-value("btn-opacity")
           );
           border-radius: get-value("border-radius");
@@ -302,7 +282,7 @@ $themes: (
 
         &:hover label {
           @include background-opacity(
-            get-value("notification-btn-hover"),
+            get-value("bg-layer-5"),
             get-value("btn-hover-opacity")
           );
         }
@@ -324,39 +304,28 @@ $themes: (
   border-radius: 999px;
 
   &:hover label {
-    color: get-value("notification-dismiss");
+    color: get-value("accent-1");
   }
 }
 
 .notification {
   border-radius: get-value("border-radius");
   padding: 0.75em;
+  @include background-opacity(
+    get-value("bg-layer-3"),
+    get-value("notification-opacity")
+  );
 
   &.notification-low {
-    @include background-opacity(
-      get-value("notification-bg"),
-      get-value("notification-opacity")
-    );
-    border: get-value("notification-border-size") solid
-      get-value("notification-low");
+    border: get-value("notification-border-size") solid get-value("accent-4");
   }
 
   &.notification-normal {
-    @include background-opacity(
-      get-value("notification-bg"),
-      get-value("notification-opacity")
-    );
-    border: get-value("notification-border-size") solid
-      get-value("notification-normal");
+    border: get-value("notification-border-size") solid get-value("accent-5");
   }
 
   &.notification-critical {
-    @include background-opacity(
-      get-value("notification-bg"),
-      get-value("notification-opacity")
-    );
-    border: get-value("notification-border-size") solid
-      get-value("notification-critical");
+    border: get-value("notification-border-size") solid get-value("accent-1");
   }
 
   .notification-container {
@@ -370,7 +339,7 @@ $themes: (
 
     .notification-action-button {
       @include background-opacity(
-        get-value("notification-btn"),
+        get-value("bg-layer-4"),
         get-value("btn-opacity")
       );
       border-radius: get-value("border-radius");
@@ -378,7 +347,7 @@ $themes: (
 
       &:hover {
         @include background-opacity(
-          get-value("notification-btn-hover"),
+          get-value("bg-layer-5"),
           get-value("btn-hover-opacity")
         );
       }
@@ -396,27 +365,24 @@ $themes: (
   margin-bottom: 50px;
   padding: 10px;
   border-radius: get-value("border-radius");
-  @include background-opacity(
-    get-value("background-light"),
-    get-value("background-opacity")
-  );
+  @include background-opacity(get-value("bg-layer-2"), get-value("bg-opacity"));
 
   .sound-box {
     padding: 15px;
     @include background-opacity(
-      get-value("widget-bg"),
-      get-value("background-opacity")
+      get-value("bg-layer-3"),
+      get-value("bg-opacity")
     );
     border-radius: get-value("border-radius");
 
     .volume-slider {
       trough {
-        background-color: get-value("slider-trough");
+        background-color: get-value("muted");
         border-radius: 50px;
         min-height: 8px;
 
         highlight {
-          background-color: get-value("slider-highlight");
+          background-color: get-value("accent-5");
           border-radius: get-value("border-radius");
         }
       }
