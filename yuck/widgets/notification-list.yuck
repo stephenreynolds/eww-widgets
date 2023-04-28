@@ -42,13 +42,11 @@
                          :tooltip {mode == 0 ? "Notifications on" :
                                    mode == 1 ? "Priority only" :
                                    "Do not disturb"}))
-        (literal :content {is-empty ?
-                 `(box :class "notification-list-empty"
-                       (label :text "No notifications"))` :
-                 `(eventbox :class "notification-clear"
-                            :onclick "scripts/dbus-send --all"
-                            :cursor "pointer"
-                            (box (label :text "Clear all")))`})))
+        (eventbox :class "notification-clear"
+                  :onclick "scripts/dbus-send --all"
+                  :cursor "pointer"
+                  :visible {!is-empty}
+                  (box (label :text "Clear all")))))
 
 (defwidget notification-list-expand-button []
   (eventbox :visible {reveal-notification-group == "null" && arraylength(notifications) > 3}
