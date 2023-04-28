@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
-EWW=eww
+EWW_CMD=eww
 
-$EWW close system-menu-window && $EWW open --screen $1 system-menu-window
+./scripts/hide-control-center
+./scripts/hide-widgets
+
+$EWW_CMD open-many --toggle system-menu-window-closer-0 system-menu-window-closer-1 system-menu-window-closer-2
+$EWW_CMD open --toggle --screen $1 system-menu-window

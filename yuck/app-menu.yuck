@@ -3,8 +3,7 @@
 (defwidget app-menu [monitor]
   (box :class "app-menu section"
     (eventbox :onclick "sh scripts/rofi"
-              :onrightclick "${EWW_CMD} open-many --toggle system-menu-window-closer-0 system-menu-window-closer-1 system-menu-window-closer-2 &&
-                             ${EWW_CMD} open --toggle --screen ${monitor} system-menu-window"
+              :onrightclick "scripts/reveal_system_menu ${monitor}"
               :cursor "pointer"
               :class "app-menu"
               (label :text ""))))

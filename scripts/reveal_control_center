@@ -2,6 +2,9 @@
 
 EWW_CMD=eww
 
+./scripts/hide-widgets
+./scripts/hide-system-menu
+
 $EWW_CMD open-many --toggle control-center-window-closer-0 control-center-window-closer-1 control-center-window-closer-2
 
 revealed=$($EWW_CMD get reveal_control_center)
