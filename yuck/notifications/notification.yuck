@@ -38,7 +38,7 @@
 (defwidget notification-dismiss-button [id appname ?is-group]
   (eventbox :class "notification-dismiss"
             :onclick {is-group ?
-                      "scripts/dbus-send --group ${appname}" :
+                      "scripts/dbus-send --group '${appname}'" :
                       "scripts/dbus-send --id ${id}"}
             :cursor "pointer"
             :width 24
