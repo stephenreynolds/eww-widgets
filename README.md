@@ -27,8 +27,6 @@ Run with `./scripts/launch`.
 - Notifications
   - Fix notification group header not showing the first time one is expanded
   - Truncate notification content if height is exceeded
-  - Implement do not disturb
-  - Implement priority mode
   - Implement resident hint
 - Control center
   - Wifi toggle and network menu
