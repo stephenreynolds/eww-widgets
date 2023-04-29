@@ -184,7 +184,7 @@ def parse_notification(id, app_name, replaces_id, app_icon, summary,
 
 
 def escape_quotes(s):
-    return s.replace('"', '\\"').replace('\\\\"', '\\\\\\"')
+    return s.replace('"', '\\"').replace('\\\\"', '\\\\\\"').replace('`', '\\`')
 
 
 def get_hint(notification, hint, default=None):
