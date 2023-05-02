@@ -17,3 +17,5 @@ done
 
 ${EWW_CMD} open control-center-window &
 ${EWW_CMD} open notification-popup-window &
+
+dbus-send --mode 0
