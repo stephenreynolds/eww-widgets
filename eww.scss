@@ -268,10 +268,10 @@ $themes: (
         get-value("btn-opacity")
       );
       border-radius: get-value("border-radius");
-      font-size: 1.6em;
+      font-size: 1.2em;
 
       label {
-        padding: 0 0.4em;
+        padding: 0.2em 0.6em;
       }
 
       &:hover {
