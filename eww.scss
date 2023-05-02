@@ -1,4 +1,4 @@
-$theme: "rose-pine";
+$theme: "catppuccin";
 
 $themes: (
   "tokyonight": (
@@ -36,6 +36,27 @@ $themes: (
     "accent-4": #31748f,
     "accent-5": #9ccfd8,
     "accent-6": #c4a7e7,
+    "border-radius": 9px,
+    "bg-opacity": 1,
+    "btn-opacity": 1,
+    "btn-hover-opacity": 1,
+    "notification-opacity": 1,
+    "notification-border-size": 0,
+  ),
+  "catppuccin": (
+    "bg-layer-1": #1e1e2e,
+    "bg-layer-2": #181825,
+    "bg-layer-3": #1e1e2e,
+    "bg-layer-4": #313244,
+    "bg-layer-5": #45475a,
+    "text": #cdd6f4,
+    "muted": #7f849c,
+    "accent-1": #f38ba8,
+    "accent-2": #fab387,
+    "accent-3": #89dceb,
+    "accent-4": #a6e3a1,
+    "accent-5": #89b4fa,
+    "accent-6": #b4befe,
     "border-radius": 9px,
     "bg-opacity": 1,
     "btn-opacity": 1,
