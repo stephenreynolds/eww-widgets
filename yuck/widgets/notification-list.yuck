@@ -9,7 +9,7 @@
   (box :class "notification-list"
        :orientation "vertical"
        :space-evenly false
-       (notification-list-header :is-empty {arraylength(notifications) == 0})
+       (notification-list-header)
        (box :orientation "vertical"
             :space-evenly false
             (for group in {jq(notifications, ".[:3]")}
@@ -25,7 +25,7 @@
                                                :group-notifications {group.notifications}))))
        (notification-list-expand-button)))
 
-(defwidget notification-list-header [is-empty]
+(defwidget notification-list-header []
    (box :class "notification-list-header"
         :space-evenly false
         :spacing 10
@@ -45,7 +45,6 @@
         (eventbox :class "notification-clear"
                   :onclick "scripts/dbus-send --all"
                   :cursor "pointer"
-                  :visible {!is-empty}
                   (box (label :text "Clear all")))))
 
 (defwidget notification-list-expand-button []
