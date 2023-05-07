@@ -20,17 +20,29 @@ def parse_shell_json(command):
         print(f"Error decoding JSON: {e}")
         return None
 
-
-def generate_default_workspaces():
-    return [
-        {
-            "id": workspace_id,
+def create_workspaces(ids):
+    workspaces = []
+    for id in ids:
+        w = {
+            "id": id,
             "windows": 0,
             "active": False,
             "hasfullscreen": False
         }
-        for workspace_id in range(1, 10)
-    ]
+        workspaces.append(w)
+    return workspaces
+
+
+def get_monitor_workspaces(id):
+    match id:
+        case 0:
+            return create_workspaces([1, 4, 7])
+        case 2:
+            return create_workspaces([2, 5, 8])
+        case 1:
+            return create_workspaces([3, 6, 9])
+        case _:
+            return []
 
 
 def update_workspaces():
@@ -39,7 +51,9 @@ def update_workspaces():
     client_data = parse_shell_json("hyprctl clients -j")
     result = []
 
-    default_workspaces = generate_default_workspaces()
+    left_monitor_id = 0
+    center_monitor_id = 2
+    right_monitor_id = 1
 
     for monitor in monitors_data:
         monitor_info = {
@@ -50,8 +64,7 @@ def update_workspaces():
         }
 
         # Assign workspaces to monitors
-        monitor_workspaces = [ws.copy() for ws in default_workspaces if (
-            ws["id"] - 1) % 3 == monitor["id"]]
+        monitor_workspaces = get_monitor_workspaces(monitor["id"])
 
         # Update workspaces with real data
         for workspace in workspaces_data:

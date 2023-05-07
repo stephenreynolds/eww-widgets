@@ -20,7 +20,7 @@
             :onmiddleclick "scripts/hide-control-center"))
 
 (defwindow control-center-window
-  :monitor 1
+  :monitor 2
   :geometry (geometry :x "-1px"
                       :height "100%"
                       :anchor "top right")

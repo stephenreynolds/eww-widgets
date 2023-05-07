@@ -1,4 +1,4 @@
-(defvar primary_monitor 1)
+(defvar primary_monitor 2)
 
 (deflisten hyprland :initial "{}" "scripts/hyprland")
 (deflisten notifications :initial "[]" "scripts/notification-daemon")
