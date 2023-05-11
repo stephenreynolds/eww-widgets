@@ -3,7 +3,7 @@
 EWW_CMD=eww
 
 # Kill any running instances
-pkill eww
+${EWW_CMD} kill
 ${EWW_CMD} daemon
 
 # Start a bar for each monitor

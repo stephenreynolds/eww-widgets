@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-EWW=eww
+EWW_CMD=eww
 
 group=$($EWW get reveal-notification-group)
 
