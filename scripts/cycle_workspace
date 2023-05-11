@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ "$1" == "up" ]; then
+    hyprctl dispatch workspace m+1
+else
+    hyprctl dispatch workspace m-1
+fi

@@ -1,6 +1,7 @@
 (defwidget workspaces [monitor]
   (box :class "button-bin section"
       (eventbox :class "button workspaces"
+                :onscroll "scripts/cycle_workspace {}"
                 (box :space-evenly false
                      (for workspace in {hyprland?.monitors?.[monitor]?.workspaces ?: []}
                           (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
