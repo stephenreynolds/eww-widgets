@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+EWW_CMD=eww
+
+revealed=$($EWW_CMD get reveal-system-tray)
+
+if [[ "$revealed" == "true" ]]; then
+    $EWW_CMD update reveal-system-tray="false"
+else
+    $EWW_CMD update reveal-system-tray="true"
+fi

@@ -1,0 +1,5 @@
+(defvar reveal-system-tray false)
+
+(defwidget system-tray []
+  (box :class "system-tray section"
+       (systray :pack_direction "ltr")))
