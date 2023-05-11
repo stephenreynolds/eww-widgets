@@ -3,7 +3,7 @@
 (defvar notification-popup-list "[]")
 
 (defwindow notification-popup-window
-  :monitor 1
+  :monitor 2
   :geometry (geometry :anchor "top right")
   :stacking "overlay"
   :exclusive false
@@ -17,5 +17,6 @@
        :space-evenly false
        :class "notification-popups"
        :visible {!reveal_widgets[primary_monitor]}
+       :vexpand true
        (for notification in notification-popup-list
            (notification :notification notification))))
