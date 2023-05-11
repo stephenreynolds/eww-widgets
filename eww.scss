@@ -44,19 +44,19 @@ $themes: (
     "notification-border-size": 0,
   ),
   "kanagawa": (
-    "bg-layer-1": #1F1F28,
-    "bg-layer-2": #2A2A37,
+    "bg-layer-1": #1f1f28,
+    "bg-layer-2": #2a2a37,
     "bg-layer-3": #363646,
-    "bg-layer-4": #54546D,
+    "bg-layer-4": #54546d,
     "bg-layer-5": #524f67,
-    "text": #DCD7BA,
-    "muted": #C8C093,
-    "accent-1": #E46876,
-    "accent-2": #FFA066,
-    "accent-3": #7FB4CA,
-    "accent-4": #98BB6C,
-    "accent-5": #7E9CD8,
-    "accent-6": #957FB8,
+    "text": #dcd7ba,
+    "muted": #c8c093,
+    "accent-1": #e46876,
+    "accent-2": #ffa066,
+    "accent-3": #7fb4ca,
+    "accent-4": #98bb6c,
+    "accent-5": #7e9cd8,
+    "accent-6": #957fb8,
     "border-radius": 9px,
     "bg-opacity": 1,
     "btn-opacity": 1,
@@ -79,10 +79,10 @@ $themes: (
     "accent-5": #89b4fa,
     "accent-6": #b4befe,
     "border-radius": 9px,
-    "bg-opacity": 1,
-    "btn-opacity": 1,
-    "btn-hover-opacity": 1,
-    "notification-opacity": 1,
+    "bg-opacity": 0.6,
+    "btn-opacity": 0.6,
+    "btn-hover-opacity": 0.6,
+    "notification-opacity": 0.6,
     "notification-border-size": 0,
   ),
 );
@@ -185,12 +185,10 @@ $themes: (
 }
 
 .widgets {
-  margin-top: 10px;
   margin-right: 10px;
   margin-bottom: 50px;
   padding: 10px;
   border-radius: get-value("border-radius");
-  @include background-opacity(get-value("bg-layer-2"), get-value("bg-opacity"));
 
   .widget {
     @include background-opacity(
@@ -209,9 +207,15 @@ $themes: (
   margin-bottom: 50px;
   padding: 10px;
   border-radius: get-value("border-radius");
-  @include background-opacity(get-value("bg-layer-2"), get-value("bg-opacity"));
 
   .session-buttons {
+    @include background-opacity(
+      get-value("bg-layer-2"),
+      get-value("bg-opacity")
+    );
+    padding: 10px;
+    border-radius: get-value("border-radius");
+
     .session-btn {
       box {
         @include background-opacity(
@@ -259,7 +263,13 @@ $themes: (
 
     .notification-list-header-label {
       font-size: 1.2em;
-      font-weight: 600;
+      font-weight: 500;
+      @include background-opacity(
+        get-value("bg-layer-3"),
+        get-value("btn-opacity")
+      );
+      border-radius: get-value("border-radius");
+      padding: 0.2em 1em;
     }
 
     .dnd-button {
@@ -271,7 +281,7 @@ $themes: (
       font-size: 1em;
 
       label {
-        padding: 0.2em 0.6em;
+        padding: 0.2em 1em;
       }
 
       &:hover {
@@ -439,12 +449,10 @@ $themes: (
 }
 
 .control-center {
-  margin-top: 10px;
   margin-right: 10px;
   margin-bottom: 50px;
   padding: 10px;
   border-radius: get-value("border-radius");
-  @include background-opacity(get-value("bg-layer-2"), get-value("bg-opacity"));
 
   .sound-box {
     padding: 15px;
@@ -463,6 +471,36 @@ $themes: (
         highlight {
           background-color: get-value("accent-5");
           border-radius: get-value("border-radius");
+        }
+      }
+    }
+  }
+}
+
+.system-tray {
+  menubar {
+    margin: 0 -5px;
+
+    menuitem {
+      margin: 0 5px;
+
+      menu {
+        @include background-opacity(
+          get-value("bg-layer-2"),
+          get-value("bg-opacity")
+        );
+        border-radius: get-value("border-radius");
+
+        menuitem {
+          padding: 9px;
+          border-radius: get-value("border-radius");
+
+          &:hover {
+            @include background-opacity(
+              get-value("bg-layer-3"),
+              get-value("bg-opacity")
+            );
+          }
         }
       }
     }
