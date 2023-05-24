@@ -1,7 +1,0 @@
-#!/bin/sh
-
-if pgrep -x rofi; then
-    killall rofi
-else
-    rofi -show drun -theme $HOME/.config/rofi/spotlight-dark.rasi
-fi
