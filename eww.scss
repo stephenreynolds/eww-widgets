@@ -101,7 +101,6 @@ $themes: (
 }
 
 .section {
-  @include background-opacity(get-value("bg-layer-1"), get-value("bg-opacity"));
   border-radius: get-value("border-radius");
   padding: 0 10px;
 }
@@ -121,8 +120,8 @@ $themes: (
   font-family: SF Pro Rounded;
   font-weight: 500;
   font-size: 0.9em;
-  margin: 10px;
-  margin-bottom: 0;
+  @include background-opacity(get-value("bg-layer-1"), get-value("bg-opacity"));
+  padding: 0 10px;
 }
 
 .icon {
