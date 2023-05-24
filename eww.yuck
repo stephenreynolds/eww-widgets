@@ -1,0 +1,56 @@
+(defvar compact false)
+
+(defwidget left []
+  "left")
+
+(defwidget center []
+  "center")
+
+(defwidget right []
+  "right")
+
+(defwidget bar [monitor]
+  (box :class "bar ${compact ? 'bar-compact' : 'bar-normal'}"
+       :space-evenly false
+       :orientation "horizontal"
+       (box :class "bar-bg")
+       (centerbox :class "bar-content"
+                  (left)
+                  (center)
+                  (right))))
+
+(defwindow bar-0
+  :monitor 0
+  :stacking "fg"
+  :wm-ignore true
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "100%"
+                      :height "38px"
+                      :anchor "top center")
+  :exclusive true
+  (bar :monitor 0))
+
+(defwindow bar-1
+  :monitor 1
+  :stacking "fg"
+  :wm-ignore true
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "100%"
+                      :height "38px"
+                      :anchor "top center")
+  :exclusive true
+  (bar :monitor 1))
+
+(defwindow bar-2
+  :monitor 2
+  :stacking "fg"
+  :wm-ignore true
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "100%"
+                      :height "38px"
+                      :anchor "top center")
+  :exclusive true
+  (bar :monitor 2))

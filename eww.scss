@@ -1,0 +1,18 @@
+* {
+  all: unset;
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  background-repeat: no-repeat;
+}
+
+.bar {
+  .bar-bg {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: -1911px;
+    margin-left: 10px;
+    border-radius: 9px;
+  }
+
+  &.bar-compact {
+  }
+}
