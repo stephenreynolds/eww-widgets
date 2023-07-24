@@ -1,7 +1,7 @@
 (include "yuck/app-menu.yuck")
 (include "yuck/window-controls.yuck")
-(include "yuck/system-stats.yuck")
 (include "yuck/workspaces.yuck")
+(include "yuck/system-stats.yuck")
 (include "yuck/indicators.yuck")
 (include "yuck/clock.yuck")
 
@@ -14,23 +14,24 @@
 
 (defwidget left [monitor]
   (box :halign "start"
-       :spacing 10
+       :spacing 5
        :space-evenly false
        (app-menu :monitor monitor)
-       (window-controls :monitor monitor)))
+       (workspaces :monitor monitor)))
 
 (defwidget center [monitor]
   (box :halign "center"
-       :spacing 10
-       :space-evenly false
-       (workspaces :monitor monitor)))
+       :spacing 5
+       :space-evenly false))
 
 (defwidget right [monitor]
   (box :halign "end"
-       :spacing 10
+       :spacing 5
        :space-evenly false
        (box :visible {monitor == primary_monitor}
-            :spacing 10
+            :spacing 5
+            :space-evenly false
+            (system-stats)
             (indicators))
        (clock :monitor monitor)))
 
@@ -40,7 +41,7 @@
                       :y "0%"
                       :width "100%"
                       :height "30px"
-                      :anchor "top center")
+                      :anchor "bottom center")
   :stacking "fg"
   :exclusive true
   :namespace "eww"
@@ -52,7 +53,7 @@
                       :y "0%"
                       :width "100%"
                       :height "30px"
-                      :anchor "top center")
+                      :anchor "bottom center")
   :stacking "fg"
   :exclusive true
   :namespace "eww"
@@ -64,7 +65,7 @@
                       :y "0%"
                       :width "100%"
                       :height "30px"
-                      :anchor "top center")
+                      :anchor "bottom center")
   :stacking "fg"
   :exclusive true
   :namespace "eww"
