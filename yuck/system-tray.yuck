@@ -2,4 +2,4 @@
 
 (defwidget system-tray []
   (box :class "system-tray section"
-       (systray :pack_direction "ltr")))
+       (systray :pack_direction "ltr" :icon-size 20)))
