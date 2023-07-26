@@ -1,6 +1,6 @@
 @import "../colors";
 
 .widget-bottom-bar {
-    background-color: get-value("bg-layer-1");
+    @include background-opacity(get-value("bg-layer-1"), get-value("bg-opacity"));
     padding: 0 1rem;
 }
