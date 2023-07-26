@@ -1,0 +1,12 @@
+(defwidget bottom-bar []
+    (box :class "bottom-bar"
+         (left)
+         (right)))
+
+(defwidget left []
+    (box :halign "start"
+         "left"))
+
+(defwidget right []
+    (box :halign "end"
+         "right"))
