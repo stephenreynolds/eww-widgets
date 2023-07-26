@@ -2,5 +2,5 @@
 
 .widget-bottom-bar {
     @include background-opacity(get-value("bg-layer-1"), get-value("bg-opacity"));
-    padding: 0 0.5rem;
+    padding: 0 0.75rem;
 }
