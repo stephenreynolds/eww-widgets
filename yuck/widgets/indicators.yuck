@@ -1,0 +1,10 @@
+(include "./yuck/widgets/network.yuck")
+(include "./yuck/widgets/volume.yuck")
+
+(defwidget indicators []
+    (eventbox :class "widget-indicators"
+              :onclick "scripts/toggle_control_center"
+              :cursor "pointer"
+              (box :spacing 12
+                   (network)
+                   (volume))))

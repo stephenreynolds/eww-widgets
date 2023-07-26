@@ -1,15 +1,22 @@
 (include "./yuck/widgets/workspaces.yuck")
+(include "./yuck/widgets/indicators.yuck")
 (include "./yuck/widgets/clock.yuck")
+
+(defvar primary-monitor 2)
 
 (defwidget bottom-bar [monitor]
     (box :class "widget-bottom-bar"
          (left :monitor monitor)
-         (right)))
+         (right :monitor monitor)))
 
 (defwidget left [monitor]
     (box :halign "start"
          (workspaces :monitor monitor)))
 
-(defwidget right []
+(defwidget right [monitor]
     (box :halign "end"
+         :space-evenly false
+         :spacing 12
+         (box :visible {monitor == primary-monitor}
+              (indicators))
          (clock)))

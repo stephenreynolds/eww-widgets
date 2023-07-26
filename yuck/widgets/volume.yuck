@@ -1,0 +1,9 @@
+(deflisten volume :initial "NaN" "scripts/get_volume")
+
+(defwidget volume []
+    (eventbox :class "volume"
+              :onmiddleclick "pamixer --toggle-mute"
+              :onscroll "scripts/set_volume {}"
+              (label :class "volume-icon icon"
+                     :tooltip "${volume}%"
+                     :text {volume == "muted" ? "" : volume > 66 ? "" : volume > 33 ? "" : volume > 0 ? "" : ""})))
