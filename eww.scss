@@ -1,5 +1,8 @@
+@import "./scss/colors.scss";
+
 * {
     all: unset;
+    color: get-value("text");
 }
 
 @import "./scss/widgets/bottom-bar";
