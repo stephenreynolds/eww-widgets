@@ -1,5 +1,5 @@
-(include "./yuck/widgets/network.yuck")
-(include "./yuck/widgets/volume.yuck")
+(include "./yuck/widgets/indicators/network.yuck")
+(include "./yuck/widgets/indicators/volume.yuck")
 
 (defwidget indicators []
     (eventbox :class "widget-indicators"
