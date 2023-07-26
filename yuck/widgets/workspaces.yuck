@@ -1,0 +1,11 @@
+(deflisten workspaces "scripts/get-workspaces")
+
+(defwidget workspaces [monitor]
+    (eventbox :class "widget-workspaces"
+              :onscroll "scripts/change-active-workspace {}"
+              (box :spacing 5
+                  (for workspace in {workspaces ?: "[]"}
+                    (eventbox :class "workspaces-entry"
+                              :onclick "hyprctl dispatch workspace ${workspace.id}"
+                              :visible {workspace.monitor == monitor}
+                              (label :text {workspace.active ? "" : workspace.windows > 0 ? "" : ""}))))))

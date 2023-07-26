@@ -9,7 +9,7 @@
     :stacking "fg"
     :exclusive true
     :namespace "eww"
-    (bottom-bar))
+    (bottom-bar :monitor 0))
 
 (defwindow bottom-bar-1
     :monitor 1
@@ -20,7 +20,7 @@
     :stacking "fg"
     :exclusive true
     :namespace "eww"
-    (bottom-bar))
+    (bottom-bar :monitor 1))
 
 (defwindow bottom-bar-2
     :monitor 2
@@ -31,4 +31,4 @@
     :stacking "fg"
     :exclusive true
     :namespace "eww"
-    (bottom-bar))
+    (bottom-bar :monitor 2))

@@ -1,13 +1,14 @@
+(include "./yuck/widgets/workspaces.yuck")
 (include "./yuck/widgets/clock.yuck")
 
-(defwidget bottom-bar []
+(defwidget bottom-bar [monitor]
     (box :class "widget-bottom-bar"
-         (left)
+         (left :monitor monitor)
          (right)))
 
-(defwidget left []
+(defwidget left [monitor]
     (box :halign "start"
-         "left"))
+         (workspaces :monitor monitor)))
 
 (defwidget right []
     (box :halign "end"
