@@ -1,8 +1,0 @@
-(defpoll wifi-strength :interval "5s" :initial "0" "grep wlan0 /proc/net/wireless | awk '{ print $3 }' | cut -d '.' -f 1")
-
-(defwidget network []
-  (eventbox
-    :onrightclick "kitty -e nmtui &"
-    :class "network"
-    (label :class "wifi-icon icon"
-           :text {wifi-strength > 66 ? "" : wifi-strength > 40 ? "" : wifi-strength > 20 ? "" : ""})))
