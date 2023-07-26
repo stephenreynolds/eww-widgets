@@ -2,7 +2,6 @@
 (include "yuck/window-controls.yuck")
 (include "yuck/workspaces.yuck")
 (include "yuck/system-stats.yuck")
-(include "yuck/system-tray.yuck")
 (include "yuck/indicators.yuck")
 (include "yuck/clock.yuck")
 
@@ -33,7 +32,6 @@
             :spacing 5
             :space-evenly false
             (system-stats)
-            (system-tray)
             (indicators))
        (clock :monitor monitor)))
 
