@@ -1,3 +1,4 @@
+(include "./yuck/widgets/launcher.yuck")
 (include "./yuck/widgets/workspaces.yuck")
 (include "./yuck/widgets/indicators.yuck")
 (include "./yuck/widgets/clock.yuck")
@@ -11,6 +12,9 @@
 
 (defwidget left [monitor]
     (box :halign "start"
+         :space-evenly false
+         :spacing 12
+         (launcher)
          (workspaces :monitor monitor)))
 
 (defwidget right [monitor]

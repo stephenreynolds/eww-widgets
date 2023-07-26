@@ -1,0 +1,13 @@
+(deflisten distro `bash -c "cat /etc/os-release | grep '^ID' | head -n 1 | cut -d '=' -f2"`)
+
+(defwidget launcher []
+    (eventbox :class "launcher-btn"
+              :onclick "pkill wofi || wofi --show drun --normal-window --allow-images &"
+              :cursor "pointer"
+              (label :class "launcher-label-${distro}"
+                     :text {distro == "arch" ? "" :
+                            distro == "fedora" ? "" :
+                            distro == "ubuntu" ? "" :
+                            distro == "debian" ? "" :
+                            distro == "opensuse-tumbleweed" ? "" :
+                            distro == "nixos" ? "" : ""})))
