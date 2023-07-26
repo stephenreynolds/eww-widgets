@@ -1,5 +1,7 @@
+(include "./yuck/widgets/clock.yuck")
+
 (defwidget bottom-bar []
-    (box :class "bottom-bar"
+    (box :class "widget-bottom-bar"
          (left)
          (right)))
 
@@ -9,4 +11,4 @@
 
 (defwidget right []
     (box :halign "end"
-         "right"))
+         (clock)))

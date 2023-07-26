@@ -1,0 +1,8 @@
+(defwidget clock []
+    (box :class "widget-clock"
+         :orientation "vertical"
+         :valign "center"
+         (label :text `${formattime(EWW_TIME, "%l:%M %p")}`
+                :xalign 1)
+         (label :text `${formattime(EWW_TIME, "%a %b %-e")}`
+                :xalign 1)))
