@@ -1,4 +1,5 @@
-(include "./yuck/widgets/control-center/volume-menu.yuck")
+(include "./yuck/widgets/control-center/volume-outputs.yuck")
+(include "./yuck/widgets/control-center/volume-inputs.yuck")
 
 (defvar reveal-control-center false)
 
@@ -8,4 +9,8 @@
               :reveal reveal-control-center
               (box :class "control-center"
                    (box :class "control-center-content"
-                        (volume-menu)))))
+                        :orientation "vertical"
+                        :spacing 5
+                        :space-evenly false
+                        (volume-outputs)
+                        (volume-inputs)))))

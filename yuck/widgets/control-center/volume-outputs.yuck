@@ -1,6 +1,6 @@
-(defvar reveal-volume-menu false)
+(defvar reveal-volume-sinks false)
 
-(defwidget volume-menu []
+(defwidget volume-outputs []
     (box :class "volume-menu widget"
          :orientation "vertical"
          :space-evenly false
@@ -20,15 +20,15 @@
                      :hexpand true)
               (label :class "volume-label"
                      :text "${volume}%")
-              (eventbox :onclick {reveal-volume-menu ? "eww update reveal-volume-menu=false" : "eww update reveal-volume-menu=true"}
+              (eventbox :onclick {reveal-volume-sinks ? "eww update reveal-volume-sinks=false" : "eww update reveal-volume-sinks=true && eww update reveal-volume-sources=false"}
                         :cursor "pointer"
                         :class "volume-menu-button"
                         (label :class "volume-menu-expand-icon icon"
-                               :text {reveal-volume-menu ? "" : ""})))
+                               :text {reveal-volume-sinks ? "" : ""})))
          (revealer :class "audio-device-menu"
                    :transition "slidedown"
                    :duration transition-duration
-                   :reveal reveal-volume-menu
+                   :reveal reveal-volume-sinks
                    (box :orientation "vertical"
                         :space-evenly false
                         (box :orientation "vertical"
@@ -41,7 +41,8 @@
                                                 :space-evenly false
                                                 :spacing 5
                                                 (label :class "audio-device-icon"
-                                                       :text {jq(sink.ports, '.[] | select(.name == "${sink.active_port}")').type == "Headphones" ? "󰋋" :
+                                                       :text {arraylength(sink.ports) == 0 ? "" :
+                                                              jq(sink.ports, '.[] | select(.name == "${sink.active_port}")').type == "Headphones" ? "󰋋" :
                                                               jq(sink.ports, '.[] | select(.name == "${sink.active_port}")').type == "Line" ? "󱡬" :
                                                               jq(sink.ports, '.[] | select(.name == "${sink.active_port}")').type == "HDMI" ? "󰡁" :
                                                               ""})
@@ -54,6 +55,6 @@
                                                        :text {sink.index == audio-sink-current ? "" : " "})))))
                         (eventbox :class "audio-settings-button"
                                   :cursor "pointer"
-                                  :onclick "pavucontrol | scripts/toggle-control-center &"
+                                  :onclick "pavucontrol -t 3 | scripts/toggle-control-center &"
                                   (label :text "Settings"
                                          :xalign 0))))))
