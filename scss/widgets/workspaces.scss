@@ -1,11 +1,15 @@
 @import "./scss/colors";
 
 .widget-workspaces {
-    .workspaces-entry {
-        font-size: 1.25rem;
+  .workspaces-entry {
+    font-size: 1.25rem;
 
-        &:hover label {
-            color: get-value("accent-2");
-        }
+    label {
+      transition: color 0.2s ease;
     }
+
+    &:hover label {
+      color: get-value("accent-2");
+    }
+  }
 }
