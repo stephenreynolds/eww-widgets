@@ -1,3 +1,4 @@
 (include "./yuck/vars.yuck")
 (include "./yuck/windows/bottom-bar.yuck")
 (include "./yuck/windows/control-center.yuck")
+(include "./yuck/windows/notification-popups.yuck")

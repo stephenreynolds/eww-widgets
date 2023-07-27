@@ -1,6 +1,7 @@
 #!/bin/bash
 
 EWW_CMD=eww
+PRIMARY_MONITOR=2
 
 # Kill any running instances
 ${EWW_CMD} kill
@@ -13,6 +14,7 @@ for monitor in ${MONITORS}; do
 done
 
 ${EWW_CMD} open control-center &
+${EWW_CMD} open notification-popups &
 
 # Reset notification mode
 dbus-send --mode 0

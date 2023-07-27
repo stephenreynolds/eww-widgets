@@ -2,7 +2,7 @@
 (include "./yuck/widgets/workspaces.yuck")
 (include "./yuck/widgets/system-tray.yuck")
 (include "./yuck/widgets/indicators.yuck")
-(include "./yuck/widgets/clock.yuck")
+(include "./yuck/widgets/widgets-button.yuck")
 
 (defwidget bottom-bar [monitor]
     (box :class "widget-bottom-bar"
@@ -25,4 +25,4 @@
               :spacing 12
               (system-tray)
               (indicators))
-         (clock)))
+         (widgets-button)))

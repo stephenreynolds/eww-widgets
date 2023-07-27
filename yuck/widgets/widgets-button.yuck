@@ -1,0 +1,11 @@
+(include "./yuck/widgets/clock.yuck")
+(include "./yuck/widgets/notifications/notification-indicator.yuck")
+
+(defwidget widgets-button []
+    (eventbox :class "widgets-button"
+              :onclick ""
+              :cursor "pointer"
+              (box :space-evenly false
+                   :spacing 5
+                   (clock)
+                   (notification-indicator))))

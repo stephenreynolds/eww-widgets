@@ -1,0 +1,4 @@
+(defwidget notification-indicator []
+    (label :class "notification-indicator"
+           :visible {arraylength(notifications) > 0}
+           :text ""))

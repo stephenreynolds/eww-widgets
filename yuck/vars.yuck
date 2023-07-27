@@ -1,4 +1,5 @@
 (defvar primary-monitor 2)
+(deflisten notifications :initial "[]" "scripts/notification-daemon")
 
 (defvar transition-duration "200ms")
 
