@@ -8,6 +8,7 @@ revealed=$($EWW_CMD get reveal-control-center)
 
 if [[ $revealed == "true" ]]; then
     $EWW_CMD update reveal-control-center="false" &
+    $EWW_CMD update reveal-session-menu="false" &
     $EWW_CMD update reveal-volume-sinks="false" &
     $EWW_CMD update reveal-volume-sources="false" &
 else

@@ -1,4 +1,4 @@
-(include "./yuck/widgets/control-center/session-buttons.yuck")
+(include "./yuck/widgets/control-center/session-menu.yuck")
 (include "./yuck/widgets/control-center/volume-outputs.yuck")
 (include "./yuck/widgets/control-center/volume-inputs.yuck")
 
@@ -13,6 +13,6 @@
                         :orientation "vertical"
                         :spacing 5
                         :space-evenly false
-                        (session-buttons)
+                        (session-menu)
                         (volume-outputs)
                         (volume-inputs)))))

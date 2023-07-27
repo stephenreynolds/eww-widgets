@@ -4,8 +4,6 @@
 (include "./yuck/widgets/indicators.yuck")
 (include "./yuck/widgets/clock.yuck")
 
-(defvar primary-monitor 2)
-
 (defwidget bottom-bar [monitor]
     (box :class "widget-bottom-bar"
          (left :monitor monitor)

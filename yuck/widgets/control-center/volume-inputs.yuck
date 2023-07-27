@@ -20,7 +20,9 @@
                      :hexpand true)
               (label :class "volume-label"
                      :text "${mic-volume}%")
-              (eventbox :onclick {reveal-volume-sources ? "eww update reveal-volume-sources=false" : "eww update reveal-volume-sources=true && eww update reveal-volume-sinks=false"}
+              (eventbox :onclick {reveal-volume-sources ?
+                                    "eww update reveal-volume-sources=false" :
+                                    "eww update reveal-volume-sources=true && eww update reveal-volume-sinks=false && eww update reveal-session-menu=false"}
                         :cursor "pointer"
                         :class "volume-menu-button"
                         (label :class "volume-menu-expand-icon icon"

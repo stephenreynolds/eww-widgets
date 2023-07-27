@@ -1,3 +1,5 @@
+(defvar primary-monitor 2)
+
 (defvar transition-duration "200ms")
 
 (deflisten volume :initial "NaN" "scripts/get-audio-sinks")
