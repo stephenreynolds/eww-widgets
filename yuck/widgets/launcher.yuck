@@ -5,9 +5,4 @@
               :onclick "pkill wofi || wofi --show drun --normal-window --allow-images &"
               :cursor "pointer"
               (label :class "launcher-label-${distro}"
-                     :text {distro == "arch" ? "" :
-                            distro == "fedora" ? "" :
-                            distro == "ubuntu" ? "" :
-                            distro == "debian" ? "" :
-                            distro == "opensuse-tumbleweed" ? "" :
-                            distro == "nixos" ? "" : ""})))
+                     :text "")))
