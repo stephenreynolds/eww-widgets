@@ -18,16 +18,27 @@ function getIsMuted() {
     isMuted=$(pactl list sinks | grep -A 15 'Sink #'"$1"'' | awk '/Mute/ {print $2; exit}')
 }
 
+function getSinks() {
+    sinks=$(pactl -f json list sinks)
+}
+
 function output() {
+    getSinks
     getCurSink
     getCurVol "$curSink"
     getIsMuted "$curSink"
 
+
     if [ "$isMuted" = "yes" ]; then
-        echo "muted"
+        eww update volume-muted=true &
     else
-        echo $VOL_LEVEL
+        eww update volume-muted=false &
     fi
+
+    eww update audio-sinks="${sinks}" &
+    eww update audio-sink-current="${curSink}" &
+
+    echo $VOL_LEVEL
 }
 
 # Print on first run

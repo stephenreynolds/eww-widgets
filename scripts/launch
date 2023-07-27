@@ -12,5 +12,7 @@ for monitor in ${MONITORS}; do
     ${EWW_CMD} open bottom-bar-${monitor} &
 done
 
+${EWW_CMD} open control-center &
+
 # Reset notification mode
 dbus-send --mode 0

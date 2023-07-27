@@ -1,0 +1,6 @@
+(defvar transition-duration "200ms")
+
+(deflisten volume :initial "NaN" "scripts/get-volume")
+(defvar volume-muted false)
+(defvar audio-sinks "[]")
+(defvar audio-sink-current "")

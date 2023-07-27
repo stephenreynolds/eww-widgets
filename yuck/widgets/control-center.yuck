@@ -1,0 +1,11 @@
+(include "./yuck/widgets/control-center/volume-menu.yuck")
+
+(defvar reveal-control-center false)
+
+(defwidget control-center []
+    (revealer :transition "slideup"
+              :duration transition-duration
+              :reveal reveal-control-center
+              (box :class "control-center"
+                   (box :class "control-center-content"
+                        (volume-menu)))))

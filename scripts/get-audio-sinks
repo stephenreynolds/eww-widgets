@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "["
+
+output_sinks=$(pamixer --list-sinks)
+default_sink_id=$(pamixer --get-default-sink | awk 'NR>1 {print $1}')
+
+echo "$output_sinks" | awk -v default_id="$default_sink_id" -F\" '
+NR>1 {
+    gsub(/^[ \t]+/, "", $6);
+    def = ($1 == default_id) ? "true" : "false";
+    printf "{ \"id\": \"%s\", \"name\": \"%s\", \"default\": %s }", $1, $6, def
+    if (NR != NF) printf ","
+    printf "\n"
+}'
+
+echo "]"

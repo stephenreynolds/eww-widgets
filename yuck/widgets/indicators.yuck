@@ -3,7 +3,7 @@
 
 (defwidget indicators []
     (eventbox :class "widget-indicators"
-              :onclick "scripts/toggle_control_center"
+              :onclick "scripts/toggle-control-center"
               :cursor "pointer"
               (box :spacing 12
                    (network)
