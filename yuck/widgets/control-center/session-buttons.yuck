@@ -1,0 +1,35 @@
+(defwidget session-buttons []
+    (box :class "widget-session-buttons widget"
+         :spacing 5
+         :space-evenly false
+         :halign "end"
+         (eventbox :class "session-button session-button-lock"
+                   :onclick "scripts/toggle-control-center && $HOME/.config/swayidle/lock.sh"
+                   :cursor "pointer"
+                   (label :class "session-button-icon"
+                          :text ""
+                          :tooltip "Lock screen"))
+         (eventbox :class "session-button session-button-logout"
+                   :onclick "scripts/toggle-control-center && hyprctl dispatch exit"
+                   :cursor "pointer"
+                   (label :class "session-button-icon"
+                          :text "󰗽"
+                          :tooltip "Log out"))
+         (eventbox :class "session-button session-button-suspend"
+                   :onclick "scripts/toggle-control-center && systemctl suspend"
+                   :cursor "pointer"
+                   (label :class "session-button-icon"
+                          :text "󰤄"
+                          :tooltip "Sleep"))
+         (eventbox :class "session-button session-button-restart"
+                   :onclick "scripts/toggle-control-center && systemctl reboot"
+                   :cursor "pointer"
+                   (label :class "session-button-icon"
+                          :text "󰤁"
+                          :tooltip "Restart"))
+         (eventbox :class "session-button session-button-poweroff"
+                   :onclick "scripts/toggle-control-center && systemctl poweroff"
+                   :cursor "pointer"
+                   (label :class "session-button-icon"
+                          :text ""
+                          :tooltip "Shut down"))))
