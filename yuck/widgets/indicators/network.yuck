@@ -1,4 +1,4 @@
-(defpoll wifi-strength :interval "5s" :initial "0" "grep wlan0 /proc/net/wireless | awk '{ print $3 }' | cut -d '.' -f 1")
+(defpoll wifi-strength :interval "10s" :initial "0" "grep wlan0 /proc/net/wireless | awk '{ print $3 }' | cut -d '.' -f 1")
 (defpoll offline :interval "60s" :initial true "ping -c 1 8.8.8.8 &> /dev/null && echo false || echo true")
 
 (defwidget network []
