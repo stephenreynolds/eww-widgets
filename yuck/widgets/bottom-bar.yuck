@@ -1,5 +1,6 @@
 (include "./yuck/widgets/launcher.yuck")
 (include "./yuck/widgets/workspaces.yuck")
+(include "./yuck/widgets/system-tray.yuck")
 (include "./yuck/widgets/indicators.yuck")
 (include "./yuck/widgets/clock.yuck")
 
@@ -22,5 +23,8 @@
          :space-evenly false
          :spacing 12
          (box :visible {monitor == primary-monitor}
+              :space-evenly false
+              :spacing 12
+              (system-tray)
               (indicators))
          (clock)))
