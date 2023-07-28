@@ -4,9 +4,9 @@ This repo contains my work-in-progess widget setup for my personal install.
 
 ## Dependencies
 
-- Eww (compiled with Wayland support)
+- Eww (eww-tray-wayland-git)
 - Hyprland
-- Rofi
+- Wofi
 - Pipewire (pipewire-audio and pipewire-pulse)
 - pamixer
 - Nerd Fonts patched font
@@ -26,13 +26,10 @@ Run with `./scripts/launch`.
 
 - Notifications
   - Fix notification group header not showing the first time one is expanded
-  - Truncate notification content if height is exceeded
   - Implement resident hint
 - Control center
   - Wifi toggle and network menu
   - Bluetooth toggle and device menu
   - Screenshot button
-  - Sound device selector (input and output)
   - Media controls
 - Keyboard layout indicator/toggle (with ibus and mozc)
-- System tray (waiting for support by Eww, or use stalonetray)
