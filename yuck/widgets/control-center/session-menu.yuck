@@ -1,0 +1,56 @@
+(defvar reveal-session-menu false)
+
+(defwidget session-menu []
+    (box :orientation "vertical"
+         :space-evenly false
+         :spacing 5
+         (box :class "session-buttons widget"
+              :orientation "vertical"
+              :halign "end"
+              :space-evenly false
+              (box :class "session-buttons"
+                   :spacing 7
+                   :space-evenly false
+                   (eventbox :class "session-button"
+                             :onclick "scripts/toggle-control-center && sleep 0.3 && $HOME/.config/swayidle/lock.sh &"
+                             :cursor "pointer"
+                             (label :class "session-button-icon"
+                                    :text ""))
+                   (eventbox :class "session-button"
+                             :onclick {reveal-session-menu ?
+                                         "eww update reveal-session-menu=false" :
+                                         "eww update reveal-session-menu=true && eww update reveal-volume-sinks=false && eww update reveal-volume-sources=false"}
+                             :cursor "pointer"
+                             (label :class "session-button-icon"
+                                    :text ""))))
+         (revealer :class "session-menu-expanded"
+                   :transition "slidedown"
+                   :duration transition-duration
+                   :reveal reveal-session-menu
+                   (box :orientation "vertical"
+                        :space-evenly false
+                        :class "widget"
+                        (box :orientation "vertical"
+                             :class "session-menu-section-power"
+                             (eventbox :class "session-menu-item"
+                                       :onclick "scripts/toggle-control-center && sleep 0.3 && systemctl suspend &"
+                                       :cursor "pointer"
+                                       (label :text "Suspend"
+                                              :xalign 0))
+                             (eventbox :class "session-menu-item"
+                                       :onclick "scripts/toggle-control-center && sleep 0.3 && systemctl reboot"
+                                       :cursor "pointer"
+                                       (label :text "Restart"
+                                              :xalign 0))
+                             (eventbox :class "session-menu-item"
+                                       :onclick "scripts/toggle-control-center && sleep 0.3 && systemctl poweroff"
+                                       :cursor "pointer"
+                                       (label :text "Power off"
+                                              :xalign 0)))
+                        (box :orientation "vertical"
+                             :class "session-menu-section-user"
+                             (eventbox :class "session-menu-item"
+                                       :onclick "scripts/toggle-control-center && sleep 0.3 && hyprctl dispatch exit"
+                                       :cursor "pointer"
+                                       (label :text "Log out"
+                                              :xalign 0)))))))

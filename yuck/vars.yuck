@@ -1,4 +1,14 @@
-(defvar primary_monitor 2)
-
-(deflisten hyprland :initial "{}" "scripts/hyprland")
+(defvar primary-monitor 2)
 (deflisten notifications :initial "[]" "scripts/notification-daemon")
+
+(defvar transition-duration "200ms")
+
+(deflisten volume :initial "NaN" "scripts/get-audio-sinks")
+(defvar volume-muted false)
+(defvar audio-sinks "[]")
+(defvar audio-sink-current "")
+
+(deflisten mic-volume :initial "NaN" "scripts/get-audio-sources")
+(defvar mic-muted false)
+(defvar audio-sources "[]")
+(defvar audio-source-current "")

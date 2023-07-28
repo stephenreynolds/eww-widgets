@@ -1,0 +1,15 @@
+@import "./scss/colors";
+
+.notification-indicator {
+  font-size: 1.25rem;
+  padding: 0.125rem 0.4375rem;
+
+  &.notification-indicator-new {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff;
+    @include background-opacity(get-value("accent-5"), 0.8);
+    border-radius: 9px;
+    padding: 0.25rem 0.4375rem;
+  }
+}

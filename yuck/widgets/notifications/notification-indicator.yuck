@@ -1,0 +1,8 @@
+(defwidget notification-indicator []
+    (label :class "notification-indicator ${mode == 0 ? 'notification-indicator-new' : ''}"
+           :valign "center"
+           :visible {mode != 0 || arraylength(notifications) > 0}
+           :text {mode == 1 ? "󰂟" : mode == 2 ? "󰪑" :
+                    jq(notifications, "[.[].notifications | length] | add//0") > 0 ?
+                        jq(notifications, "[.[].notifications | length] | add//0") < 30 ?
+                            `${jq(notifications, "[.[].notifications | length] | add//0")}` : "30+" : ""}))

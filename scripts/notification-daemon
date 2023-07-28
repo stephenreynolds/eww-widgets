@@ -3,10 +3,10 @@
 import json
 import os
 import sys
+import textwrap
 from datetime import datetime
 from enum import Enum
 import shutil
-import subprocess
 import pathlib
 import dbus
 import dbus.service
@@ -21,6 +21,7 @@ CACHE_DIR = "/tmp/eww"
 HISTORY_PATH = os.path.expandvars("$XDG_CACHE_HOME/eww/notifications.json")
 HISTORY_LIMIT = 20
 POPUP_LIMIT = 5
+EWW_CMD = "eww"
 
 
 class Mode(Enum):
@@ -164,14 +165,17 @@ def get_notification_icon(appname, app_icon, id):
 
 def parse_notification(id, app_name, replaces_id, app_icon, summary,
                        body, actions, hints, expire_timeout):
+
+    max_text_length = 36
+
     notification = {
         "id": id,
-        "timestamp": datetime.now().strftime("%-l:%M %p"),
+        "timestamp": int(datetime.now().timestamp()),
         "appname": app_name,
         "replaces-id": replaces_id,
         "icon": get_notification_icon(app_name, app_icon, id),
         "summary": summary,
-        "body": GLib.markup_escape_text(body),
+        "body": textwrap.fill(GLib.markup_escape_text(body), max_text_length),
         "actions": actions,
         "hints": parse_hints(hints, app_name, id),
         "timeout": expire_timeout
@@ -260,12 +264,12 @@ class NotificationServer(dbus.service.Object):
         # Update the popup notifications
         output_str = json.dumps(self.popups)
         output_str = escape_quotes(output_str)
-        os.system(f"eww update notification-popup-list=\"{output_str}\"")
+        os.system(f"{EWW_CMD} update notification-popup-list=\"{output_str}\"")
 
         # Update the persistant notifications
         output_str = json.dumps(self.notifications)
         output_str = escape_quotes(output_str)
-        os.system(f"eww update notifications=\"{output_str}\"")
+        os.system(f"{EWW_CMD} update notifications=\"{output_str}\"")
 
     def add_popup_notification(self, notification):
         self.popups.insert(0, notification)
