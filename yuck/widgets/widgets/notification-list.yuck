@@ -44,7 +44,6 @@
          (eventbox :class "notification-clear"
                    :onclick "scripts/dbus-send --all"
                    :cursor "pointer"
-                   :visible {arraylength(notifications) > 0}
                    (label :text "Clear all"))))
 
 (defwidget notification-list-expand-button []
