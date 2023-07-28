@@ -10,28 +10,8 @@
   &:hover label {
     color: get-value("accent-5");
 
-    &.launcher-label-arch {
+    .launcher-label {
       color: #1793d1;
-    }
-
-    &.launcher-label-fedora {
-      color: #0b57a4;
-    }
-
-    &.launcher-label-ubuntu {
-      color: #e95420;
-    }
-
-    &.launcher-label-debian {
-      color: #d70a53;
-    }
-
-    &.launcher-label-opensuse-tumbleweed {
-      color: #73ba25;
-    }
-
-    &.launcher-label-nixos {
-      color: #7ebae4;
     }
   }
 }

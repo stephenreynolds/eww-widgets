@@ -19,10 +19,10 @@
 (defwidget right [monitor]
     (box :halign "end"
          :space-evenly false
-         :spacing 12
+         :spacing 5
          (box :visible {monitor == primary-monitor}
               :space-evenly false
-              :spacing 12
+              :spacing 5
               (system-tray)
               (indicators))
-         (widgets-button)))
+         (widgets-button :monitor monitor)))

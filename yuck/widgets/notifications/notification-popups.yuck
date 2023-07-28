@@ -7,5 +7,6 @@
          :orientation "vertical"
          :spacing 10
          :space-evenly false
+         :visible {!jq(reveal-widgets, "any")}
          (for notification in {jq(notification-popup-list, 'reverse')}
               (notification :notification notification :is-popup true))))

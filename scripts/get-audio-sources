@@ -1,5 +1,7 @@
 #!/bin/bash
 
+EWW_CMD=eww
+
 function getCurSourceName() {
   if ! pactl info &> /dev/null; then return 1; fi
     curSourceName=$(pactl info | awk -F : '/Default Source:/{print $2}')
@@ -29,13 +31,13 @@ function output() {
     getIsMuted "$curSource"
 
     if [ "$isMuted" = "yes" ]; then
-        eww update mic-muted=true &
+        $EWW_CMD update mic-muted=true &
     else
-        eww update mic-muted=false &
+        $EWW_CMD update mic-muted=false &
     fi
 
-    eww update audio-sources="${sources}" &
-    eww update audio-source-current="${curSource}" &
+    $EWW_CMD update audio-sources="${sources}" &
+    $EWW_CMD update audio-source-current="${curSource}" &
 
     echo $VOL_LEVEL
 }

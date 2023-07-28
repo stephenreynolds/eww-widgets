@@ -1,5 +1,0 @@
-(defwidget notification-list []
-    (box :class "notification-list"
-         :orientation "vertical"
-         :space-evenly false
-         ""))

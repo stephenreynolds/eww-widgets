@@ -17,6 +17,16 @@
     border: get-value("notification-border-size") solid get-value("accent-1");
   }
 
+  .notification-header {
+    .notification-dismiss {
+      border-radius: 999px;
+
+      &:hover label {
+        color: get-value("accent-1");
+      }
+    }
+  }
+
   .notification-container {
     .notification-summary {
       font-weight: 500;

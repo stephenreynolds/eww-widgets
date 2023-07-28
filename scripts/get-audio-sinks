@@ -1,5 +1,7 @@
 #!/bin/bash
 
+EWW_CMD=eww
+
 function getCurSinkName() {
   if ! pactl info &> /dev/null; then return 1; fi
     curSinkName=$(pactl info | awk -F : '/Default Sink:/{print $2}')
@@ -29,13 +31,13 @@ function output() {
     getIsMuted "$curSink"
 
     if [ "$isMuted" = "yes" ]; then
-        eww update volume-muted=true &
+        $EWW_CMD update volume-muted=true &
     else
-        eww update volume-muted=false &
+        $EWW_CMD update volume-muted=false &
     fi
 
-    eww update audio-sinks="${sinks}" &
-    eww update audio-sink-current="${curSink}" &
+    $EWW_CMD update audio-sinks="${sinks}" &
+    $EWW_CMD update audio-sink-current="${curSink}" &
 
     echo $VOL_LEVEL
 }

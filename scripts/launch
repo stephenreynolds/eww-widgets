@@ -11,6 +11,7 @@ ${EWW_CMD} daemon
 MONITORS=$(hyprctl monitors -j | jq '.[] | .id')
 for monitor in ${MONITORS}; do
     ${EWW_CMD} open bottom-bar-${monitor} &
+    ${EWW_CMD} open widgets-${monitor} &
 done
 
 ${EWW_CMD} open control-center &

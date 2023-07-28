@@ -1,10 +1,9 @@
-(defwidget notification [notification ?is-popup ?is-group]
+(defwidget notification [notification ?is-popup ?is-group ?group-count ?show-count]
     (box :class "notification notification-${notification.hints.urgency ?: 'normal'}"
          :orientation "vertical"
          :space-evenly false
          :spacing 10
          :width 380
-         :vexpand true
          (box :class "notification-container"
               :orientation "vertical"
               :space-evenly false
@@ -16,14 +15,17 @@
                                    :is-popup {is-popup ?: false}
                                    :is-group {is-group ?: false})
               (eventbox :onclick {arraylength(notification.actions) == 0 ?
-                                    "scripts/dbus-send --id ${notification.id}" :
-                                        jq(notifications.actions, "any(.[]; . == 'default')") ?
-                                            "scripts/dbus-send --action ${notification.id} default" :
-                                                "scripts/dbus-send --action ${notification.id} ${notification.actions[0]}"}
-                        :onrightclick {jq(notifications.actions, "any(.[]; . == 'settings')") ?
-                                       "scripts/dbus-send --action ${notification.id} settings" : ""}
+                                    "scripts/dbus-send --id ${notification.id} && scripts/hide-widgets" :
+                                        jq(notification.actions, 'any(.[]; . == "default")') ?
+                                            "scripts/dbus-send --action ${notification.id} default && scripts/hide-widgets" :
+                                                "scripts/dbus-send --action ${notification.id} ${notification.actions[0]} && scripts/hide-widgets"}
+                        :onrightclick {jq(notification.actions, 'any(.[]; . == "settings")') ?
+                                       "scripts/dbus-send --action ${notification.id} settings && scripts/hide-widgets" : ""}
                         (notification-content :notification notification)))
-         (notification-actions :id {notification.id} :actions {notification.actions})))
+         (notification-actions :id {notification.id} :actions {notification.actions})
+         (notification-group-expand-button :visible {show-count ?: false}
+                                           :appname {notification.appname}
+                                           :group-count {group-count ?: 1})))
 
 (defwidget notification-header [id appname timestamp icon ?is-popup ?is-group]
     (box :class "notification-header"
@@ -66,10 +68,15 @@
               :hexpand true
               (label :class "notification-summary"
                      :xalign 0
+                     :limit-width 30
+                     :show-truncated true
                      :text {notification.summary})
               (label :class "notification-body"
                      :visible {notification.body != ""}
                      :xalign 0
+                     :halign "start"
+                     :limit-width 141
+                     :show-truncated true
                      :markup {notification.body}))
          (image :class "notification-image"
                 :visible {notification.hints.image-path != "null"}
@@ -83,3 +90,13 @@
             (eventbox :class "notification-action-button"
                       :onclick "scripts/dbus-send --action ${id} ${action.key}"
                       (label :text {action.text})))))
+
+(defwidget notification-group-expand-button [visible appname group-count]
+  (box :class "notification-group-expand-button-box"
+       :visible visible
+       (eventbox :onclick `scripts/reveal-notification-group "${appname}"`
+                 :cursor "pointer"
+                 :halign "start"
+                 :visible visible
+                 :class "notification-group-expand-button"
+                 (label :text "+${group-count - 1} more"))))
