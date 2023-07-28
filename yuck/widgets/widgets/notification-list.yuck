@@ -42,7 +42,7 @@
                                     mode == 1 ? "Priority only" :
                                     "Do not disturb"}))
          (eventbox :class "notification-clear"
-                   :onclick "scripts/dbus-send --all"
+                   :onclick "scripts/dbus-send --all && scripts/hide-widgets"
                    :cursor "pointer"
                    (label :text "Clear all"))))
 
