@@ -10,6 +10,7 @@
          :orientation "vertical"
          :space-evenly false
          (notification-list-header)
+         (empty-message)
          (box :orientation "vertical"
               :space-evenly false
               (for group in {jq(notifications, ".[:3]")}
@@ -43,6 +44,7 @@
          (eventbox :class "notification-clear"
                    :onclick "scripts/dbus-send --all"
                    :cursor "pointer"
+                   :visible {arraylength(notifications) > 0}
                    (label :text "Clear all"))))
 
 (defwidget notification-list-expand-button []
@@ -52,3 +54,8 @@
             :class "notification-list-expand-button"
             (label :text {expand-notification-groups ? "Show less" :
                    "${jq(notifications, "[del(.[0:3])[] | .notifications | length] | add")} more notifications"})))
+
+(defwidget empty-message []
+    (box :class "notifications-empty"
+         :visible {arraylength(notifications) == 0}
+         (label :text "No new notifications")))

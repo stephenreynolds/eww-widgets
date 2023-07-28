@@ -88,6 +88,7 @@
     (box :spacing 5
          (for action in {jq(actions, `[range(0; ${arraylength(actions) / 2}) as $i | ({"key": .[2*$i], "text": .[2*$i+1]}) | select(.key != "default" and .key != "settings")]`)}
             (eventbox :class "notification-action-button"
+                      :cursor "pointer"
                       :onclick "scripts/dbus-send --action ${id} ${action.key}"
                       (label :text {action.text})))))
 

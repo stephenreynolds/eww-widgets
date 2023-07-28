@@ -1,15 +1,16 @@
 @import "./scss/colors";
 
 .notification-list {
+  @include background-opacity(get-value("bg-layer-1"), get-value("bg-opacity"));
+  padding: 1rem;
+  border-radius: 9px;
+
   .notification-list-header {
     margin-bottom: 10px;
 
     .notification-list-header-label {
       font-size: 1.2rem;
       font-weight: 500;
-      @include background-opacity(get-value("bg-layer-3"), 0.8);
-      border-radius: 9px;
-      padding: 0.2rem 1rem;
     }
 
     .dnd-button {
@@ -50,5 +51,9 @@
     &:hover label {
       @include background-opacity(get-value("bg-layer-4"), 0.8);
     }
+  }
+
+  .notifications-empty {
+    font-weight: 500;
   }
 }
