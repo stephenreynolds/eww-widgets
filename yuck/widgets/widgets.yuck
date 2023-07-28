@@ -1,4 +1,5 @@
 (include "./yuck/widgets/widgets/notification-list.yuck")
+(include "./yuck/widgets/widgets/calendar-timezones.yuck")
 
 (defvar reveal-widgets "[false, false, false]")
 
@@ -14,4 +15,5 @@
                            :spacing 10
                            :width 380
                            :valign "end"
-                           (notification-list)))))
+                           (notification-list)
+                           (calendar-timezones)))))
