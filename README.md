@@ -16,7 +16,7 @@ These widgets also assume you are running three 1920x1080 monitors and may need
 modification if your setup differs.
 
 You will also need to disable any notification daemon, such as dunst, as it will
-conflict with the included one (WIP).
+conflict with the included one.
 
 ## Running
 
