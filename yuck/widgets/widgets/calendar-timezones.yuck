@@ -18,7 +18,8 @@
                    :duration transition-duration
                    :reveal reveal-calendar
                    (calendar :show-details true
-                             :show-heading true))))
+                             :show-heading true
+                             :width 380))))
 
 (defwidget calendar-header []
     (box :space-evenly false
