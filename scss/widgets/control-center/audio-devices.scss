@@ -3,6 +3,7 @@
     border-radius: 5px;
     transition: background-color 0.2s ease;
     padding: 0.5rem 0.5rem;
+    min-width: 1.25rem;
 
     &:hover {
       @include background-opacity(
