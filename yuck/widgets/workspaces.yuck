@@ -4,7 +4,7 @@
     (eventbox :class "widget-workspaces"
               :onscroll "scripts/change-active-workspace {}"
               (box :spacing 5
-                  (for workspace in {workspaces ?: "[]"}
+                  (for workspace in {jq(workspaces, "map(select(.windows > 0 or .active))") ?: "[]"}
                     (eventbox :class "workspaces-entry"
                               :onclick "hyprctl dispatch workspace ${workspace.id}"
                               :visible {workspace.monitor == monitor}
