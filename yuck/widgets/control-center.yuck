@@ -1,3 +1,4 @@
+(include "./yuck/widgets/control-center/network-menu.yuck")
 (include "./yuck/widgets/control-center/session-menu.yuck")
 (include "./yuck/widgets/control-center/volume-outputs.yuck")
 (include "./yuck/widgets/control-center/volume-inputs.yuck")
@@ -13,6 +14,12 @@
                         :orientation "vertical"
                         :spacing 5
                         :space-evenly false
+                        (box :spacing 10
+                             (network-toggle)
+                             (box :class "bluetooth-toggle widget"
+                                  (label ""))
+                             (session-buttons))
+                        (network-menu)
                         (session-menu)
                         (volume-outputs)
                         (volume-inputs)))))

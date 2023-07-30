@@ -21,8 +21,8 @@
               (label :class "volume-label"
                      :text "${volume}%")
               (eventbox :onclick {reveal-volume-sinks ?
-                                    "eww update reveal-volume-sinks=false" :
-                                    "eww update reveal-volume-sinks=true && eww update reveal-volume-sources=false && eww update reveal-session-menu=false"}
+                                    "${EWW_CMD} update reveal-volume-sinks=false" :
+                                    "scripts/hide-control-center-menus && ${EWW_CMD} update reveal-volume-sinks=true"}
                         :cursor "pointer"
                         :class "volume-menu-button"
                         (label :class "volume-menu-expand-icon icon"
