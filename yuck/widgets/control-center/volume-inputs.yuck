@@ -4,6 +4,7 @@
     (box :class "volume-menu widget"
          :orientation "vertical"
          :space-evenly false
+         :visible {arraylength(audio-sources) > 0}
          (box :class "volume-menu-parent"
               :spacing 8
               :space-evenly false
