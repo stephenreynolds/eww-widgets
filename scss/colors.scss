@@ -10,6 +10,18 @@ $themes: (
     @return map-get(map-get($themes, $theme), $value);
 }
 
+@function shade($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
+
+@function tint($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+
+@function transparentize($color, $percentage) {
+  @return rgba($color, 1 - $percentage);
+}
+
 @mixin background-opacity($color, $opacity) {
   background-color: rgba($color, $opacity);
 }

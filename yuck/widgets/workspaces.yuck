@@ -3,9 +3,21 @@
 (defwidget workspaces [monitor]
     (eventbox :class "widget-workspaces"
               :onscroll "scripts/change-active-workspace {}"
-              (box :spacing 5
-                  (for workspace in {jq(workspaces, "map(select(.windows > 0 or .active))") ?: "[]"}
+              (box :spacing 4
+                  (for workspace in workspaces
                     (eventbox :class "workspaces-entry"
-                              :onclick "hyprctl dispatch workspace ${workspace.id}"
+                              :onclick "hyprctl dispatch workspace name:${workspace.name}"
                               :visible {workspace.monitor == monitor}
-                              (label :text {workspace.active ? "" : workspace.windows > 0 ? "" : ""}))))))
+                              :cursor "pointer"
+                              (overlay
+                                       (box :class "workspaces-entry-box"
+                                            (label :text {workspace.name == "browser" ? "󰈹" :
+                                                          workspace.name == "terminal" ? "" :
+                                                          workspace.name == "tasks" ? "" :
+                                                          workspace.name == "notes" ? "󱞁" :
+                                                          workspace.name == "social" ? "󰇮" :
+                                                          workspace.name == "misc" ? "" :
+                                                          workspace.active ? "" :
+                                                          workspace.windows > 0 ? "" :
+                                                          ""}))
+                                       (box :class "workspaces-entry-indicator ${workspace.active ? 'active' : workspace.windows > 0 ? 'occupied' : ''}")))))))

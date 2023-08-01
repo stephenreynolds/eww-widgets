@@ -7,27 +7,47 @@ workspaces() {
 
     MONITOR_IDS=$(echo ${MONITORS} | jq 'map({key: .name, value: .id}) | from_entries')
     ACTIVE_WORKSPACES=$(echo ${MONITORS} | jq 'map({key: .name, value: .activeWorkspace.id}) | from_entries')
-    WORKSPACE_WINDOWS=$(echo ${WORKSPACES} | jq 'map({key: .id | tostring, value: .windows}) | from_entries')
+    WORKSPACE_WINDOWS=$(echo ${WORKSPACES} | jq 'map({key: .name, value: .windows}) | from_entries')
 
-    EXISTING_WORKSPACES=$(echo ${WORKSPACES} | jq --argjson windows "${WORKSPACE_WINDOWS}" --argjson monitors "${MONITOR_IDS}" --argjson active "${ACTIVE_WORKSPACES}" -Mc \
-        'map(select(.id != -99)) | map({id: .id, windows: ($windows[.id | tostring]//0), monitor: ($monitors[.monitor]//0), active: ($active[.monitor] == .id)}) | sort_by(.id)')
+    FILTERED_WORKSPACES=$(echo ${WORKSPACES} | jq -Mc \
+        'map(select(.name == "browser" or .name == "terminal" or .name == "tasks" or .name == "notes" or .name == "social" or .name == "misc" or .name == "left1" or .name == "left2" or .name == "right1" or .name == "right2"))')
+
+    EXISTING_WORKSPACES=$(echo ${FILTERED_WORKSPACES} | jq --argjson windows "${WORKSPACE_WINDOWS}" --argjson monitors "${MONITOR_IDS}" --argjson active "${ACTIVE_WORKSPACES}" -Mc \
+        'map({name: .name, windows: ($windows[.name]//0), monitor: ($monitors[.monitor]//0), active: ($active[.monitor] == .id)})')
 
     echo ${EXISTING_WORKSPACES} | jq -Mc '
   # Input data
+  # Generate full list of workspaces
   . as $data
 
-  # Generate full list of workspaces
   | [
-      (range(1,10) | { "id": ., "windows":0, "monitor":2, "active":false }),
-      (range(10,19) | { "id": ., "windows":0, "monitor":1, "active":false }),
-      (range(19,28) | { "id": ., "windows":0, "monitor":0, "active":false })
+      { "name": "browser", "windows": 0, "monitor": 2, "active": false },
+      { "name": "terminal", "windows": 0, "monitor": 2, "active": false },
+      { "name": "tasks", "windows": 0, "monitor": 2, "active": false },
+      { "name": "notes", "windows": 0, "monitor": 2, "active": false },
+      { "name": "social", "windows": 0, "monitor": 2, "active": false },
+      { "name": "misc", "windows": 0, "monitor": 2, "active": false },
+      { "name": "left1", "windows": 0, "monitor": 1, "active": false },
+      { "name": "left2", "windows": 0, "monitor": 1, "active": false },
+      { "name": "right1", "windows": 0, "monitor": 0, "active": false },
+      { "name": "right2", "windows": 0, "monitor": 0, "active": false }
     ]
 
-  # For some reason a workspace with id 0 is inserted
-  | map(select(.id != 0))
-
   # Merge input data and generated workspaces, removing duplicates
-  | $data + . | unique_by(.id)
+   | $data + .
+   | unique_by(.name)
+   | sort_by(if .name == "browser" then 0
+            elif .name == "terminal" then 1
+            elif .name == "tasks" then 2
+            elif .name == "notes" then 3
+            elif .name == "social" then 4
+            elif .name == "misc" then 5
+            elif .name == "left1" then 6
+            elif .name == "left2" then 7
+            elif .name == "right1" then 8
+            elif .name == "right2" then 9
+            else 10
+            end)
 '
 }
 
