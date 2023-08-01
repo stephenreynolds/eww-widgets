@@ -32,12 +32,12 @@
                                    (label :text "Suspend"
                                           :xalign 0))
                          (eventbox :class "session-menu-item"
-                                   :onclick "scripts/toggle-control-center && sleep 0.3 && systemctl reboot"
+                                   :onclick "scripts/toggle-control-center && sleep 0.3 && systemctl reboot &"
                                    :cursor "pointer"
                                    (label :text "Restart"
                                           :xalign 0))
                          (eventbox :class "session-menu-item"
-                                   :onclick "scripts/toggle-control-center && sleep 0.3 && systemctl poweroff"
+                                   :onclick "scripts/toggle-control-center && sleep 0.3 && systemctl poweroff &"
                                    :cursor "pointer"
                                    (label :text "Power off"
                                           :xalign 0)))
