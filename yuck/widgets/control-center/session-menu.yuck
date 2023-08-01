@@ -44,7 +44,7 @@
                     (box :orientation "vertical"
                          :class "session-menu-section-user"
                          (eventbox :class "session-menu-item"
-                                   :onclick "scripts/toggle-control-center && sleep 0.3 && hyprctl dispatch exit"
+                                   :onclick "scripts/toggle-control-center && sleep 0.3 && hyprctl dispatch exit &"
                                    :cursor "pointer"
                                    (label :text "Log out"
                                           :xalign 0))))))
