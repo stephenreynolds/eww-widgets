@@ -23,6 +23,7 @@
          (box :visible {monitor == primary-monitor}
               :space-evenly false
               :spacing 5
+              (label :text {submap})
               (system-tray)
               (indicators))
          (widgets-button :monitor monitor)))

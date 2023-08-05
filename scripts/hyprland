@@ -1,10 +1,10 @@
-#!/bin/bash
-# Get workspaces including id, monitor, active, and windows
+#!/bin/sh
+
+EWW_CMD=eww
 
 workspaces() {
     MONITORS=$(hyprctl monitors -j)
     WORKSPACES=$(hyprctl workspaces -j)
-    SUBMAP=$()
 
     MONITOR_IDS=$(echo ${MONITORS} | jq 'map({key: .name, value: .id}) | from_entries')
     ACTIVE_WORKSPACES=$(echo ${MONITORS} | jq 'map({key: .name, value: .activeWorkspace.id}) | from_entries')
@@ -13,7 +13,7 @@ workspaces() {
     EXISTING_WORKSPACES=$(echo ${WORKSPACES} | jq --argjson windows "${WORKSPACE_WINDOWS}" --argjson monitors "${MONITOR_IDS}" --argjson active "${ACTIVE_WORKSPACES}" -Mc \
         'map(select(.id != -99)) | map({id: .id, windows: ($windows[.id | tostring]//0), monitor: ($monitors[.monitor]//0), active: ($active[.monitor] == .id)}) | sort_by(.id)')
 
-    echo ${EXISTING_WORKSPACES} | jq -Mc '
+    WORKSPACE_JSON=$(echo ${EXISTING_WORKSPACES} | jq -Mc '
   # Input data
   . as $data
 
@@ -29,9 +29,23 @@ workspaces() {
 
   # Merge input data and generated workspaces, removing duplicates
   | $data + . | unique_by(.id)
-'
+')
+
+    $EWW_CMD update workspaces="$WORKSPACE_JSON"
 }
 
+handle() {
+  event=${1%%>>*}
+  data=${1##"$event">>}
+
+  case "$event" in
+    "workspace") workspaces;;
+    "submap") $EWW_CMD update submap="${data%_submap}";;
+  esac
+}
+
+workspaces
+
 socat -u UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | while read -r line; do
-	workspaces
+	handle "$line"
 done

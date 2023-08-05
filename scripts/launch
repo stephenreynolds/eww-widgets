@@ -14,6 +14,8 @@ for monitor in ${MONITORS}; do
     ${EWW_CMD} open widgets-${monitor} &
 done
 
+scripts/hyprland &
+
 ${EWW_CMD} open control-center &
 ${EWW_CMD} open notification-popups &
 
