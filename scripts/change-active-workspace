@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Cycle betwwen occupied workspaces
 
 if [ "$1" == "up" ]; then

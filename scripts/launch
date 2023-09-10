@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 EWW_CMD=eww
 PRIMARY_MONITOR=2
