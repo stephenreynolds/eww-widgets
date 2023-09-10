@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-EWW_CMD=eww
+EWW_CMD="eww -c ."
 PRIMARY_MONITOR=2
 
 # Kill any running instances
