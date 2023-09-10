@@ -5,6 +5,7 @@ PRIMARY_MONITOR=2
 
 # Kill any running instances
 ${EWW_CMD} kill
+${EWW_CMD} daemon
 
 # Open windows for each monitor
 MONITORS=$(hyprctl monitors -j | jq '.[] | .id')
