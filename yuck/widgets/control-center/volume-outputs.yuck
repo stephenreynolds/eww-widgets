@@ -10,7 +10,7 @@
               (eventbox :onclick "pamixer --toggle-mute"
                         :cursor "pointer"
                         :class "volume-icon"
-                        (label :class "volume-icon fluent-icon"
+                        (label :class "volume-icon icon"
                                :text {volume-muted ? "" : volume > 66 ? "" : volume > 33 ? "" : volume > 0 ? "" : ""}))
               (scale :class "volume-slider"
                      :value volume

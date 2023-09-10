@@ -11,7 +11,7 @@
               (eventbox :onclick "pamixer --toggle-mute --source 0"
                         :cursor "pointer"
                         :class "volume-icon"
-                        (label :class "volume-icon fluent-icon"
+                        (label :class "volume-icon icon"
                                :text {mic-muted ? "" : ""}))
               (scale :class "volume-slider"
                      :value mic-volume
