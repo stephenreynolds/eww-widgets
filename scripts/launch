@@ -19,4 +19,4 @@ ${EWW_CMD} open control-center &
 ${EWW_CMD} open notification-popups &
 
 # Reset notification mode
-dbus-send --mode 0
+scripts/dbus-send --mode 0
