@@ -1,5 +1,5 @@
 (defvar primary-monitor 2)
-(deflisten notifications :initial "[]" "scripts/notification-daemon")
+(deflisten notifications :initial "[]" "json-notification-daemon")
 
 (defvar submap "")
 
