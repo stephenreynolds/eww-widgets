@@ -1,3 +1,6 @@
+This repo is archived as I have moved to [AGS](https://github.com/Aylur/ags).
+[New config here.](https://github.com/stephenreynolds/ags-config)
+
 # My Eww Widgets
 
 This repo contains my work-in-progess widget setup for my personal install.
